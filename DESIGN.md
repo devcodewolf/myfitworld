@@ -1,17 +1,22 @@
 ---
 name: My Fitness World
-description: Un mesociclo a oscuras con una sola luz encendida sobre lo que toca ahora.
+description: Suelo negro azulado, fotografía a sangre y un único cian encendido sobre lo que toca ahora.
 colors:
-  ground: "#05070a"
-  surface: "#0e1116"
-  raised: "#171b22"
-  line: "#232a35"
-  line-strong: "#39424f"
-  ink: "#f3f6f8"
-  ink-dim: "#9aa7b6"
-  ink-faint: "#828d9c"
-  volt: "#ccf24a"
-  volt-ink: "#0e1405"
+  ground: "#091017"
+  surface: "#141d26"
+  raised: "#1e2934"
+  line: "#2c3947"
+  line-strong: "#45576a"
+  ink: "#f0f6fa"
+  ink-dim: "#a9becd"
+  ink-faint: "#869dae"
+  accent: "#34dafa"
+  accent-strong: "#00b6eb"
+  accent-ink: "#031c30"
+  phase-accumulation: "#88c0e1"
+  phase-progression: "#7dcece"
+  phase-intensification: "#99a6e7"
+  phase-deload: "#9dceb7"
 typography:
   display:
     fontFamily: "Archivo, 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif"
@@ -26,15 +31,15 @@ typography:
     lineHeight: 1
     letterSpacing: "-0.02em"
     fontFeature: "'tnum' 1"
-  headline:
+  title:
     fontFamily: "Archivo, 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif"
     fontSize: "1.5rem"
     fontWeight: 800
-    lineHeight: 1.2
+    lineHeight: 1.33
     letterSpacing: "-0.02em"
-  title:
+  headline:
     fontFamily: "Archivo, 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif"
-    fontSize: "1.125rem"
+    fontSize: "1.25rem"
     fontWeight: 700
     lineHeight: 1.4
     letterSpacing: "normal"
@@ -44,6 +49,12 @@ typography:
     fontWeight: 400
     lineHeight: 1.625
     letterSpacing: "normal"
+  meta:
+    fontFamily: "Archivo, 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif"
+    fontSize: "0.875rem"
+    fontWeight: 400
+    lineHeight: 1.43
+    letterSpacing: "normal"
   label:
     fontFamily: "Archivo, 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif"
     fontSize: "0.72rem"
@@ -52,373 +63,444 @@ typography:
     letterSpacing: "0.2em"
 rounded:
   card: "14px"
-  nav: "12px"
-  focus: "4px"
+  rail: "1rem"
+  tile: "0.75rem"
   pill: "999px"
+  focus: "4px"
 spacing:
-  xs: "0.375rem"
-  sm: "0.5rem"
-  md: "1rem"
-  lg: "1.5rem"
-  xl: "2rem"
-  2xl: "3.5rem"
+  tight: "0.5rem"
+  snug: "0.75rem"
+  grid: "1.25rem"
+  card: "1.25rem"
+  card-lg: "1.5rem"
+  section: "2rem"
+  section-lg: "3rem"
+  gutter: "1rem"
+  gutter-lg: "2rem"
+  container: "80rem"
 components:
   button-primary:
-    backgroundColor: "{colors.volt}"
-    textColor: "{colors.volt-ink}"
-    typography: "{typography.title}"
+    backgroundColor: "{colors.accent}"
+    textColor: "{colors.accent-ink}"
+    typography: "{typography.headline}"
     rounded: "{rounded.pill}"
-    padding: "0.75rem 2rem"
+    padding: "0 1.75rem"
     height: "3.5rem"
+  button-primary-hover:
+    backgroundColor: "{colors.accent}"
+    textColor: "{colors.accent-ink}"
+    size: "1.02"
   button-disabled:
-    backgroundColor: "transparent"
+    backgroundColor: "{colors.ground}"
     textColor: "{colors.ink-faint}"
     rounded: "{rounded.pill}"
-    padding: "0 2rem"
+    padding: "0 1.75rem"
     height: "3.5rem"
-  card-day:
-    backgroundColor: "{colors.surface}"
+  chip-glass:
+    backgroundColor: "{colors.ground}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.card}"
-    padding: "1.5rem"
-  card-day-hover:
-    backgroundColor: "{colors.raised}"
-    textColor: "{colors.ink}"
-  chip-muscle:
+    rounded: "{rounded.pill}"
+    padding: "0.375rem 0.875rem"
+  chip-outline:
     backgroundColor: "transparent"
     textColor: "{colors.ink-dim}"
     rounded: "{rounded.pill}"
-    padding: "0.25rem 0.625rem"
-  nav-item:
+    padding: "0.25rem 0.75rem"
+  card-photo:
+    backgroundColor: "{colors.ground}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.card}"
+    padding: "1.25rem"
+  card-panel:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.card}"
+    padding: "1.25rem"
+  nav-pill:
     backgroundColor: "transparent"
     textColor: "{colors.ink-dim}"
-    rounded: "{rounded.nav}"
-    padding: "0 0.75rem"
-    height: "3rem"
-  nav-item-active:
+    rounded: "{rounded.pill}"
+    padding: "0 1rem"
+    height: "2.75rem"
+  nav-pill-active:
     backgroundColor: "{colors.raised}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.nav}"
-  ledger-row:
-    backgroundColor: "transparent"
-    textColor: "{colors.ink-dim}"
-    padding: "1.25rem 0.25rem"
-  ledger-row-hover:
+    rounded: "{rounded.pill}"
+    padding: "0 1rem"
+    height: "2.75rem"
+  rail-week:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
-  media-frame:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink-faint}"
-    rounded: "{rounded.card}"
+    rounded: "{rounded.rail}"
+    padding: "0.5rem 1rem"
+    height: "3.5rem"
+  rail-week-active:
+    backgroundColor: "{colors.raised}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.rail}"
+    padding: "0.5rem 1rem"
+    height: "3.5rem"
+  rail-day:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink-dim}"
+    rounded: "{rounded.pill}"
+    padding: "0 1rem"
+    height: "2.75rem"
+  rail-day-active:
+    backgroundColor: "{colors.raised}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.pill}"
+    padding: "0 1rem"
+    height: "2.75rem"
 ---
+
+<!-- ESTADO: este documento describe el mundo tal y como está construido hoy, después
+     del rediseño. La revisión de acabado NO se ha ejecutado sobre esta versión: lo que
+     sigue es lo que el código hace, no un veredicto de calidad. -->
 
 # Design System: My Fitness World
 
 ## Overview
 
-**Creative North Star: "La sala a oscuras con una sola luz encendida"**
+**Creative North Star: "La sala a oscuras con la luz encendida sobre la barra"**
 
-Es de noche, la pantalla está apoyada a dos o tres metros y las manos están ocupadas. Todo el sistema
-parte de ahí: la sala está casi a oscuras (`ground` es un negro azulado, no un gris de dashboard), los
-planos se separan por luz y no por sombra, y hay exactamente una luz encendida —el verde volt— apuntando
-a lo único que importa en ese momento: lo que toca AHORA. Cuando esa luz se enciende en una pantalla,
-señala una sola cosa; si señalara tres, no señalaría ninguna.
+Es un plan por el que se avanza por fecha, no un panel que se lee. El eje de la interfaz es el
+raíl de semanas y días: siempre sabes en qué punto del mesociclo estás antes de saber ninguna
+otra cosa. Sobre ese raíl, la sesión que toca ocupa la pantalla como una tarjeta fotográfica a
+sangre con una sola acción encima. La app se mira de pie, a dos o tres metros, con las manos
+ocupadas y casi siempre de noche: de ahí el fondo negro azulado, el tamaño desmesurado de las
+cifras y el hecho de que solo haya un color encendido en toda la pantalla.
 
-La densidad no es uniforme, y esa desigualdad es el argumento del producto hecho materia visual. La
-semana en curso se abre en tarjetas grandes con cifras a tamaño de titular; las semanas 2 a 4 se
-comprimen en un libro de cuentas de filas finas separadas por hairlines. El sistema rechaza
-explícitamente la rejilla de cuatro tarjetas de semana idénticas: la jerarquía la impone el estado real
-del plan, no la simetría. Las páginas secundarias —semana, día, catálogo, ejercicio— heredan el mismo
-material pero sin una sola gota de volt: allí no hay nada ocurriendo ahora mismo.
+El material es fotografía. Bodegones reales de mancuernas, discos y suelo de madera, apagados al
+70 % de opacidad y desaturados al 65 %, que llenan el ancho de las tarjetas de día y de la sesión
+protagonista. No son ilustración de relleno: son lo que da temperatura y peso a una interfaz que,
+sin ellas, sería una lista. Debajo del texto siempre cae un degradado que arranca del propio
+fondo de la app, así que el contraste no depende nunca de qué foto haya puesta. El suelo de la
+página lo iluminan tres focos radiales fijos —cian, lavanda y verdeazulado, todos por debajo del
+15 % de mezcla— que no se mueven con el scroll y no tiñen el contenido.
 
-El material es deliberadamente barato de renderizar y caro de imitar: tres superficies casi negras, dos
-grosores de línea de un píxel, una familia tipográfica variable auto-alojada, cero sombras, cero
-degradados, cero librerías de iconos. La riqueza sale del peso tipográfico, de las cifras tabulares
-cuadrando en columna y del contraste brutal entre el titular a `clamp(2.75rem, 6vw, 5rem)` y la etiqueta
-a `0.72rem` con `0.2em` de tracking.
+Lo que este mundo rechaza está tan decidido como lo que abraza: no hay barra lateral, no hay
+sombras en ninguna parte, no hay iconos de librería ni emoji haciendo de icono, no hay tarjetas
+de solo texto en las superficies principales y no hay ningún segundo color saturado compitiendo
+con el cian. La profundidad se declara una vez, con un filete de un píxel; el material de las
+tarjetas es un degradado sutil, no una sombra.
 
 **Key Characteristics:**
 
-- Casi negro por capas: `ground` → `surface` → `raised`, cada plano un escalón de luz.
-- Hairlines de 1px como único recurso de separación; ni una sombra en todo el build.
-- Un solo acento (`volt`), reservado por ley a lo que ocurre ahora.
-- Archivo variable (400–900), display apretado a `-0.03em`, etiquetas abiertas a `0.2em`.
-- Toda cifra comparable en cifras tabulares mediante la utilidad `.figures`.
-- Ningún estado se distingue solo por color: sobrevive en escala de grises.
-- Un único momento animado en toda la aplicación, y arranca ya visible.
+- Negro azulado con tres focos radiales fijos, nunca gris neutro
+- Un único cian saturado (`#34dafa`), reservado a la acción primaria y al AHORA
+- Cuatro pasteles de croma bajo que identifican las fases del mesociclo sin competir
+- Fotografía a sangre bajo degradado garantizado, con metadatos como chips de cristal
+- Archivo variable 400–900, cifras tabulares en todo lo comparable
+- Filete de un píxel como única declaración de elevación: cero sombras
+- Raíl de semanas y días como columna vertebral de la navegación
 
 ## Colors
 
-Una paleta de tres superficies casi negras y una sola tinta viva; todo lo demás es texto en tres niveles
-de luz sobre esas superficies.
+Una paleta fría calculada en OKLCH: tres superficies que comparten tono y escalonan la
+luminosidad de forma regular (L ≈ 17 % / 23 % / 28 %), tintas tomadas de la temperatura del fondo
+en lugar de gris neutro, un solo croma alto y cuatro pasteles de identificación.
 
 ### Primary
 
-- **Volt** (`--color-volt`): el verde ácido de la aplicación. En estado de reposo aparece exactamente en
-  tres sitios, los tres en la portada del mesociclo: el CTA primario (`Empezar Día N`), la etiqueta
-  `AHORA` de la semana en curso y la regla `#barra-ahora` que subraya esa semana. Las páginas de semana,
-  día, catálogo y ejercicio no contienen volt en absoluto, y es correcto que así sea.
-- **Volt Ink** (`--color-volt-ink`): el verde casi negro que se escribe *sobre* volt. Es el único texto
-  admitido encima del acento; nunca `ground` ni `ink`.
+- **Cian Encendido** (`accent`): el único croma alto del sistema (C ≈ 0,135 en OKLCH) y por eso el
+  que manda la atención. Solo aparece en la acción primaria («Ver la sesión»), en el rótulo y el
+  filete de «Tu próxima sesión», en el tinte superior del degradado de las fotos y en el cuadro
+  del logotipo. Contraste 11,43 / 10,18 / 8,83 sobre `ground` / `surface` / `raised`.
+- **Cian Profundo** (`accent-strong`): existe solo para cerrar el degradado de la acción primaria
+  (`.accion-primaria`, 100°, mezclado al 88 % con la lavanda de intensificación). Nunca se usa
+  como color plano.
+- **Tinta sobre Cian** (`accent-ink`): el azul casi negro que se escribe encima del cian, y solo
+  encima del cian. Contraste 10,35 sobre el acento; nunca se pone sobre una superficie.
 
-Existe además `--color-volt-dim` (`#7f9622`), declarado en `@theme` pero **sin ningún uso en el build**.
-No es una licencia para introducir un segundo tono de acento: mientras no haya una superficie que lo
-justifique, tratarlo como reserva vacía.
+### Secondary
+
+Las cuatro fases del mesociclo. Son pastel a propósito: identifican la semana de un vistazo y
+siempre van acompañadas de su etiqueta en texto, así que jamás son la única señal.
+
+- **Azul Acumulación** (`phase-accumulation`): fase de acumulación.
+- **Verdeazulado Progresión** (`phase-progression`): fase de progresión; también el foco radial
+  inferior del fondo.
+- **Lavanda Intensificación** (`phase-intensification`): fase de intensificación; también el foco
+  radial superior derecho y el cierre del degradado de la acción primaria.
+- **Verde Descarga** (`phase-deload`): semana de descarga.
+
+Cada fase se sirve en tres presentaciones desde `src/theme.ts`: texto (`text`), filete o punto
+(`mark`) y tinte de fondo al 10 % (`wash`).
 
 ### Neutral
 
-- **Ground / Suelo de sala** (`--color-ground`): el fondo de `html` y `body`, y el canal de la barra de
-  scroll. Es el plano más lejano; nada se dibuja por debajo.
-- **Surface / Plano de trabajo** (`--color-surface`): tarjetas, marco de media, rail de navegación,
-  contenedor de superserie. Un escalón de luz por encima del suelo.
-- **Raised / Plano próximo** (`--color-raised`): solo estados —el hover de una tarjeta y el ítem activo
-  de la navegación. Es el plano que responde al usuario.
-- **Line** (`--color-line`): el hairline por defecto. Separa filas del libro de cuentas, cierra tarjetas
-  y subraya cabeceras de sección.
-- **Line Strong** (`--color-line-strong`): el hairline con voz. Marca el hover de una tarjeta, el borde
-  del contenedor de superserie, el botón deshabilitado, la cita de los errores comunes y el pulgar de la
-  barra de scroll.
-- **Ink** (`--color-ink`): texto primario y cifras. Casi blanco, con temperatura fría.
-- **Ink Dim** (`--color-ink-dim`): texto secundario —descripciones, focos de sesión, unidades. Contraste
-  medido de 8.24 / 7.72 / 7.05 sobre `ground` / `surface` / `raised`.
-- **Ink Faint** (`--color-ink-faint`): texto terciario —etiquetas en mayúsculas, numeración de filas,
-  estados vacíos honestos. Contraste medido de 5.99 / 5.62 / 5.13 sobre las tres superficies. Los dos
-  niveles atenuados superan 4.5:1 en cualquier superficie del sistema.
+- **Suelo Negro Azulado** (`ground`): fondo de la página y del `html`, base del degradado de las
+  fotos, de los chips de cristal (al 65 %) y de la barra superior (al 82 %).
+- **Superficie** (`surface`): fondo de los raíles inactivos, del contenedor de la navegación de
+  píldoras, del hueco de media y del hover de las filas de semana.
+- **Superficie Elevada** (`raised`): reservada al estado activo —píldora de navegación activa,
+  semana activa, día activo— y arranque del degradado de `.panel`.
+- **Filete** (`line`): el borde de un píxel de todo: tarjetas, chips, separadores de fila,
+  cabecera pegajosa.
+- **Filete Marcado** (`line-strong`): el mismo borde cuando algo está activo o en hover, la barra
+  lateral de los errores comunes, el icono del estado vacío y el pulgar de la barra de scroll.
+- **Tinta** (`ink`): el texto principal y todo lo que hay que leer a tres metros.
+- **Tinta Atenuada** (`ink-dim`): la segunda voz —descripciones, metadatos, enlaces inactivos—.
+  Contraste 9,96 / 8,86 / 7,69 sobre las tres superficies.
+- **Tinta Tenue** (`ink-faint`): la tercera voz —rótulos de sección, unidades, matices, textos de
+  estado vacío—. Contraste 6,78 / 6,04 / 5,24 sobre las tres superficies.
 
 ### Named Rules
 
-**Regla del Volt Reservado.** El acento está reservado por ley a lo que está ocurriendo AHORA. En reposo
-vive en tres sitios y solo en la portada: el CTA primario, la etiqueta `AHORA` y `#barra-ahora`. Antes de
-pintar algo de volt, la pregunta es una sola: ¿esto es lo que toca en este instante? Si no, no lleva
-volt. El anillo de foco, `::selection` y el skip link —que solo existe visualmente bajo foco de teclado—
-son superficies del navegador tematizadas y no cuentan para ese recuento; tampoco autorizan a extender el
-acento al contenido.
+**La regla del único cian.** El cian saturado está reservado a la acción primaria y a lo que está
+pasando AHORA. Nada decorativo lo usa, y los pasteles de fase nunca compiten con él. El anillo de
+foco, `::selection` y el estado de foco del enlace de salto son superficies del navegador
+tematizadas, y quedan fuera de la cuenta.
 
-**Regla del Gris que Sobrevive.** Ningún estado puede distinguirse solo por color. La página actual en la
-navegación se marca con superficie, peso y luz a la vez (`bg-raised`, `font-bold`, `text-ink`) más
-`aria-current="page"`; la semana en curso se marca con la palabra literal `AHORA` y una regla, no con un
-tono. Prueba de auditoría: en escala de grises, todo estado sigue siendo legible.
+**La regla del gris.** Ningún estado se distingue solo por color. La navegación activa y los
+elementos activos del raíl se leen por superficie (`raised`), por peso (700 → 800) y por
+luminosidad de la tinta, además de por `aria-current`: en escala de grises siguen siendo legibles.
 
-**Regla del Suelo de Contraste.** Ningún texto baja de 4.5:1 contra la superficie sobre la que se apoya.
-Si hace falta un cuarto nivel de jerarquía, se toma del tamaño o del peso —nunca bajando el valor por
-debajo del suelo.
+**La regla de la etiqueta.** Un color de fase nunca viaja solo: siempre lleva al lado el nombre de
+la fase escrito.
 
 ## Typography
 
-**Display Font:** Archivo variable, pesos 400–900 (reserva: `Segoe UI Variable Display`, `Segoe UI`,
-`system-ui`, `sans-serif`)
-**Body Font:** la misma Archivo. El sistema es de una sola familia.
+**Display Font:** Archivo variable (con `Segoe UI Variable Display`, `Segoe UI`, `system-ui`)
+**Body Font:** Archivo variable, la misma familia en todo el sistema
+**Label/Mono Font:** ninguna aparte; las cifras se resuelven con `font-variant-numeric: tabular-nums`
 
-Archivo se auto-aloja como dos woff2 subseteados (latin y latin-ext) en `src/assets/fonts/`,
-referenciados desde CSS para que Vite reescriba las URLs con el `base` del despliegue, con
-`font-display: swap`.
+La familia es una sola, variable de 400 a 900, auto-alojada como dos `woff2` subseteados en
+`src/assets/fonts/` (latin y latin-ext) y referenciada desde el CSS para que Vite reescriba las
+rutas con el `base` del despliegue. Toda la jerarquía se construye con peso y tamaño, nunca con un
+cambio de familia.
 
-**Character:** una grotesca de rejilla estrecha que aguanta el peso 900 sin engordar y las cifras sin
-bailar. Apretada y casi arquitectónica en display, neutra y silenciosa en cuerpo: toda la expresión del
-sistema está en el salto de escala y de peso, no en un segundo tipo de letra.
+**Character:** grotesca ancha y de eje vertical, cómoda en negrita extrema. En 900 y con `-0.03em`
+de interletraje deja de ser tipografía de interfaz y pasa a ser señalética: es lo que permite leer
+el nombre de la sesión desde el otro lado de la habitación.
 
 ### Hierarchy
 
-- **Display** (900, `clamp(2.75rem, 6vw, 5rem)`, `line-height: 0.95`, `letter-spacing: -0.03em`): el `h1`
-  de cada página —nombre del mesociclo, fase de la semana, título del día, nombre del ejercicio. Con
-  `text-balance` cuando el título puede partir en dos líneas.
-- **Figure** (800, `clamp(1.75rem, 3vw, 2.5rem)`, `line-height: 1`, `letter-spacing: -0.02em`, tabular):
-  la escala de las cifras que se leen a tres metros —series de un día, prescripción `4 × 8-10`, número de
-  semana en el libro de cuentas, `Semana 01` en la portada. Es la única escala compartida entre texto y
-  número.
-- **Headline** (800, `1.5rem`, `letter-spacing: -0.02em`): el título de una tarjeta de día.
-- **Title** (700, `1.125rem`–`1.25rem`): el nombre de un ejercicio en el listado del día y la fase en una
-  fila del libro de cuentas.
-- **Body** (400, `1rem`, `line-height: 1.625`): notas, claves de técnica, textos de estado. La entradilla
-  bajo un `h1` sube a `1.125rem` en `ink-dim`. Toda columna de prosa se corta con una medida explícita:
-  `55ch`, `60ch`, `62ch` o `65ch` según el ancho del contenedor.
-- **Label** (700, `0.72rem`, `letter-spacing: 0.2em`, mayúsculas, en `ink-faint`): el rótulo de sección
-  —`CALENTAMIENTO`, `EJERCICIOS`, `EL RESTO DEL MESOCICLO`, `TU HISTORIAL`. Variante a `0.16em` para
-  etiquetas dentro de una ficha y a `0.22em` para la marca del rail. Nunca hace de titular.
+- **Display** (900, `clamp(2.75rem, 6vw, 5rem)`, 0,95, −0,03em): el nombre de la sesión sobre la
+  foto, el nombre de la fase en la página de semana y el nombre del ejercicio en su ficha. Uno por
+  pantalla.
+- **Figure** (800, `clamp(1.75rem, 3vw, 2.5rem)`, 1, −0,02em, tabular): la cifra grande. La
+  prescripción de un bloque (`4 × 10-20`), el ordinal de la semana en su fila y —en peso 900— el
+  título de las páginas de índice.
+- **Title** (800, 1,5rem, −0,02em): el título del día en las tarjetas fotográficas.
+- **Headline** (700, 1,125–1,25rem): el nombre del ejercicio en la lista del día, el nombre de la
+  fase en la fila de semana.
+- **Body** (400, 1rem, 1,625): descripciones y prosa larga, con la medida limitada entre 55 y 65
+  caracteres (`max-w-[55ch]` … `max-w-[65ch]`).
+- **Meta** (400–700, 0,875rem): la segunda línea de todo —contadores, duraciones, músculos—, con la
+  cifra en 700 y `ink` y la palabra en `ink-dim`.
+- **Label** (700, 0,72rem, +0,2em, versalitas por `uppercase`): los rótulos de sección
+  («Ejercicios», «Calentamiento», «Las cuatro semanas»). Una variante a +0,18em sirve la línea de
+  localización sobre las fotos, y otra a 0,7rem / +0,16em los `dt` de la ficha de ejercicio.
 
 ### Named Rules
 
-**Regla de las Cifras Tabulares.** Toda cantidad comparable se compone con la utilidad `.figures`
-(`tabular-nums` + `font-feature-settings: 'tnum' 1`). Series, días, minutos, número de semana, número de
-posición: si dos números pueden acabar uno debajo del otro, cuadran en columna. Se aplica al contenedor
-—`dl`, `p`, fila—, no a cada número suelto.
+**La regla de las cifras tabulares.** Toda cantidad comparable se compone con la utilidad
+`.figures` (`tabular-nums` + `'tnum' 1`): series, semanas, días, duraciones, prescripciones y
+ordinales. Si dos números pueden acabar uno debajo del otro, van en cifras tabulares.
 
-**Regla de un Solo Display por Página.** La escala display es el ancla de orientación de la página. Hay
-exactamente un `h1` a esa escala; cualquier segundo nivel baja a `figure` o a `label`.
+**La regla de la unidad al lado.** Una cifra grande nunca viaja sola: `4 × 10-20` no dice si son
+repeticiones o segundos, así que la unidad se escribe siempre junto a ella, en 0,875rem, +0,14em y
+`ink-faint`.
+
+**La regla del ordinal de dos dígitos.** Semanas y posiciones se rellenan a dos dígitos (`01`,
+`02`) para que la columna cuadre.
 
 ## Layout
 
-Dos zonas: navegación y contenido. A partir de `lg` (1024px) la navegación es un rail izquierdo de
-`15rem` (`lg:w-60`), pegajoso y de alto de viewport, separado del contenido por un hairline vertical; por
-debajo de `lg` es una barra inferior fija de alto mínimo `3.5rem` con `bg-surface/95` y `backdrop-blur`,
-y el contenido reserva `pb-24` para no quedar debajo.
+Contenedor único de 80rem (`max-w-7xl`) centrado, con canal de 1rem que crece a 1,5rem en `sm` y a
+2rem en `lg`; el aire vertical es de 2rem, 2,5rem en `lg`. Los puntos de ruptura son los de
+Tailwind sin tocar: 640, 768, 1024 y 1280 px.
 
-El contenido vive en un contenedor centrado: `max-w-6xl` (72rem) en las páginas de rejilla —portada,
-semana, catálogo— y `max-w-5xl` (64rem) en las de lectura —día y ficha de ejercicio. El acolchado
-horizontal escala en tres pasos (`px-5` → `sm:px-8` → `lg:px-12`) y el vertical en dos (`py-10` →
-`lg:py-16`).
+La página se ordena siempre igual: barra superior pegajosa → raíl de semanas y días → la pieza
+protagonista → las listas. En la portada, el primer viewport reparte doce columnas en `lg`: cinco
+para la sesión siguiente en 21:9 y siete para el resto de la semana en dos columnas de tarjetas
+5:4. La rejilla de días de una semana es de una, dos y tres columnas (base / `sm` / `lg`); la del
+catálogo, de una, dos y tres (base / `sm` / `xl`). La separación entre tarjetas es siempre de
+1,25rem.
 
-Las rejillas son pocas y explícitas: los días de una semana van a tres columnas desde `md`, el catálogo a
-dos desde `sm` y tres desde `lg`, y la ficha de ejercicio parte en `[1fr_20rem]` desde `lg` con la media
-en la columna estrecha. El libro de cuentas de semanas usa una rejilla que se reorganiza en vez de
-truncarse: `[auto_1fr_auto]` en móvil y `[4.5rem_1fr_auto_auto_auto_auto]` desde `sm`, revelando
-progresivamente días y duración conforme hay sitio.
+La ficha de ejercicio rompe el patrón a propósito: dos columnas asimétricas (`minmax(0,1.15fr)` y
+`minmax(0,1fr)`) separadas por 2,5rem que crecen a 3,5rem, con la media pegada al scroll (`sticky`
+a 2,5rem del borde) mientras el texto avanza.
 
-El ritmo vertical se apoya en pocos escalones: `0.375rem` entre chips, `1rem` entre celdas de rejilla,
-`1.5rem` de acolchado interior de tarjeta, `2rem` entre bloques de una cabecera y `3.5rem` entre secciones
-mayores. Las separaciones de sección se hacen con `border-b border-line` más acolchado, no con márgenes
-sueltos.
+Los dos raíles y la navegación de píldoras se desbordan en horizontal con scroll
+(`overflow-x-auto`) en lugar de replegarse: en móvil se arrastran, en escritorio caben. Todo lo
+que se pulsa mide al menos 2,75rem de alto; la acción primaria y las tarjetas de semana, 3,5rem.
+La barra superior es `sticky` a 0 con `z-40` y desenfoque de fondo.
 
-**Regla del Ancho de 375.** Ningún contenido provoca desbordamiento horizontal a 375px de ancho
-(`document.documentElement.scrollWidth === 375`, verificado). Toda celda que pueda recibir texto largo
-lleva `min-w-0`, y el texto que no cabe se trunca (`truncate`) en vez de ensanchar la fila.
+Los tres focos radiales del suelo van con `background-attachment: fixed`: la sala está iluminada,
+la luz no viaja con el contenido.
 
 ## Elevation & Depth
 
-**No hay ni una sombra en todo el build.** La profundidad se construye por dos medios y solo dos: un
-escalón de luz de superficie (`ground` → `surface` → `raised`) y un hairline de 1px (`line`, o
-`line-strong` cuando el elemento tiene voz). Un elemento elevado se declara **una sola vez**: o cambia de
-superficie, o cambia de línea; nunca borde más sombra, y nunca sombra sola.
+**No hay ni una sombra en todo el proyecto.** La elevación se declara una sola vez y siempre de la
+misma forma: un filete de un píxel en `line`, que pasa a `line-strong` cuando el elemento está
+activo o bajo el cursor. Nunca borde y sombra a la vez, porque no hay sombra que sumar.
 
-El hover no levanta nada del plano: la tarjeta de día pasa de `surface` a `raised` y su borde de `line` a
-`line-strong`; la fila del libro de cuentas se ilumina de transparente a `surface`. El movimiento
-aparente lo hace el color, no el eje Z.
+La profundidad se consigue por otras tres vías, todas ópticas y ninguna proyectada:
+
+1. **Material de tarjeta** (`.panel`): un degradado vertical que aclara la superficie por arriba
+   —de `raised` mezclado con un 4 % de acento hasta `surface` al 62 %—, como si a la tarjeta le
+   diera la luz de la sala por el borde superior. Sustituye a la sombra.
+2. **Tono de estado**: `surface` para lo inactivo, `raised` para lo activo. La jerarquía es tonal,
+   no espacial.
+3. **Cristal**: los chips sobre fotografía y la barra superior usan el propio fondo de la app
+   mezclado con transparencia (65 % y 82 %) más `backdrop-filter: blur`, así que dejan ver lo que
+   tienen detrás sin dejar de ser legibles.
 
 ### Named Rules
 
-**Regla de la Elevación Declarada Una Vez.** Cada nivel se anuncia con un único recurso —superficie o
-línea. Si un elemento ya tiene borde, no lleva sombra; si algún día llevara sombra, pierde el borde. En
-este sistema la respuesta correcta siempre ha sido el borde.
-
-**Regla del Momento Único.** Toda la aplicación tiene una sola animación autoral: la marca de la semana en
-curso al cargar la portada. `#barra-ahora` hace `scaleX(0.82 → 1)` desde `transform-origin: left center`
-con un asentamiento de opacidad, y `#marcador-ahora` hace `translateY(3px → 0)`; ambas a `700ms
-cubic-bezier(0.16, 1, 0.3, 1)` y ambas anuladas bajo `prefers-reduced-motion`. Arranca desde un estado ya
-visible por diseño: interrumpirla a media reproducción nunca deja un elemento truncado. Todo lo demás que
-se mueve es una transición de estado disparada por el usuario (`transition-colors`, un `translate-x-1` de
-flecha, un `scale-[1.02]` en el CTA).
+**La regla del filete único.** La elevación se declara una vez: filete de un píxel, nunca borde
+más sombra. Si algo tiene que destacar, sube de tono, no de altura.
 
 ## Shapes
 
-Dos radios y una píldora. Las superficies de contenido —tarjeta de día, tarjeta de catálogo, marco de
-media, contenedor de superserie— llevan una curva contenida de 14px (`--radius-card`), suficiente para
-que el rectángulo no corte pero sin llegar a redondear el mundo. El ítem del rail de navegación usa 12px
-(`rounded-xl`), porque es más pequeño y la curva tiene que escalar con él. Todo lo que es una acción o una
-etiqueta breve es una píldora completa: el CTA primario, el botón deshabilitado, los chips de grupo
-muscular, el skip link y el pulgar de la barra de scroll. El anillo de foco global redondea a 4px.
+Dos radios y casi nada en medio. Las superficies rectangulares —tarjetas fotográficas, paneles,
+huecos de media— llevan 14px (`--radius-card`), un redondeo lo bastante corto para que la esquina
+se lea como recorte y no como blandura. Todo lo que se pulsa o se etiqueta es una cápsula completa
+(`999px`): píldoras de navegación, días del raíl, chips, la acción primaria, los enlaces a
+ejercicios alternativos. Entre medias solo hay dos excepciones justificadas: las tarjetas de
+semana del raíl usan 1rem, y el cuadro del logotipo, 0,75rem.
 
-Las filas no tienen forma propia: el libro de cuentas de semanas y la lista de bloques de un día son
-rectángulos sin radio separados por hairlines, con `last:border-b-0` para que la última fila no cierre la
-serie con una línea suelta. Esa ausencia de forma es lo que las hace leerse como registro y no como
-tarjetas.
+Las marcas de fase son geometría mínima y siempre en cápsula: un punto de 0,5rem en el raíl, un
+filete horizontal de 1,5rem × 2px sobre las fotos y una barra vertical de 4px × 0,875rem en la
+fila de semana.
 
-Los iconos son un sistema propio dibujado a mano en `Icon.astro`: `viewBox` de 24, `fill: none`,
-`stroke: currentColor`, grosor único `1.75`, terminaciones y uniones redondeadas, `aria-hidden`. Seis
-glifos —`mesocycle`, `catalog`, `history`, `settings`, `arrow-right`, `check`—, todos como un solo `path`.
-La flecha `arrow-right` girada 180° hace de flecha de vuelta; no existe un glifo `arrow-left`.
+Los iconos están dibujados a mano en `Icon.astro`: lienzo de 24, trazo de 1,75 sin relleno,
+terminaciones y uniones redondeadas, `currentColor` y siempre `aria-hidden`. Seis nombres
+(`mesocycle`, `catalog`, `history`, `settings`, `arrow-right`, `check`) y ninguna dependencia
+externa.
+
+El foco visible es común a todo: contorno de 2px en acento, 3px de separación y 4px de radio.
 
 ## Components
 
 ### Buttons
 
-- **Shape:** píldora completa (`rounded-full`), altura mínima táctil de `3.5rem` (`min-h-14`).
-- **Primary:** fondo `volt` con texto `volt-ink` a peso 800 y `tracking-[-0.01em]`, acolchado `px-6 py-3`
-  que sube a `px-8` y `text-lg` desde `sm`, con la flecha `arrow-right` de 20px al final. Hay **uno por
-  aplicación**: el `Empezar Día N` de la portada.
-- **Hover / Focus:** `hover:scale-[1.02]` y `active:scale-100` sobre `transition-transform`; el foco lo da
-  el anillo global de 2px en `volt` con `outline-offset: 3px`.
-- **Disabled:** sin relleno, borde `line-strong`, texto `ink-faint`, `cursor-not-allowed`. Es la forma
-  honesta de una acción que todavía no existe (el botón `Entrenar`), y va siempre acompañada de una frase
-  que explica por qué está apagada. No inventar un deshabilitado en volt atenuado.
+- **Shape:** cápsula completa (`999px`), altura mínima 3,5rem, 1,75rem de padding lateral, peso 800.
+- **Primary:** el único degradado saturado de la app (`.accion-primaria`): 100°, de `accent` a
+  `accent-strong` mezclado al 88 % con la lavanda de intensificación, con la tinta `accent-ink`
+  encima. Lleva el icono `arrow-right` a la derecha. Solo hay una por pantalla.
+- **Hover / Focus:** escala a 1,02 en hover y vuelve a 1 al pulsar; el foco es el contorno común de
+  acento. No cambia de color.
+- **Disabled:** cuando la acción todavía no existe (el botón «Entrenar» del día), no se disfraza:
+  se dibuja como cristal con filete marcado y tinta tenue, con el cursor bloqueado, y debajo se
+  escribe en una línea por qué está apagado.
 
 ### Chips
 
-- **Style:** píldora de borde `line` sobre fondo transparente, texto `ink-dim` a `0.72rem` peso 600,
-  acolchado `px-2.5 py-1`. Se usan para los grupos musculares de una tarjeta de día, un máximo de cuatro.
-- **State:** son informativos, no interactivos. No tienen estado seleccionado; si algún día filtran, el
-  seleccionado debe cambiar superficie y peso, no solo color.
+- **Style (cristal, sobre fotografía):** cápsula con filete `line`, fondo del suelo de la app al
+  65 % con desenfoque, texto `ink` en 600. Llevan los metadatos de la sesión: series, ejercicios,
+  duración estimada, reserva.
+- **Style (contorno, sobre superficie):** cápsula con filete `line`, sin fondo, texto `ink-dim` en
+  600 y 0,75rem. Se usan para músculos y nivel en el catálogo, y para los ejercicios alternativos.
+- **State:** los chips son informativos, no filtros; no tienen estado seleccionado. El único
+  interactivo es el de ejercicio alternativo, que aclara filete y tinta en hover.
 
 ### Cards / Containers
 
-- **Corner Style:** 14px (`rounded-card`).
-- **Background:** `surface` en reposo, `raised` en hover.
-- **Shadow Strategy:** ninguna. Ver *Elevation & Depth*.
-- **Border:** hairline `line`, que pasa a `line-strong` en hover.
-- **Internal Padding:** `1.5rem` (`p-6`) en la tarjeta de día; `1.25rem` (`p-5`) en la de catálogo, que es
-  más pequeña y lleva media dentro.
-- La tarjeta de día es `flex flex-col` con la fila de cierre en `mt-auto`, así que todas las tarjetas de
-  una fila terminan su llamada a la acción a la misma altura aunque el texto de arriba difiera.
+- **Corner Style:** 14px en todas.
+- **Background:** `PhotoCard` apoya sobre fotografía; el resto usa el material `.panel`.
+- **Shadow Strategy:** ninguna (ver *Elevation & Depth*).
+- **Border:** filete de un píxel en `line`; `line-strong` en hover o cuando el contenedor agrupa
+  algo especial, como una superserie.
+- **Internal Padding:** 1,25rem, que crece a 1,5rem en `sm` en las tarjetas fotográficas.
 
 ### Navigation
 
-Rail izquierdo desde `lg`, barra inferior fija por debajo. En el rail, la marca `MY FITNESS WORLD` va en
-label a `0.22em` sobre `ink-faint` y se oculta en móvil. Cada ítem combina icono de 22px y etiqueta: en
-móvil apilados en columna a `0.72rem`; en rail, en fila a `0.95rem` con `rounded-xl`.
+- **Barra superior:** pegajosa a 0, filete inferior, fondo del suelo al 82 % con desenfoque medio.
+  A la izquierda el logotipo (cuadro de 2rem con el degradado de acción y el icono de mancuerna,
+  más el nombre a partir de `sm`); a la derecha, la navegación.
+- **Píldoras:** cuatro enlaces dentro de un contenedor en cápsula con filete y fondo `surface`, con
+  0,25rem de aire interior. Cada uno lleva su icono siempre y su etiqueta a partir de `md`.
+- **Estados:** en reposo, tinta atenuada sin fondo; en hover, la tinta sube a `ink`; activo, fondo
+  `raised`, peso 800, tinta `ink` y `aria-current="page"`. Nunca color.
 
-- **Default:** texto `ink-dim`, fondo transparente.
-- **Hover:** texto `ink`, y en rail fondo `raised/60`.
-- **Active:** `bg-raised` + `font-bold` + `text-ink` **a la vez**, más `aria-current="page"`. Tres señales
-  redundantes, y ninguna de ellas es el color del acento.
+### Raíl de semanas y días (componente firma)
 
-### ExerciseMedia (componente de firma)
+La columna vertebral de la app, presente en portada, semana y día. Dos filas apiladas con 0,75rem
+de separación:
 
-Única puerta de entrada a la media de un ejercicio, y la razón de que el layout no salte nunca. Reserva
-siempre el hueco por `aspect-ratio` (`4/3` por defecto) dentro de un marco `surface` con hairline `line` y
-radio de tarjeta, exista o no el asset. Cuatro modos: `image` y `croquis` (`object-cover` y
-`object-contain` con `p-4`), `video` silencioso en bucle, y `embed`, que **no carga nada de terceros hasta
-que se pulsa**: hasta entonces solo hay un botón con un disco de 4rem en `ink` sobre `ground` y la
-etiqueta `Ver la ejecución en vídeo`.
+- **Semanas:** tarjetas de 1rem de radio y 3,5rem de alto, con el punto de color de la fase, el
+  ordinal a dos dígitos en cifras tabulares y el nombre de la fase debajo en su color. Inactiva:
+  filete `line` sobre `surface`. Activa: filete `line-strong` sobre `raised` y `aria-current`.
+- **Días:** píldoras de 2,75rem con «Día N» en negrita tabular y el título del día en `ink-faint` a
+  partir de `sm`. Activa: filete marcado, fondo `raised`, peso 800 y `aria-current`.
+- Ambas filas se desbordan en horizontal con scroll.
 
-El estado vacío es honesto y forma parte del diseño, no es un fallo: rótulo `CROQUIS PENDIENTE` en label
-sobre `ink-faint` y una línea que nombra el ejercicio que falta. No sustituir por un esqueleto animado ni
-por una silueta genérica.
+### Tarjeta fotográfica (componente firma)
 
-### WeekRow (componente de firma)
+`PhotoCard` es la pieza de la que vive la interfaz. Reserva su hueco con `aspect-ratio` (21:9 la
+protagonista, con 19rem de alto mínimo; 5:4 las tarjetas de día), recorta la foto a `object-cover`
+al 70 % de opacidad y 65 % de saturación y encima —siempre, sin excepción— tiende un degradado de
+tres paradas que va del suelo opaco abajo, al suelo al 72 % en el 46 % de la altura, y termina en
+un 14 % de acento arriba. El contenido se ancla abajo con 1,25–1,5rem de padding. En hover la foto
+escala a 1,03 en medio segundo; el marco no se mueve. La imagen se sirve por `astro:assets` en dos
+anchos (480 y 960) y solo la protagonista carga en `eager`.
 
-La fila del libro de cuentas, y la contrapartida material de la tesis: las semanas que no están en curso
-no son tarjetas. Número de semana a dos dígitos (`padStart(2, '0')`) en escala `figure` sobre `ink-faint`,
-fase y foco a la izquierda, cifras a la derecha, flecha al final, hairline inferior y `last:border-b-0`.
-En hover la fila se ilumina a `surface`, el número sube a `ink` y la flecha avanza `translate-x-1`.
+Las fotografías son cuatro, viven en `src/assets/photos/`, se convierten a WebP en build y son
+**provisionales**: cambiar una es reemplazar el archivo con el mismo nombre, sin tocar ningún
+componente. Su procedencia (StockSnap, licencia CC0) y sus identificadores están en
+`src/assets/photos/PROCEDENCIA.md`.
+
+### Filas de datos
+
+Las listas largas —las cuatro semanas, los ejercicios de un día— no son tarjetas: son filas
+separadas por un filete inferior que desaparece en la última. La fila de semana usa una rejilla de
+tres columnas en móvil que se abre a seis en `sm`, con el ordinal en tamaño *figure* y una flecha
+que avanza 0,25rem en hover. La fila de bloque coloca la posición a la izquierda, el ejercicio en
+el centro y la prescripción alineada a la derecha en `sm`.
+
+### Hueco de media
+
+`ExerciseMedia` es la única puerta a la media de un ejercicio y resuelve cuatro tipos (croquis,
+vídeo, embed e imagen) más el estado vacío. Reserva el hueco por `aspect-ratio` siempre —4:3 por
+defecto—, así que el layout no salta cuando el asset todavía no existe. El estado vacío es honesto
+y está diseñado: un foco radial tenue de acento al 7 %, el icono de mancuerna en `line-strong`, el
+rótulo «Croquis pendiente» y una línea que nombra el ejercicio que falta. El vídeo de terceros no
+carga nada hasta que se pulsa: el botón de reproducción es un círculo de 4rem en `ink` sobre
+`ground`, y el iframe se crea en el clic.
 
 ## Do's and Don'ts
 
 ### Do:
 
-- **Do** preguntarse "¿esto es lo que ocurre AHORA?" antes de escribir `volt` en cualquier sitio. Si la
-  respuesta no es un sí evidente, el color correcto es `ink`, `ink-dim` o `ink-faint`.
-- **Do** marcar todo estado con al menos dos señales (superficie + peso, o palabra + regla) y añadir el
-  atributo ARIA correspondiente; debe sobrevivir en escala de grises.
-- **Do** envolver en `.figures` cualquier contenedor con cantidades comparables.
-- **Do** declarar la elevación una sola vez: o superficie, o hairline.
-- **Do** poner medida explícita (`55ch`–`65ch`) a toda columna de prosa, y `min-w-0` a toda celda de
-  rejilla que reciba texto variable.
-- **Do** dar un estado vacío honesto y nombrado (`CROQUIS PENDIENTE`, `Todavía no has registrado…`) en vez
-  de esconder el hueco.
-- **Do** dibujar los iconos nuevos en `Icon.astro` con `viewBox` 24, un solo `path` y grosor `1.75`.
+- **Do** reservar `accent` (`#34dafa`) para la acción primaria y para lo que pasa ahora; como mucho
+  una acción primaria por pantalla.
+- **Do** acompañar todo color de fase con el nombre de la fase escrito al lado.
+- **Do** duplicar la señal de cualquier estado activo: superficie `raised` + peso 800 +
+  `aria-current`, para que sobreviva en escala de grises.
+- **Do** componer con `.figures` cualquier cantidad comparable, y escribir siempre la unidad junto a
+  la cifra grande.
+- **Do** meter el contenido de una tarjeta fotográfica dentro de `PhotoCard`, que es quien
+  garantiza el degradado de contraste bajo el texto.
+- **Do** reservar el hueco de toda media con `aspect-ratio` antes de saber si el asset existe.
+- **Do** declarar la elevación con un filete de un píxel en `line`, y subirlo a `line-strong` para
+  el estado activo o el hover.
+- **Do** dibujar los iconos nuevos en `Icon.astro` con lienzo 24, trazo 1,75 y terminaciones
+  redondeadas.
+- **Do** dar al menos 2,75rem de alto a todo lo que se pulse (3,5rem a la acción primaria).
+- **Do** decir la verdad en los estados vacíos: nombrar lo que falta en lugar de simular contenido.
+- **Do** sustituir una fotografía reemplazando el archivo de `src/assets/photos/` con el mismo
+  nombre, y mantener actualizado `PROCEDENCIA.md` con su origen y su licencia.
 
 ### Don't:
 
-- **Don't** usar volt en una página secundaria. Semana, día, catálogo y ficha de ejercicio no contienen
-  acento, y esa ausencia es la que hace que la portada signifique algo.
-- **Don't** introducir un segundo acento ni recurrir a `--color-volt-dim`: está declarado y sin uso a
-  propósito.
-- **Don't** añadir `box-shadow` a nada. No hay ni una sombra en el sistema; el borde ya hizo ese trabajo.
-- **Don't** combinar borde y sombra en el mismo elemento si algún día se introdujera una sombra.
-- **Don't** distinguir un estado únicamente por tono, ni marcar la semana en curso solo con color en lugar
-  de la palabra `AHORA`.
-- **Don't** bajar `ink-faint` por debajo del suelo de 4.5:1 para recuperar jerarquía; tomarla del tamaño o
-  del peso.
-- **Don't** añadir animaciones de entrada. El sistema tiene un único momento autoral; lo demás se mueve
-  solo como respuesta a una acción del usuario y siempre respetando `prefers-reduced-motion`.
-- **Don't** cargar iframes, fuentes o imágenes de terceros en la carga inicial: el vídeo incrustado se crea
-  al pulsar, y las fuentes van auto-alojadas.
-- **Don't** usar emoji ni una librería de iconos como sustituto de `Icon.astro`.
-- **Don't** cifrar la jerarquía de las semanas en una rejilla de tarjetas iguales: la semana en curso se
-  abre, el resto es registro.
-
-## Known tension
-
-Al subir `--color-ink-faint` de `#6c7787` a `#828d9c` para cruzar el suelo de contraste, el hueco con
-`--color-ink-dim` se estrechó: donde ambos valores aparecen adyacentes, la jerarquía de tres niveles de
-texto se lee más cerca de dos. Es una regresión aceptada, no un descuido. El remedio, si alguna vez
-importa, es tomar el tercer nivel del tamaño o del peso —nunca devolviendo el valor por debajo del suelo.
+- **Don't** usar sombras. No hay ninguna en el proyecto y no se añade la primera; si algo tiene que
+  destacar, sube de tono.
+- **Don't** poner borde y sombra a la vez, ni dos filetes concéntricos.
+- **Don't** distinguir un estado solo por color, ni usar un pastel de fase como color de acción.
+- **Don't** introducir un segundo color saturado: los pasteles existen precisamente para no competir
+  con el cian.
+- **Don't** escribir `accent-ink` sobre una superficie; solo vive encima del acento.
+- **Don't** dejar texto sobre una fotografía sin el degradado de `PhotoCard` debajo, ni confiar en
+  que la foto concreta ya tenga contraste suficiente.
+- **Don't** usar iconos de librería, fuentes de iconos ni emoji haciendo de icono.
+- **Don't** meter una segunda familia tipográfica: la jerarquía se hace con peso y tamaño.
+- **Don't** poner cifras comparables en tipografía proporcional.
+- **Don't** añadir una línea pequeña en versalitas encima de un título si no aporta un dato que el
+  título no tiene: la que existe sobre las fotos localiza la sesión (semana, fase, día) o declara el
+  estado «Tu próxima sesión»; una etiqueta decorativa en ese sitio no está justificada.
+- **Don't** deshabilitar un control sin decir al lado por qué está apagado.
+- **Don't** cargar media de terceros antes de que el usuario la pida.

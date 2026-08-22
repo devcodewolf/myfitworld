@@ -3,13 +3,7 @@
  * Iconos dibujados a mano con un solo grosor de trazo (1.75) y las mismas
  * terminaciones. Nada de librerías ni de emoji haciendo de icono.
  */
-export type IconName =
-  | 'mesocycle'
-  | 'catalog'
-  | 'history'
-  | 'settings'
-  | 'arrow-right'
-  | 'check';
+export type IconName = 'mesocycle' | 'catalog' | 'history' | 'settings' | 'arrow-right' | 'check';
 
 interface Props {
   name: IconName;
@@ -45,5 +39,5 @@ const paths: Record<IconName, string> = {
   aria-hidden="true"
   class={className}
 >
-  <path d={paths[name]} />
+  <path d={paths[name]}></path>
 </svg>

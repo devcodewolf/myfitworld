@@ -3,68 +3,87 @@ import type { GetStaticPaths } from 'astro';
 
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import BlockRow from '@/components/routine/BlockRow.astro';
-import Icon from '@/components/ui/Icon.astro';
+import WeekNav from '@/components/routine/WeekNav.astro';
+import PhotoCard from '@/components/ui/PhotoCard.astro';
 import { getActiveMesocycle, getExerciseCatalog } from '@/data';
 import { PHASE_LABELS, formatDuration, formatReserve } from '@/core/labels';
 import { daySetCount, estimateDaySeconds, groupSupersets } from '@/core/training';
-import { routes } from '@/routes';
+import { PHASE_PALETTE, dayPhoto } from '@/theme';
 
 export const getStaticPaths = (async () => {
   const mesocycle = await getActiveMesocycle();
   return mesocycle.weeks.flatMap((week) =>
     week.days.map((day) => ({
       params: { week: String(week.order), day: String(day.order) },
-      props: { week, day },
+      props: { week, day, mesocycle },
     })),
   );
 }) satisfies GetStaticPaths;
 
-const { week, day } = Astro.props;
+const { week, day, mesocycle } = Astro.props;
 const catalog = await getExerciseCatalog();
 
 const groups = groupSupersets(day);
 const sets = daySetCount(day);
 const seconds = estimateDaySeconds(day, catalog);
 const reserve = day.blocks[0]?.repsInReserve;
+const palette = PHASE_PALETTE[week.phase];
+const chips = [
+  `${sets} series`,
+  `${day.blocks.length} ejercicios`,
+  formatDuration(seconds),
+  ...(reserve !== undefined ? [formatReserve(reserve)] : []),
+];
 
 // Numeración continua sobre los bloques, respetando el agrupado por superserie.
 let position = 0;
 ---
 
-<BaseLayout title={`Semana ${week.order} · Día ${day.order} · ${day.title}`} description={day.focus}>
-  <div class="mx-auto max-w-5xl px-5 py-10 sm:px-8 lg:px-12 lg:py-16">
-    <a
-      href={routes.week(week.order)}
-      class="inline-flex items-center gap-2 text-sm font-bold text-ink-dim transition-colors hover:text-ink"
-    >
-      <Icon name="arrow-right" size={16} class="rotate-180" />
-      Semana {week.order} · {PHASE_LABELS[week.phase]}
-    </a>
+<BaseLayout
+  title={`Semana ${week.order} · Día ${day.order} · ${day.title}`}
+  description={day.focus}
+>
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    <WeekNav mesocycle={mesocycle} activeWeek={week.order} activeDay={day.order} />
 
-    <header class="border-b border-line pt-6 pb-10">
-      <h1 class="text-display font-black text-balance text-ink">{day.title}</h1>
-      <p class="mt-4 max-w-[60ch] text-lg leading-relaxed text-ink-dim">{day.focus}</p>
-
-      <div class="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
-        <button
-          type="button"
-          disabled
-          class="inline-flex min-h-14 cursor-not-allowed items-center justify-center gap-3 rounded-full border border-line-strong px-8 text-lg font-extrabold text-ink-faint"
+    <div class="pt-8">
+      <PhotoCard photo={dayPhoto(day.order)} alt="" eager ratio="21/9" class="min-h-76">
+        <h1 class="text-display font-black tracking-[-0.03em] text-balance text-ink">
+          {day.title}
+        </h1>
+        <p
+          class="figures mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-bold text-ink-dim"
         >
-          Entrenar
-        </button>
-        <div>
-          <p class="figures text-sm text-ink-dim">
-            Día {day.order} · {day.blocks.length} ejercicios · {sets} series ·{' '}
-            {formatDuration(seconds)}
-            {reserve !== undefined && ` · ${formatReserve(reserve)}`}
-          </p>
-          <p class="mt-1 text-sm text-ink-faint">
-            El modo entreno todavía no está construido: de momento puedes consultar el plan.
-          </p>
+          <span class:list={['h-0.5 w-6 rounded-full', palette.mark]} aria-hidden="true"></span>
+          Semana {String(week.order).padStart(2, '0')} · {PHASE_LABELS[week.phase]} · Día {
+            day.order
+          }
+        </p>
+        <p class="mt-3 max-w-[55ch] text-base leading-relaxed text-ink-dim">{day.focus}</p>
+
+        <div class="mt-5 flex flex-wrap items-center gap-4">
+          <button
+            type="button"
+            disabled
+            class="inline-flex min-h-14 cursor-not-allowed items-center justify-center gap-3 rounded-full border border-line-strong bg-[color-mix(in_oklab,var(--color-ground)_65%,transparent)] px-7 text-base font-extrabold text-ink-faint backdrop-blur-sm"
+          >
+            Entrenar
+          </button>
+          <ul class="figures flex flex-wrap gap-2">
+            {
+              chips.map((chip) => (
+                <li class="rounded-full border border-line bg-[color-mix(in_oklab,var(--color-ground)_65%,transparent)] px-3.5 py-1.5 text-sm font-semibold text-ink backdrop-blur-sm">
+                  {chip}
+                </li>
+              ))
+            }
+          </ul>
         </div>
-      </div>
-    </header>
+        <p class="mt-3 text-sm text-ink-faint">
+          El modo entreno todavía no está construido: de momento puedes consultar el plan.
+        </p>
+      </PhotoCard>
+    </div>
 
     {
       day.warmupNotes && (
@@ -81,7 +100,10 @@ let position = 0;
     }
 
     <section class="pt-8" aria-labelledby="ejercicios">
-      <h2 id="ejercicios" class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase">
+      <h2
+        id="ejercicios"
+        class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase"
+      >
         Ejercicios
       </h2>
       {
@@ -96,7 +118,7 @@ let position = 0;
               />
             </ul>
           ) : (
-            <div class="my-4 rounded-card border border-line-strong bg-surface px-5">
+            <div class="panel my-4 rounded-card border border-line-strong px-5">
               <p class="figures pt-5 text-[0.72rem] font-bold tracking-[0.2em] text-ink-dim uppercase">
                 Superserie · {group.length} ejercicios encadenados
               </p>

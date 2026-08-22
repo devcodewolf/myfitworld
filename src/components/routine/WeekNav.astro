@@ -1,0 +1,79 @@
+---
+/**
+ * Columna vertebral de la app: dónde estás dentro del mesociclo.
+ * Una fila de semanas y, debajo, los días de la semana abierta.
+ */
+import type { Mesocycle } from '@/core/model';
+import { PHASE_LABELS } from '@/core/labels';
+import { routes } from '@/routes';
+import { PHASE_PALETTE } from '@/theme';
+
+interface Props {
+  mesocycle: Mesocycle;
+  /** Semana abierta ahora mismo. */
+  activeWeek: number;
+  /** Día abierto, si estamos dentro de uno. */
+  activeDay?: number;
+}
+
+const { mesocycle, activeWeek, activeDay } = Astro.props;
+const week = mesocycle.weeks.find((item) => item.order === activeWeek) ?? mesocycle.weeks[0]!;
+---
+
+<div class="flex flex-col gap-3">
+  <ol class="flex gap-2 overflow-x-auto pb-1">
+    {
+      mesocycle.weeks.map((item) => {
+        const active = item.order === activeWeek;
+        const palette = PHASE_PALETTE[item.phase];
+        return (
+          <li class="shrink-0">
+            <a
+              href={routes.week(item.order)}
+              aria-current={active ? 'page' : undefined}
+              class:list={[
+                'figures flex min-h-14 flex-col justify-center rounded-2xl border px-4 py-2 transition-colors',
+                active
+                  ? 'border-line-strong bg-raised'
+                  : 'border-line bg-surface hover:border-line-strong',
+              ]}
+            >
+              <span class="flex items-center gap-2 text-sm font-bold text-ink">
+                <span class:list={['size-2 rounded-full', palette.mark]} aria-hidden="true" />
+                Semana {String(item.order).padStart(2, '0')}
+              </span>
+              <span class:list={['pl-4 text-xs font-semibold', palette.text]}>
+                {PHASE_LABELS[item.phase]}
+              </span>
+            </a>
+          </li>
+        );
+      })
+    }
+  </ol>
+
+  <ol class="flex gap-2 overflow-x-auto pb-1">
+    {
+      week.days.map((day) => {
+        const active = day.order === activeDay;
+        return (
+          <li class="shrink-0">
+            <a
+              href={routes.day(week.order, day.order)}
+              aria-current={active ? 'page' : undefined}
+              class:list={[
+                'flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm transition-colors',
+                active
+                  ? 'border-line-strong bg-raised font-bold text-ink'
+                  : 'border-line text-ink-dim hover:border-line-strong hover:text-ink',
+              ]}
+            >
+              <span class="figures font-bold">Día {day.order}</span>
+              <span class="hidden text-ink-faint sm:inline">{day.title}</span>
+            </a>
+          </li>
+        );
+      })
+    }
+  </ol>
+</div>

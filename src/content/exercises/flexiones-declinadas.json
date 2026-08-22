@@ -1,19 +1,8 @@
 {
   "name": "Flexiones declinadas",
-  "primaryMuscles": [
-    "chest",
-    "front_delts"
-  ],
-  "secondaryMuscles": [
-    "triceps",
-    "core"
-  ],
-  "equipment": [
-    "bodyweight",
-    "floor",
-    "chair",
-    "box"
-  ],
+  "primaryMuscles": ["chest", "front_delts"],
+  "secondaryMuscles": ["triceps", "core"],
+  "equipment": ["bodyweight", "floor", "chair", "box"],
   "difficulty": "advanced",
   "loadType": "bodyweight",
   "cues": [
@@ -26,7 +15,5 @@
     "Perder la línea del cuerpo y sacar el glúteo"
   ],
   "defaultRestSeconds": 90,
-  "substitutions": [
-    "flexiones"
-  ]
+  "substitutions": ["flexiones"]
 }

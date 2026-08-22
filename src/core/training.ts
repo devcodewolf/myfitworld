@@ -60,11 +60,7 @@ export function estimateBlockSeconds(
 /** Cinco minutos de calentamiento cuando el día lo prescribe. */
 const WARMUP_SECONDS = 300;
 
-export function estimateDaySeconds(
-  day: Day,
-  catalog: ExerciseCatalog,
-  restMultiplier = 1,
-): number {
+export function estimateDaySeconds(day: Day, catalog: ExerciseCatalog, restMultiplier = 1): number {
   const blocks = day.blocks.reduce(
     (total, block) => total + estimateBlockSeconds(block, catalog, restMultiplier),
     0,

@@ -1,17 +1,8 @@
 {
   "name": "Sentadilla goblet",
-  "primaryMuscles": [
-    "quads",
-    "glutes"
-  ],
-  "secondaryMuscles": [
-    "core",
-    "adductors",
-    "upper_back"
-  ],
-  "equipment": [
-    "dumbbell"
-  ],
+  "primaryMuscles": ["quads", "glutes"],
+  "secondaryMuscles": ["core", "adductors", "upper_back"],
+  "equipment": ["dumbbell"],
   "difficulty": "beginner",
   "loadType": "external",
   "cues": [
@@ -24,7 +15,5 @@
     "Levantar los talones del suelo al bajar"
   ],
   "defaultRestSeconds": 120,
-  "substitutions": [
-    "zancadas-mancuernas"
-  ]
+  "substitutions": ["zancadas-mancuernas"]
 }

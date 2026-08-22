@@ -1,17 +1,8 @@
 {
   "name": "Fondos entre bancos",
-  "primaryMuscles": [
-    "triceps"
-  ],
-  "secondaryMuscles": [
-    "front_delts",
-    "chest"
-  ],
-  "equipment": [
-    "bodyweight",
-    "chair",
-    "bench"
-  ],
+  "primaryMuscles": ["triceps"],
+  "secondaryMuscles": ["front_delts", "chest"],
+  "equipment": ["bodyweight", "chair", "bench"],
   "difficulty": "intermediate",
   "loadType": "bodyweight",
   "cues": [
@@ -24,7 +15,5 @@
     "Alejar el cuerpo del banco y perder el eje del movimiento"
   ],
   "defaultRestSeconds": 60,
-  "substitutions": [
-    "extension-triceps-tras-nuca"
-  ]
+  "substitutions": ["extension-triceps-tras-nuca"]
 }

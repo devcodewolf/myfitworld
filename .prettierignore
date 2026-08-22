@@ -1,0 +1,9 @@
+dist/
+node_modules/
+pnpm-lock.yaml
+.astro/
+.impeccable/
+.agents/
+src/assets/
+DESIGN.md
+PRODUCT.md

@@ -23,13 +23,16 @@ const palette = PHASE_PALETTE[week.phase];
   href={routes.week(week.order)}
   class="group grid grid-cols-[auto_1fr_auto] items-center gap-x-5 gap-y-2 border-b border-line px-1 py-5 transition-colors last:border-b-0 hover:bg-surface sm:grid-cols-[4.5rem_1fr_auto_auto_auto_auto] sm:gap-x-8"
 >
-  <p class="figures text-figure font-extrabold text-ink-faint transition-colors group-hover:text-ink">
+  <p
+    class="figures text-figure font-extrabold text-ink-faint transition-colors group-hover:text-ink"
+  >
     {String(week.order).padStart(2, '0')}
   </p>
 
   <div class="min-w-0">
     <h3 class:list={['flex items-center gap-2.5 text-lg font-bold', palette.text]}>
-      <span class:list={['h-3.5 w-1 shrink-0 rounded-full', palette.mark]} aria-hidden="true" />
+      <span class:list={['h-3.5 w-1 shrink-0 rounded-full', palette.mark]} aria-hidden="true"
+      ></span>
       {PHASE_LABELS[week.phase]}
     </h3>
     <p class="mt-0.5 truncate pl-[1.375rem] text-sm text-ink-dim">{week.focus}</p>

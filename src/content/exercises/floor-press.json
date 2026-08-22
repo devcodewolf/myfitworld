@@ -1,16 +1,8 @@
 {
   "name": "Floor press con mancuernas",
-  "primaryMuscles": [
-    "chest",
-    "triceps"
-  ],
-  "secondaryMuscles": [
-    "front_delts"
-  ],
-  "equipment": [
-    "dumbbell",
-    "floor"
-  ],
+  "primaryMuscles": ["chest", "triceps"],
+  "secondaryMuscles": ["front_delts"],
+  "equipment": ["dumbbell", "floor"],
   "difficulty": "beginner",
   "loadType": "external",
   "cues": [
@@ -23,7 +15,5 @@
     "Juntar las mancuernas arriba perdiendo la tensión del pectoral"
   ],
   "defaultRestSeconds": 120,
-  "substitutions": [
-    "flexiones"
-  ]
+  "substitutions": ["flexiones"]
 }

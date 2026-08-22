@@ -88,7 +88,9 @@ export async function assertRoutineIntegrity(): Promise<void> {
         day.blocks.forEach((block, blockIndex) => {
           const position = `${where} › bloque ${blockIndex + 1}`;
           if (!catalog.has(block.exerciseId)) {
-            problems.push(`${position} › el ejercicio "${block.exerciseId}" no existe en el catálogo`);
+            problems.push(
+              `${position} › el ejercicio "${block.exerciseId}" no existe en el catálogo`,
+            );
           }
           const key = blockKeyOf(block);
           if (keys.has(key)) {

@@ -185,12 +185,7 @@ export const DaySchema = z.object({
   blocks: z.array(ExerciseBlockSchema).min(1),
 });
 
-export const WeekPhaseSchema = z.enum([
-  'accumulation',
-  'progression',
-  'intensification',
-  'deload',
-]);
+export const WeekPhaseSchema = z.enum(['accumulation', 'progression', 'intensification', 'deload']);
 
 export const WeekSchema = z.object({
   order: z.number().int().min(1).max(12),
