@@ -8,9 +8,16 @@ App personal de entrenamiento en casa: mesociclos, días, y un modo entreno que 
 pnpm install
 pnpm dev        # servidor de desarrollo en http://localhost:4321
 pnpm check      # comprobación de tipos (TypeScript strict, cero errores)
+pnpm test       # tests del dominio puro
+pnpm test:watch # los mismos, en observación mientras editas
+pnpm format     # Prettier sobre todo el proyecto
 pnpm build      # build estático en dist/
 pnpm preview    # sirve dist/ para revisarlo antes de subir
 ```
+
+Los tests cubren solo `src/core/`, que es lógica pura: temporizadores, volumen,
+duración estimada, material disponible y progresión. Nada de eso toca el DOM ni
+el almacenamiento, así que se puede probar entero sin navegador.
 
 En este entorno el servidor de desarrollo se maneja en segundo plano:
 
@@ -44,6 +51,7 @@ src/
 ├─ data.ts        de dónde salen los datos y comprobación de integridad
 ├─ routes.ts      todas las URLs de la app se construyen aquí
 ├─ core/          LÓGICA PURA: modelo, cálculos, etiquetas. Sin navegador.
+│                 Cada módulo tiene su `*.test.ts` al lado.
 ├─ components/    lo que se ve
 ├─ layouts/
 ├─ pages/         composición y rutas
