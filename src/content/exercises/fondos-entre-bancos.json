@@ -1,0 +1,30 @@
+{
+  "name": "Fondos entre bancos",
+  "primaryMuscles": [
+    "triceps"
+  ],
+  "secondaryMuscles": [
+    "front_delts",
+    "chest"
+  ],
+  "equipment": [
+    "bodyweight",
+    "chair",
+    "bench"
+  ],
+  "difficulty": "intermediate",
+  "loadType": "bodyweight",
+  "cues": [
+    "Manos al borde del asiento, dedos hacia delante",
+    "Baja hasta que el codo forme 90 grados, no más",
+    "Mantén la espalda rozando el banco durante todo el recorrido"
+  ],
+  "commonMistakes": [
+    "Bajar demasiado y forzar la cápsula del hombro",
+    "Alejar el cuerpo del banco y perder el eje del movimiento"
+  ],
+  "defaultRestSeconds": 60,
+  "substitutions": [
+    "extension-triceps-tras-nuca"
+  ]
+}

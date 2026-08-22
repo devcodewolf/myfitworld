@@ -1,0 +1,31 @@
+{
+  "name": "Zancadas con mancuernas",
+  "primaryMuscles": [
+    "quads",
+    "glutes"
+  ],
+  "secondaryMuscles": [
+    "hamstrings",
+    "calves",
+    "core"
+  ],
+  "equipment": [
+    "dumbbell"
+  ],
+  "difficulty": "intermediate",
+  "loadType": "bodyweight_plus",
+  "unilateral": true,
+  "cues": [
+    "Paso largo y bajada vertical: la rodilla de atrás casi toca el suelo",
+    "Torso erguido, mancuernas colgando a los lados",
+    "Empuja con el talón de la pierna de delante para volver"
+  ],
+  "commonMistakes": [
+    "Paso corto, que carga la rodilla delantera",
+    "Inclinar el torso hacia delante al subir"
+  ],
+  "defaultRestSeconds": 90,
+  "substitutions": [
+    "sentadilla-bulgara"
+  ]
+}

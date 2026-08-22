@@ -1,0 +1,48 @@
+---
+import type { Week } from '@/core/model';
+import type { ExerciseCatalog } from '@/core/training';
+import { estimateWeekSeconds, weekSetCount } from '@/core/training';
+import { PHASE_LABELS, formatDuration } from '@/core/labels';
+import { routes } from '@/routes';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  week: Week;
+  catalog: ExerciseCatalog;
+}
+
+const { week, catalog } = Astro.props;
+
+const sets = weekSetCount(week);
+const seconds = estimateWeekSeconds(week, catalog);
+---
+
+<a
+  href={routes.week(week.order)}
+  class="group grid grid-cols-[auto_1fr_auto] items-center gap-x-5 gap-y-2 border-b border-line px-1 py-5 transition-colors last:border-b-0 hover:bg-surface sm:grid-cols-[4.5rem_1fr_auto_auto_auto_auto] sm:gap-x-8"
+>
+  <p class="figures text-figure font-extrabold text-ink-faint transition-colors group-hover:text-ink">
+    {String(week.order).padStart(2, '0')}
+  </p>
+
+  <div class="min-w-0">
+    <h3 class="text-lg font-bold text-ink">{PHASE_LABELS[week.phase]}</h3>
+    <p class="mt-0.5 truncate text-sm text-ink-dim">{week.focus}</p>
+  </div>
+
+  <p class="figures col-start-2 text-sm text-ink-dim sm:col-start-auto">
+    <span class="font-bold text-ink">{sets}</span> series
+  </p>
+
+  <p class="figures hidden text-sm text-ink-dim sm:block">
+    <span class="font-bold text-ink">{week.days.length}</span> días
+  </p>
+
+  <p class="figures hidden text-sm text-ink-dim md:block">{formatDuration(seconds)}</p>
+
+  <Icon
+    name="arrow-right"
+    size={20}
+    class="col-start-3 row-start-1 self-center text-ink-faint transition-all group-hover:translate-x-1 group-hover:text-ink sm:col-start-auto sm:row-start-auto"
+  />
+</a>

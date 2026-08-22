@@ -1,0 +1,26 @@
+{
+  "name": "Curl martillo",
+  "primaryMuscles": [
+    "biceps",
+    "forearms"
+  ],
+  "secondaryMuscles": [],
+  "equipment": [
+    "dumbbell"
+  ],
+  "difficulty": "beginner",
+  "loadType": "external",
+  "cues": [
+    "Palmas enfrentadas durante todo el recorrido, como si sujetaras un martillo",
+    "Codos quietos pegados al costado",
+    "Sube sin balancear y baja controlando"
+  ],
+  "commonMistakes": [
+    "Girar la muñeca a mitad de subida",
+    "Usar el balanceo del cuerpo como impulso"
+  ],
+  "defaultRestSeconds": 60,
+  "substitutions": [
+    "curl-biceps-supino"
+  ]
+}

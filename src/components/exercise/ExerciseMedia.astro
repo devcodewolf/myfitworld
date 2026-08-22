@@ -1,0 +1,120 @@
+---
+/**
+ * Única puerta de entrada a la media de un ejercicio.
+ *
+ * Reserva el hueco por aspect-ratio siempre, así que el layout no salta ni
+ * cuando el asset no existe todavía. El vídeo de terceros no carga nada hasta
+ * que se pulsa: en modo entreno no puede haber una petición a YouTube por serie.
+ */
+import type { MediaAsset } from '@/core/model';
+
+interface Props {
+  asset?: MediaAsset;
+  /** El ejercicio activo en modo entreno carga de inmediato; el resto, en diferido. */
+  eager?: boolean;
+  label: string;
+  class?: string;
+}
+
+const { asset, eager = false, label, class: className } = Astro.props;
+const ratio = asset?.aspectRatio ?? '4/3';
+---
+
+<figure
+  class:list={['relative overflow-hidden rounded-card border border-line bg-surface', className]}
+  style={`aspect-ratio: ${ratio}`}
+>
+  {
+    asset === undefined && (
+      <div class="absolute inset-0 grid place-content-center gap-2 text-center">
+        <p class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase">
+          Croquis pendiente
+        </p>
+        <p class="max-w-[24ch] px-4 text-sm text-ink-faint">
+          Aún no hay animación de {label}.
+        </p>
+      </div>
+    )
+  }
+
+  {
+    asset?.kind === 'image' && (
+      <img
+        src={asset.src}
+        alt={asset.alt}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+        class="size-full object-cover"
+      />
+    )
+  }
+
+  {
+    asset?.kind === 'croquis' && (
+      <img
+        src={asset.src}
+        alt={asset.alt}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+        class="size-full object-contain p-4 text-ink"
+      />
+    )
+  }
+
+  {
+    asset?.kind === 'video' && (
+      <video
+        muted
+        loop
+        playsinline
+        autoplay={eager}
+        preload={eager ? 'auto' : 'none'}
+        poster={asset.poster}
+        aria-label={asset.alt}
+        class="size-full object-cover"
+      >
+        {asset.sources.map((source) => (
+          <source src={source.src} type={source.type} />
+        ))}
+      </video>
+    )
+  }
+
+  {
+    asset?.kind === 'embed' && (
+      <button
+        type="button"
+        class="group absolute inset-0 grid place-content-center gap-3 text-center"
+        data-embed-provider={asset.provider}
+        data-embed-id={asset.videoId}
+        data-embed-start={asset.startSeconds ?? 0}
+      >
+        <span class="mx-auto grid size-16 place-content-center rounded-full bg-ink text-ground transition-transform group-hover:scale-105">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M8 5.5v13l11-6.5z" />
+          </svg>
+        </span>
+        <span class="text-sm font-bold text-ink-dim">Ver la ejecución en vídeo</span>
+        <span class="sr-only">{asset.alt}</span>
+      </button>
+    )
+  }
+</figure>
+
+<script>
+  // El iframe de terceros se crea al pulsar, nunca antes.
+  document.querySelectorAll<HTMLButtonElement>('[data-embed-provider]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const { embedProvider, embedId, embedStart } = button.dataset;
+      const iframe = document.createElement('iframe');
+      iframe.src =
+        embedProvider === 'vimeo'
+          ? `https://player.vimeo.com/video/${embedId}?autoplay=1#t=${embedStart}s`
+          : `https://www.youtube-nocookie.com/embed/${embedId}?autoplay=1&start=${embedStart}`;
+      iframe.allow = 'autoplay; fullscreen';
+      iframe.className = 'absolute inset-0 size-full';
+      iframe.title = button.querySelector('.sr-only')?.textContent ?? 'Vídeo del ejercicio';
+      button.replaceWith(iframe);
+    });
+  });
+</script>

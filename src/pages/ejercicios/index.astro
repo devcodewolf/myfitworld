@@ -1,0 +1,48 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ExerciseMedia from '@/components/exercise/ExerciseMedia.astro';
+import { getExerciseCatalog } from '@/data';
+import { DIFFICULTY_LABELS, MUSCLE_LABELS } from '@/core/labels';
+import { routes } from '@/routes';
+
+const catalog = await getExerciseCatalog();
+const exercises = [...catalog.values()].sort((a, b) => a.name.localeCompare(b.name, 'es'));
+---
+
+<BaseLayout
+  title="Ejercicios · My Fitness World"
+  description="Catálogo de los ejercicios del mesociclo, con sus claves de técnica."
+>
+  <div class="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:px-12 lg:py-16">
+    <header class="border-b border-line pb-10">
+      <h1 class="text-display font-black text-ink">Ejercicios</h1>
+      <p class="figures mt-4 text-lg text-ink-dim">
+        {exercises.length} ejercicios en el catálogo del mesociclo.
+      </p>
+    </header>
+
+    <ul class="grid gap-4 pt-10 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        exercises.map((exercise) => (
+          <li>
+            <a
+              href={routes.exercise(exercise.id)}
+              class="group flex h-full flex-col rounded-card border border-line bg-surface p-5 transition-colors hover:border-line-strong hover:bg-raised"
+            >
+              <ExerciseMedia label={exercise.name} asset={exercise.media?.thumbnail} class="mb-5" />
+              <h2 class="text-lg font-bold text-ink">
+                {exercise.name}
+              </h2>
+              <p class="mt-1 text-sm text-ink-dim">
+                {exercise.primaryMuscles.map((muscle) => MUSCLE_LABELS[muscle]).join(' · ')}
+              </p>
+              <p class="mt-auto pt-4 text-[0.72rem] font-bold tracking-[0.16em] text-ink-faint uppercase">
+                {DIFFICULTY_LABELS[exercise.difficulty]}
+              </p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</BaseLayout>

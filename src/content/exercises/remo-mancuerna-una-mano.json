@@ -1,0 +1,33 @@
+{
+  "name": "Remo a una mano con mancuerna",
+  "primaryMuscles": [
+    "lats",
+    "upper_back"
+  ],
+  "secondaryMuscles": [
+    "biceps",
+    "rear_delts",
+    "core"
+  ],
+  "equipment": [
+    "dumbbell",
+    "bench",
+    "chair"
+  ],
+  "difficulty": "beginner",
+  "loadType": "external",
+  "unilateral": true,
+  "cues": [
+    "Espalda plana y cadera cuadrada: no rotes el torso al tirar",
+    "Lleva el codo hacia la cadera, no hacia el hombro",
+    "Estira del todo abajo para que el dorsal trabaje en rango completo"
+  ],
+  "commonMistakes": [
+    "Tirar con el bíceps y el hombro en vez de con la espalda",
+    "Rotar el tronco para ganar recorrido con impulso"
+  ],
+  "defaultRestSeconds": 90,
+  "substitutions": [
+    "renegade-row"
+  ]
+}

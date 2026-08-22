@@ -1,0 +1,28 @@
+{
+  "name": "Extensión de tríceps tras nuca",
+  "primaryMuscles": [
+    "triceps"
+  ],
+  "secondaryMuscles": [
+    "front_delts",
+    "core"
+  ],
+  "equipment": [
+    "dumbbell"
+  ],
+  "difficulty": "beginner",
+  "loadType": "external",
+  "cues": [
+    "Codos apuntando al techo y pegados a la cabeza",
+    "Baja hasta notar el estiramiento completo del tríceps",
+    "Costillas abajo: no compenses arqueando la lumbar"
+  ],
+  "commonMistakes": [
+    "Abrir los codos hacia los lados al subir",
+    "Arquear la espalda para poder con más peso"
+  ],
+  "defaultRestSeconds": 60,
+  "substitutions": [
+    "fondos-entre-bancos"
+  ]
+}
