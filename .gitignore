@@ -22,3 +22,8 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Impeccable: estado local de la skill (capturas, servidor de decisiones, config de máquina)
+.impeccable/review/
+.impeccable/questions/
+.impeccable/config.local.json

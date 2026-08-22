@@ -1,0 +1,28 @@
+{
+  "name": "Pájaros (vuelos posteriores)",
+  "primaryMuscles": [
+    "rear_delts"
+  ],
+  "secondaryMuscles": [
+    "upper_back",
+    "traps"
+  ],
+  "equipment": [
+    "dumbbell"
+  ],
+  "difficulty": "beginner",
+  "loadType": "external",
+  "cues": [
+    "Bisagra de cadera hasta casi 90 grados, espalda plana",
+    "Abre los brazos hacia los lados, no hacia atrás",
+    "Piensa en separar las mancuernas, no en levantarlas"
+  ],
+  "commonMistakes": [
+    "Incorporarse a la vez que se abren los brazos",
+    "Convertirlo en un remo llevando los codos hacia atrás"
+  ],
+  "defaultRestSeconds": 60,
+  "substitutions": [
+    "remo-mancuerna-una-mano"
+  ]
+}

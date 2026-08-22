@@ -1,0 +1,63 @@
+---
+import type { GetStaticPaths } from 'astro';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import DayCard from '@/components/routine/DayCard.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { getActiveMesocycle, getExerciseCatalog } from '@/data';
+import { PHASE_LABELS, formatDuration, formatReserve } from '@/core/labels';
+import { estimateWeekSeconds, weekSetCount } from '@/core/training';
+import { routes } from '@/routes';
+
+export const getStaticPaths = (async () => {
+  const mesocycle = await getActiveMesocycle();
+  return mesocycle.weeks.map((week) => ({
+    params: { week: String(week.order) },
+    props: { week },
+  }));
+}) satisfies GetStaticPaths;
+
+const { week } = Astro.props;
+const catalog = await getExerciseCatalog();
+
+const sets = weekSetCount(week);
+const seconds = estimateWeekSeconds(week, catalog);
+const reserve = week.days[0]?.blocks[0]?.repsInReserve;
+---
+
+<BaseLayout title={`Semana ${week.order} · ${PHASE_LABELS[week.phase]}`} description={week.focus}>
+  <div class="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:px-12 lg:py-16">
+    <a
+      href={routes.home()}
+      class="inline-flex items-center gap-2 text-sm font-bold text-ink-dim transition-colors hover:text-ink"
+    >
+      <Icon name="arrow-right" size={16} class="rotate-180" />
+      Mesociclo
+    </a>
+
+    <header class="border-b border-line pt-6 pb-10">
+      <h1 class="text-display font-black text-ink">{PHASE_LABELS[week.phase]}</h1>
+      <p class="mt-4 max-w-[60ch] text-lg leading-relaxed text-ink-dim">{week.focus}</p>
+
+      <p class="figures mt-8 flex flex-wrap gap-x-8 gap-y-2 text-sm text-ink-dim">
+        <span>
+          Semana <span class="font-bold text-ink">{String(week.order).padStart(2, '0')}</span> de 4
+        </span>
+        <span><span class="font-bold text-ink">{week.days.length}</span> días</span>
+        <span><span class="font-bold text-ink">{sets}</span> series</span>
+        <span><span class="font-bold text-ink">{formatDuration(seconds)}</span> estimadas</span>
+        {reserve !== undefined && <span class="text-ink-faint">{formatReserve(reserve)}</span>}
+      </p>
+    </header>
+
+    {
+      week.notes && (
+        <p class="max-w-[65ch] pt-10 text-base leading-relaxed text-ink-dim">{week.notes}</p>
+      )
+    }
+
+    <div class="grid gap-4 pt-8 md:grid-cols-3">
+      {week.days.map((day) => <DayCard day={day} weekOrder={week.order} catalog={catalog} />)}
+    </div>
+  </div>
+</BaseLayout>

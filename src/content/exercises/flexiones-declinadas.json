@@ -1,0 +1,32 @@
+{
+  "name": "Flexiones declinadas",
+  "primaryMuscles": [
+    "chest",
+    "front_delts"
+  ],
+  "secondaryMuscles": [
+    "triceps",
+    "core"
+  ],
+  "equipment": [
+    "bodyweight",
+    "floor",
+    "chair",
+    "box"
+  ],
+  "difficulty": "advanced",
+  "loadType": "bodyweight",
+  "cues": [
+    "Pies elevados sobre una silla o cajón estable, cuerpo en línea recta",
+    "Cuanto más alto el apoyo, más carga sobre el pectoral superior y el hombro",
+    "Controla la bajada: es la variante donde más fácil es dejarse caer"
+  ],
+  "commonMistakes": [
+    "Elevar tanto los pies que el ejercicio se convierte en un press vertical",
+    "Perder la línea del cuerpo y sacar el glúteo"
+  ],
+  "defaultRestSeconds": 90,
+  "substitutions": [
+    "flexiones"
+  ]
+}

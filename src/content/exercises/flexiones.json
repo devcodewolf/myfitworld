@@ -1,0 +1,31 @@
+{
+  "name": "Flexiones",
+  "primaryMuscles": [
+    "chest",
+    "front_delts",
+    "triceps"
+  ],
+  "secondaryMuscles": [
+    "core"
+  ],
+  "equipment": [
+    "bodyweight",
+    "floor"
+  ],
+  "difficulty": "intermediate",
+  "loadType": "bodyweight",
+  "cues": [
+    "Cuerpo en tabla: glúteo y abdomen apretados de principio a fin",
+    "Codos a unos 45 grados del torso, nunca abiertos en cruz",
+    "Baja controlando 3 segundos y sube sin rebotar en el suelo"
+  ],
+  "commonMistakes": [
+    "Hundir la cadera o levantar el glúteo para acortar el recorrido",
+    "Bajar solo media repetición y contarla entera"
+  ],
+  "defaultRestSeconds": 90,
+  "substitutions": [
+    "flexiones-declinadas",
+    "floor-press"
+  ]
+}

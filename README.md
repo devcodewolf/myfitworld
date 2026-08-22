@@ -1,43 +1,61 @@
-# Astro Starter Kit: Minimal
+# My Fitness World
 
-```sh
-npm create astro@latest -- --template minimal
+App personal de entrenamiento en casa: mesociclos, días, y un modo entreno que lleva el ritmo.
+
+## Comandos
+
+```bash
+pnpm install
+pnpm dev        # servidor de desarrollo en http://localhost:4321
+pnpm check      # comprobación de tipos (TypeScript strict, cero errores)
+pnpm build      # build estático en dist/
+pnpm preview    # sirve dist/ para revisarlo antes de subir
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+En este entorno el servidor de desarrollo se maneja en segundo plano:
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```bash
+astro dev --background
+astro dev status
+astro dev logs
+astro dev stop
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Desplegar en una subcarpeta
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Astro no sabe emitir rutas relativas: con `base: './'` escribe `/./` y el sitio se rompe fuera de
+la raíz. La portabilidad se resuelve en tiempo de build con una variable:
 
-Any static assets, like images, can be placed in the `public/` directory.
+```bash
+BASE_PATH=/entreno pnpm build     # el sitio vivirá en https://tu-servidor/entreno/
+pnpm build                        # sin variable, se despliega en la raíz
+```
 
-## 🧞 Commands
+Luego se copia el contenido de `dist/` dentro de esa carpeta del servidor. Cambiar de carpeta obliga
+a reconstruir, nada más. Todos los enlaces internos salen de `src/routes.ts`, que es lo único que
+hay que tocar si aparece una ruta nueva.
 
-All commands are run from the root of the project, from a terminal:
+## Cómo está organizado
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+```
+src/
+├─ content/       LOS DATOS. Lo único que editas para cambiar la rutina.
+├─ content.config.ts   define y valida las colecciones con Zod
+├─ data.ts        de dónde salen los datos y comprobación de integridad
+├─ routes.ts      todas las URLs de la app se construyen aquí
+├─ core/          LÓGICA PURA: modelo, cálculos, etiquetas. Sin navegador.
+├─ components/    lo que se ve
+├─ layouts/
+├─ pages/         composición y rutas
+└─ styles/        tokens del sistema de diseño en @theme
+```
 
-## 👀 Want to learn more?
+Carpetas previstas y todavía sin construir: `storage/` (persistencia tras una interfaz de
+repositorio) y `browser/` (audio, vibración, wake lock).
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Editar la rutina
+
+Un archivo JSON por ejercicio en `src/content/exercises/` (el nombre del archivo es su identificador)
+y uno por mesociclo en `src/content/mesocycles/`. El build **falla** si un día referencia un ejercicio
+que no existe, si dos bloques comparten clave o si una superserie se queda con un solo ejercicio, y el
+error dice exactamente qué bloque de qué día lo provoca.

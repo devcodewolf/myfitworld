@@ -1,17 +1,137 @@
 ---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import DayCard from '@/components/routine/DayCard.astro';
+import WeekRow from '@/components/routine/WeekRow.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { getActiveMesocycle, getExerciseCatalog } from '@/data';
+import { PHASE_LABELS } from '@/core/labels';
+import { routes } from '@/routes';
 
+const mesocycle = await getActiveMesocycle();
+const catalog = await getExerciseCatalog();
+
+// El estado real de cada semana vive en el historial, que aún no existe: hasta
+// que exista la capa de persistencia, la semana en curso es la primera.
+const currentWeek = mesocycle.weeks[0]!;
+const remainingWeeks = mesocycle.weeks.slice(1);
+const firstDay = currentWeek.days[0]!;
+const totalSessions = mesocycle.weeks.reduce((total, week) => total + week.days.length, 0);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title={`${mesocycle.name} · My Fitness World`} description={mesocycle.description}>
+  <div class="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:px-12 lg:py-16">
+    <header class="border-b border-line pb-8">
+      <h1 class="max-w-3xl text-display font-black text-balance text-ink">{mesocycle.name}</h1>
+      {
+        mesocycle.description && (
+          <p class="mt-4 max-w-[60ch] text-lg leading-relaxed text-ink-dim">
+            {mesocycle.description}
+          </p>
+        )
+      }
+
+      <div class="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center">
+        <a
+          href={routes.day(currentWeek.order, firstDay.order)}
+          class="inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-volt px-6 py-3 text-center text-base font-extrabold tracking-[-0.01em] text-volt-ink transition-transform hover:scale-[1.02] active:scale-100 sm:px-8 sm:text-lg"
+        >
+          Empezar Día {firstDay.order} · {firstDay.title}
+          <Icon name="arrow-right" size={20} class="shrink-0" />
+        </a>
+        <p class="figures text-sm text-ink-faint">
+          {totalSessions} sesiones en el mesociclo. Aún no has registrado ninguna.
+        </p>
+      </div>
+    </header>
+
+    <section class="pt-8" aria-labelledby="semana-actual">
+      <div class="flex flex-wrap items-baseline gap-x-5 gap-y-2">
+        <h2 id="semana-actual" class="figures text-figure font-extrabold text-ink">
+          Semana {String(currentWeek.order).padStart(2, '0')}
+        </h2>
+        <p class="text-lg font-bold text-ink-dim">{PHASE_LABELS[currentWeek.phase]}</p>
+        <p
+          id="marcador-ahora"
+          class="ml-auto text-[0.72rem] font-bold tracking-[0.2em] text-volt uppercase"
+        >
+          Ahora
+        </p>
+      </div>
+      <div id="barra-ahora" class="mt-3 h-0.5 origin-left bg-volt"></div>
+
+      {
+        currentWeek.notes && (
+          <p class="mt-5 max-w-[65ch] text-base leading-relaxed text-ink-dim">
+            {currentWeek.notes}
+          </p>
+        )
+      }
+
+      <div class="mt-7 grid gap-4 md:grid-cols-3">
+        {
+          currentWeek.days.map((day) => (
+            <DayCard day={day} weekOrder={currentWeek.order} catalog={catalog} />
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="pt-14" aria-labelledby="resto-mesociclo">
+      <h2
+        id="resto-mesociclo"
+        class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase"
+      >
+        El resto del mesociclo
+      </h2>
+      <div class="mt-4">
+        {remainingWeeks.map((week) => <WeekRow week={week} catalog={catalog} />)}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  /* El único momento animado de la página: la marca de "ahora" se asienta al
+     cargar. Parte de un estado ya visible y a su tamaño final, así que
+     interrumpirla a media reproducción nunca deja un elemento truncado. */
+  #barra-ahora {
+    transform-origin: left center;
+    animation: asentar 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* La etiqueta acompaña el mismo gesto, sin estirarse. */
+  #marcador-ahora {
+    animation: asentar-etiqueta 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* Arranca visible y a un tamaño legible: interrumpirla nunca deja
+     un elemento truncado, pero el gesto sí se ve. */
+  @keyframes asentar {
+    from {
+      opacity: 0.35;
+      transform: scaleX(0.82);
+    }
+    to {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+  }
+
+  @keyframes asentar-etiqueta {
+    from {
+      opacity: 0.35;
+      transform: translateY(3px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #marcador-ahora,
+    #barra-ahora {
+      animation: none;
+    }
+  }
+</style>

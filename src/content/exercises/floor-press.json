@@ -1,0 +1,29 @@
+{
+  "name": "Floor press con mancuernas",
+  "primaryMuscles": [
+    "chest",
+    "triceps"
+  ],
+  "secondaryMuscles": [
+    "front_delts"
+  ],
+  "equipment": [
+    "dumbbell",
+    "floor"
+  ],
+  "difficulty": "beginner",
+  "loadType": "external",
+  "cues": [
+    "Tumbado, rodillas dobladas y pies plantados en el suelo",
+    "Los tríceps tocan el suelo en cada repetición, sin rebotar",
+    "Codos a 45 grados, no en cruz"
+  ],
+  "commonMistakes": [
+    "Rebotar los codos contra el suelo para subir",
+    "Juntar las mancuernas arriba perdiendo la tensión del pectoral"
+  ],
+  "defaultRestSeconds": 120,
+  "substitutions": [
+    "flexiones"
+  ]
+}

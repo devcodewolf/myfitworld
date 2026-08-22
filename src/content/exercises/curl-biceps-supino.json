@@ -1,0 +1,27 @@
+{
+  "name": "Curl de bíceps supino",
+  "primaryMuscles": [
+    "biceps"
+  ],
+  "secondaryMuscles": [
+    "forearms"
+  ],
+  "equipment": [
+    "dumbbell"
+  ],
+  "difficulty": "beginner",
+  "loadType": "external",
+  "cues": [
+    "Codos pegados al costado y quietos durante todo el recorrido",
+    "Gira la muñeca hacia fuera al subir para acabar en supinación completa",
+    "Baja en 3 segundos: la excéntrica es donde está el estímulo"
+  ],
+  "commonMistakes": [
+    "Balancear el torso para lanzar la mancuerna hacia arriba",
+    "Adelantar el codo, que convierte el curl en una elevación frontal"
+  ],
+  "defaultRestSeconds": 60,
+  "substitutions": [
+    "curl-martillo"
+  ]
+}

@@ -1,0 +1,59 @@
+---
+import type { Day } from '@/core/model';
+import type { ExerciseCatalog } from '@/core/training';
+import { dayMuscleGroups, daySetCount, estimateDaySeconds } from '@/core/training';
+import { MUSCLE_LABELS, formatDuration } from '@/core/labels';
+import { routes } from '@/routes';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  day: Day;
+  weekOrder: number;
+  catalog: ExerciseCatalog;
+}
+
+const { day, weekOrder, catalog } = Astro.props;
+
+const sets = daySetCount(day);
+const seconds = estimateDaySeconds(day, catalog);
+const muscles = dayMuscleGroups(day, catalog).slice(0, 4);
+---
+
+<a
+  href={routes.day(weekOrder, day.order)}
+  class="group flex flex-col rounded-card border border-line bg-surface p-6 transition-colors hover:border-line-strong hover:bg-raised"
+>
+  <h3 class="text-2xl font-extrabold tracking-[-0.02em] text-ink">{day.title}</h3>
+  <p class="mt-2 text-sm leading-relaxed text-ink-dim">{day.focus}</p>
+
+  <dl class="figures mt-6">
+    <dt class="sr-only">Series</dt>
+    <dd class="flex items-baseline gap-2">
+      <span class="text-figure font-extrabold text-ink">{sets}</span>
+      <span class="text-[0.7rem] font-semibold tracking-[0.14em] text-ink-faint uppercase">
+        series
+      </span>
+    </dd>
+    <dt class="sr-only">Ejercicios y duración estimada</dt>
+    <dd class="mt-1 text-sm text-ink-dim">
+      Día {day.order} · {day.blocks.length} ejercicios · {formatDuration(seconds)}
+    </dd>
+  </dl>
+
+  <ul class="mt-6 flex flex-wrap gap-1.5">
+    {
+      muscles.map((muscle) => (
+        <li class="rounded-full border border-line px-2.5 py-1 text-[0.72rem] font-semibold text-ink-dim">
+          {MUSCLE_LABELS[muscle]}
+        </li>
+      ))
+    }
+  </ul>
+
+  <p
+    class="mt-auto flex items-center gap-2 pt-6 text-sm font-bold text-ink-dim transition-colors group-hover:text-ink"
+  >
+    Ver el día
+    <Icon name="arrow-right" size={18} class="transition-transform group-hover:translate-x-1" />
+  </p>
+</a>

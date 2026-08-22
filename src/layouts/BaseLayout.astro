@@ -1,0 +1,54 @@
+---
+import '@/styles/global.css';
+import AppNav from '@/components/nav/AppNav.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="color-scheme" content="dark" />
+    {description && <meta name="description" content={description} />}
+    <title>{title}</title>
+  </head>
+  <body class="min-h-dvh bg-ground text-ink">
+    <!--
+      THESIS: The plan you are inside of, not a feed about fitness. It refuses the
+      four-identical-week-cards grid: the current week opens, the rest stay a ledger.
+      OWN-WORLD: Near-black layered surfaces, hairline borders, no shadows. One volt
+      accent (#ccf24a) reserved by law for what is happening now. Archivo variable,
+      display tight at -0.03em, every comparable figure tabular.
+      STORY: He sees where he is in the mesocycle, what today costs him in sets and
+      minutes, and starts training in one click.
+      FIRST VIEWPORT: Left rail; mesocycle name at display scale; real counters
+      (0 of 12 sessions); one primary action; the current week's three days side by
+      side on desktop; weeks 2-4 as a dense ledger below.
+      FORM: canon, the category standard chosen deliberately over the dealt hand;
+      craft bar Apple Fitness / Nike Training Club; seed 7f81f74b.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the
+      finish review, the verdict, DESIGN.md, and every shipping raster carrying its
+      provenance
+    -->
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-full focus:bg-volt focus:px-5 focus:py-2.5 focus:font-semibold focus:text-volt-ink"
+    >
+      Saltar al contenido
+    </a>
+    <div class="lg:flex">
+      <AppNav />
+      <main id="contenido" class="min-w-0 flex-1 pb-24 lg:pb-0">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

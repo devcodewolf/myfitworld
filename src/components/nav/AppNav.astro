@@ -1,0 +1,46 @@
+---
+import Icon, { type IconName } from '@/components/ui/Icon.astro';
+import { isActiveRoute, routes } from '@/routes';
+
+const current = Astro.url.pathname;
+
+const links: ReadonlyArray<{ href: string; label: string; icon: IconName }> = [
+  { href: routes.home(), label: 'Mesociclo', icon: 'mesocycle' },
+  { href: routes.exercises(), label: 'Ejercicios', icon: 'catalog' },
+  { href: routes.history(), label: 'Historial', icon: 'history' },
+  { href: routes.settings(), label: 'Ajustes', icon: 'settings' },
+];
+---
+
+<nav
+  aria-label="Navegación principal"
+  class="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 backdrop-blur lg:sticky lg:top-0 lg:h-dvh lg:w-60 lg:shrink-0 lg:border-t-0 lg:border-r lg:bg-surface lg:backdrop-blur-none"
+>
+  <p class="hidden px-6 pt-7 pb-8 text-[0.7rem] font-bold tracking-[0.22em] text-ink-faint uppercase lg:block">
+    My Fitness World
+  </p>
+  <ul class="flex lg:flex-col lg:gap-1 lg:px-3">
+    {
+      links.map((link) => {
+        const active = isActiveRoute(current, link.href);
+        return (
+          <li class="flex-1">
+            <a
+              href={link.href}
+              aria-current={active ? 'page' : undefined}
+              class:list={[
+                'flex min-h-14 flex-col items-center justify-center gap-1 text-[0.72rem] font-semibold transition-colors lg:min-h-12 lg:flex-row lg:justify-start lg:gap-3 lg:rounded-xl lg:px-3 lg:text-[0.95rem]',
+                // El estado activo se lee por superficie y peso, no por color:
+                // funciona igual en escala de grises.
+                active ? 'bg-raised font-bold text-ink' : 'text-ink-dim hover:text-ink lg:hover:bg-raised/60',
+              ]}
+            >
+              <Icon name={link.icon} size={22} />
+              <span>{link.label}</span>
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>

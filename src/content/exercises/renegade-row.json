@@ -1,0 +1,33 @@
+{
+  "name": "Renegade row",
+  "primaryMuscles": [
+    "lats",
+    "upper_back",
+    "core"
+  ],
+  "secondaryMuscles": [
+    "biceps",
+    "chest",
+    "front_delts"
+  ],
+  "equipment": [
+    "dumbbell",
+    "floor"
+  ],
+  "difficulty": "advanced",
+  "loadType": "external",
+  "unilateral": true,
+  "cues": [
+    "Pies más separados de lo normal: es lo que evita que la cadera rote",
+    "Rema un brazo mientras el otro empuja el suelo con fuerza",
+    "La cadera no se mueve: si rota, el peso es excesivo"
+  ],
+  "commonMistakes": [
+    "Balancear la cadera en cada remo",
+    "Colocar los pies juntos y perder toda la estabilidad"
+  ],
+  "defaultRestSeconds": 90,
+  "substitutions": [
+    "remo-mancuerna-una-mano"
+  ]
+}

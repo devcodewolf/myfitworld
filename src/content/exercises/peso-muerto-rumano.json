@@ -1,0 +1,30 @@
+{
+  "name": "Peso muerto rumano con mancuernas",
+  "primaryMuscles": [
+    "hamstrings",
+    "glutes"
+  ],
+  "secondaryMuscles": [
+    "lower_back",
+    "lats",
+    "forearms"
+  ],
+  "equipment": [
+    "dumbbell"
+  ],
+  "difficulty": "intermediate",
+  "loadType": "external",
+  "cues": [
+    "Empuja la cadera hacia atrás; las rodillas casi no se doblan",
+    "Las mancuernas rozan el muslo durante toda la bajada",
+    "Baja hasta donde llegues sin curvar la espalda, no más"
+  ],
+  "commonMistakes": [
+    "Convertirlo en una sentadilla doblando las rodillas",
+    "Redondear la lumbar buscando tocar el suelo"
+  ],
+  "defaultRestSeconds": 120,
+  "substitutions": [
+    "sentadilla-goblet"
+  ]
+}

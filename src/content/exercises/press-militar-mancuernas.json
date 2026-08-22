@@ -1,0 +1,30 @@
+{
+  "name": "Press militar con mancuernas",
+  "primaryMuscles": [
+    "front_delts",
+    "side_delts"
+  ],
+  "secondaryMuscles": [
+    "triceps",
+    "core",
+    "upper_back"
+  ],
+  "equipment": [
+    "dumbbell"
+  ],
+  "difficulty": "intermediate",
+  "loadType": "external",
+  "cues": [
+    "Costillas hacia abajo y glúteo apretado: nada de arquear la lumbar",
+    "Las mancuernas suben en línea con las orejas, no por delante",
+    "Bloquea arriba sin encoger los hombros"
+  ],
+  "commonMistakes": [
+    "Convertirlo en un press inclinado arqueando la espalda",
+    "Bajar solo hasta la frente en lugar de hasta la barbilla"
+  ],
+  "defaultRestSeconds": 90,
+  "substitutions": [
+    "elevaciones-laterales"
+  ]
+}

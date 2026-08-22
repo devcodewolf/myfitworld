@@ -1,0 +1,35 @@
+{
+  "name": "Sentadilla búlgara",
+  "primaryMuscles": [
+    "quads",
+    "glutes"
+  ],
+  "secondaryMuscles": [
+    "hamstrings",
+    "adductors",
+    "core"
+  ],
+  "equipment": [
+    "bodyweight",
+    "chair",
+    "bench",
+    "dumbbell"
+  ],
+  "difficulty": "advanced",
+  "loadType": "bodyweight_plus",
+  "unilateral": true,
+  "cues": [
+    "El pie de delante lo bastante lejos para que la rodilla no se adelante en exceso",
+    "Baja vertical: el peso cae sobre el talón de delante",
+    "El pie de atrás solo equilibra, no empuja"
+  ],
+  "commonMistakes": [
+    "Pie delantero demasiado cerca, que convierte el ejercicio en cuádriceps puro y rodilla cargada",
+    "Perder el equilibrio y rebotar con la pierna de atrás"
+  ],
+  "defaultRestSeconds": 90,
+  "substitutions": [
+    "zancadas-mancuernas",
+    "sentadilla-goblet"
+  ]
+}

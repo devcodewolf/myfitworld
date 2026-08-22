@@ -1,0 +1,28 @@
+{
+  "name": "Elevaciones laterales",
+  "primaryMuscles": [
+    "side_delts"
+  ],
+  "secondaryMuscles": [
+    "traps",
+    "front_delts"
+  ],
+  "equipment": [
+    "dumbbell"
+  ],
+  "difficulty": "beginner",
+  "loadType": "external",
+  "cues": [
+    "Sube hasta la altura del hombro, ni un centímetro más",
+    "Codo ligeramente flexionado y fijo, guiando el movimiento",
+    "Baja en 3 segundos sin dejar caer el peso"
+  ],
+  "commonMistakes": [
+    "Encoger los trapecios y subir con los hombros hacia las orejas",
+    "Usar impulso de cadera cuando el peso es excesivo"
+  ],
+  "defaultRestSeconds": 60,
+  "substitutions": [
+    "press-militar-mancuernas"
+  ]
+}

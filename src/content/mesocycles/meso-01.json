@@ -1,0 +1,879 @@
+{
+  "name": "Full body en casa",
+  "description": "Cuatro semanas, tres días por semana, con mancuernas y peso corporal. Acumular, progresar, intensificar y descargar.",
+  "isActive": true,
+  "weeks": [
+    {
+      "order": 1,
+      "phase": "accumulation",
+      "focus": "Fijar técnica y pesos de partida",
+      "notes": "Deja 3 o 4 repeticiones en reserva en todas las series. Esta semana es para anotar con qué peso trabajas, no para exprimirte.",
+      "days": [
+        {
+          "order": 1,
+          "title": "Torso / Empuje",
+          "focus": "Pectoral, espalda alta y hombro, con una pierna unilateral de apoyo",
+          "warmupNotes": "5 minutos: círculos de hombro, gato-camello, 10 sentadillas sin peso y una serie de flexiones a media intensidad.",
+          "blocks": [
+            {
+              "exerciseId": "flexiones",
+              "sets": 4,
+              "repRange": {
+                "min": 10,
+                "max": 20
+              },
+              "tempo": {
+                "eccentricSeconds": 3,
+                "bottomPauseSeconds": 0,
+                "concentricSeconds": 1,
+                "topPauseSeconds": 0
+              },
+              "restSeconds": 90,
+              "repsInReserve": 3.5
+            },
+            {
+              "exerciseId": "remo-mancuerna-una-mano",
+              "sets": 4,
+              "repRange": {
+                "min": 12,
+                "max": 15
+              },
+              "restSeconds": 90,
+              "intraSideRestSeconds": 40,
+              "repsInReserve": 3.5
+            },
+            {
+              "exerciseId": "press-militar-mancuernas",
+              "sets": 3,
+              "repRange": {
+                "min": 10,
+                "max": 12
+              },
+              "restSeconds": 90,
+              "repsInReserve": 3.5
+            },
+            {
+              "exerciseId": "sentadilla-bulgara",
+              "sets": 3,
+              "repRange": {
+                "min": 10,
+                "max": 12
+              },
+              "restSeconds": 90,
+              "intraSideRestSeconds": 40,
+              "repsInReserve": 3.5
+            },
+            {
+              "exerciseId": "curl-biceps-supino",
+              "sets": 3,
+              "repRange": {
+                "min": 10,
+                "max": 12
+              },
+              "tempo": {
+                "eccentricSeconds": 3,
+                "bottomPauseSeconds": 0,
+                "concentricSeconds": 1,
+                "topPauseSeconds": 0
+              },
+              "restSeconds": 60,
+              "repsInReserve": 3.5
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Pierna / Tracción",
+          "focus": "Cuádriceps e isquiotibiales, hombro lateral y tríceps",
+          "warmupNotes": "5 minutos: movilidad de cadera y tobillo, 10 sentadillas sin peso y una serie ligera de peso muerto rumano.",
+          "blocks": [
+            {
+              "exerciseId": "sentadilla-goblet",
+              "sets": 4,
+              "repRange": {
+                "min": 15,
+                "max": 20
+              },
+              "tempo": {
+                "eccentricSeconds": 2,
+                "bottomPauseSeconds": 1,
+                "concentricSeconds": 1,
+                "topPauseSeconds": 0
+              },
+              "restSeconds": 120,
+              "repsInReserve": 3.5
+            },
+            {
+              "exerciseId": "peso-muerto-rumano",
+              "sets": 4,
+              "repRange": {
+                "min": 12,
+                "max": 15
+              },
+              "restSeconds": 120,
+              "repsInReserve": 3.5
+            },
+            {
+              "exerciseId": "flexiones-declinadas",
+              "sets": 3,
+              "repRange": {
+                "min": 8,
+                "max": 15
+              },
+              "restSeconds": 90,
+              "repsInReserve": 3.5
+            },
+            {
+              "exerciseId": "elevaciones-laterales",
+              "sets": 4,
+              "repRange": {
+                "min": 12,
+                "max": 15
+              },
+              "restSeconds": 60,
+              "repsInReserve": 3.5
+            },
+            {
+              "exerciseId": "extension-triceps-tras-nuca",
+              "sets": 3,
+              "repRange": {
+                "min": 12,
+                "max": 15
+              },
+              "restSeconds": 60,
+              "repsInReserve": 3.5
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Hipertrofia global",
+          "focus": "Cuerpo completo con densidad alta y una superserie de brazo al cierre",
+          "warmupNotes": "5 minutos: movilidad de hombro y cadera, plancha de 30 s y una serie ligera de floor press.",
+          "blocks": [
+            {
+              "exerciseId": "floor-press",
+              "sets": 4,
+              "repRange": {
+                "min": 15,
+                "max": 20
+              },
+              "restSeconds": 120,
+              "repsInReserve": 3.5
+            },
+            {
+              "exerciseId": "renegade-row",
+              "sets": 3,
+              "repRange": {
+                "min": 8,
+                "max": 10
+              },
+              "restSeconds": 90,
+              "intraSideRestSeconds": 30,
+              "repsInReserve": 3.5
+            },
+            {
+              "exerciseId": "zancadas-mancuernas",
+              "sets": 3,
+              "repRange": {
+                "min": 12,
+                "max": 12
+              },
+              "restSeconds": 90,
+              "intraSideRestSeconds": 30,
+              "repsInReserve": 3.5
+            },
+            {
+              "exerciseId": "pajaros-vuelos-posteriores",
+              "sets": 3,
+              "repRange": {
+                "min": 15,
+                "max": 15
+              },
+              "restSeconds": 60,
+              "repsInReserve": 3.5
+            },
+            {
+              "exerciseId": "curl-martillo",
+              "sets": 3,
+              "repRange": {
+                "min": 10,
+                "max": 12
+              },
+              "restSeconds": 10,
+              "supersetGroup": "brazos",
+              "notes": "Encadena directo con los fondos, sin descanso real.",
+              "repsInReserve": 3.5
+            },
+            {
+              "exerciseId": "fondos-entre-bancos",
+              "sets": 3,
+              "repRange": {
+                "min": 8,
+                "max": 12
+              },
+              "restSeconds": 120,
+              "supersetGroup": "brazos",
+              "notes": "Cierra la ronda y descansa 2 minutos antes de repetir.",
+              "repsInReserve": 3.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "phase": "progression",
+      "focus": "Las mismas series, más repeticiones",
+      "notes": "Mismas series que la semana 1 con una o dos repeticiones más por serie, o algo más de peso si te sobran. Deja 2 o 3 en reserva.",
+      "days": [
+        {
+          "order": 1,
+          "title": "Torso / Empuje",
+          "focus": "Pectoral, espalda alta y hombro, con una pierna unilateral de apoyo",
+          "warmupNotes": "5 minutos: círculos de hombro, gato-camello, 10 sentadillas sin peso y una serie de flexiones a media intensidad.",
+          "blocks": [
+            {
+              "exerciseId": "flexiones",
+              "sets": 4,
+              "repRange": {
+                "min": 11,
+                "max": 22
+              },
+              "tempo": {
+                "eccentricSeconds": 3,
+                "bottomPauseSeconds": 0,
+                "concentricSeconds": 1,
+                "topPauseSeconds": 0
+              },
+              "restSeconds": 90,
+              "repsInReserve": 2.5
+            },
+            {
+              "exerciseId": "remo-mancuerna-una-mano",
+              "sets": 4,
+              "repRange": {
+                "min": 13,
+                "max": 17
+              },
+              "restSeconds": 90,
+              "intraSideRestSeconds": 40,
+              "repsInReserve": 2.5
+            },
+            {
+              "exerciseId": "press-militar-mancuernas",
+              "sets": 3,
+              "repRange": {
+                "min": 11,
+                "max": 14
+              },
+              "restSeconds": 90,
+              "repsInReserve": 2.5
+            },
+            {
+              "exerciseId": "sentadilla-bulgara",
+              "sets": 3,
+              "repRange": {
+                "min": 11,
+                "max": 14
+              },
+              "restSeconds": 90,
+              "intraSideRestSeconds": 40,
+              "repsInReserve": 2.5
+            },
+            {
+              "exerciseId": "curl-biceps-supino",
+              "sets": 3,
+              "repRange": {
+                "min": 11,
+                "max": 14
+              },
+              "tempo": {
+                "eccentricSeconds": 3,
+                "bottomPauseSeconds": 0,
+                "concentricSeconds": 1,
+                "topPauseSeconds": 0
+              },
+              "restSeconds": 60,
+              "repsInReserve": 2.5
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Pierna / Tracción",
+          "focus": "Cuádriceps e isquiotibiales, hombro lateral y tríceps",
+          "warmupNotes": "5 minutos: movilidad de cadera y tobillo, 10 sentadillas sin peso y una serie ligera de peso muerto rumano.",
+          "blocks": [
+            {
+              "exerciseId": "sentadilla-goblet",
+              "sets": 4,
+              "repRange": {
+                "min": 16,
+                "max": 22
+              },
+              "tempo": {
+                "eccentricSeconds": 2,
+                "bottomPauseSeconds": 1,
+                "concentricSeconds": 1,
+                "topPauseSeconds": 0
+              },
+              "restSeconds": 120,
+              "repsInReserve": 2.5
+            },
+            {
+              "exerciseId": "peso-muerto-rumano",
+              "sets": 4,
+              "repRange": {
+                "min": 13,
+                "max": 17
+              },
+              "restSeconds": 120,
+              "repsInReserve": 2.5
+            },
+            {
+              "exerciseId": "flexiones-declinadas",
+              "sets": 3,
+              "repRange": {
+                "min": 9,
+                "max": 17
+              },
+              "restSeconds": 90,
+              "repsInReserve": 2.5
+            },
+            {
+              "exerciseId": "elevaciones-laterales",
+              "sets": 4,
+              "repRange": {
+                "min": 13,
+                "max": 17
+              },
+              "restSeconds": 60,
+              "repsInReserve": 2.5
+            },
+            {
+              "exerciseId": "extension-triceps-tras-nuca",
+              "sets": 3,
+              "repRange": {
+                "min": 13,
+                "max": 17
+              },
+              "restSeconds": 60,
+              "repsInReserve": 2.5
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Hipertrofia global",
+          "focus": "Cuerpo completo con densidad alta y una superserie de brazo al cierre",
+          "warmupNotes": "5 minutos: movilidad de hombro y cadera, plancha de 30 s y una serie ligera de floor press.",
+          "blocks": [
+            {
+              "exerciseId": "floor-press",
+              "sets": 4,
+              "repRange": {
+                "min": 16,
+                "max": 22
+              },
+              "restSeconds": 120,
+              "repsInReserve": 2.5
+            },
+            {
+              "exerciseId": "renegade-row",
+              "sets": 3,
+              "repRange": {
+                "min": 9,
+                "max": 12
+              },
+              "restSeconds": 90,
+              "intraSideRestSeconds": 30,
+              "repsInReserve": 2.5
+            },
+            {
+              "exerciseId": "zancadas-mancuernas",
+              "sets": 3,
+              "repRange": {
+                "min": 13,
+                "max": 13
+              },
+              "restSeconds": 90,
+              "intraSideRestSeconds": 30,
+              "repsInReserve": 2.5
+            },
+            {
+              "exerciseId": "pajaros-vuelos-posteriores",
+              "sets": 3,
+              "repRange": {
+                "min": 16,
+                "max": 16
+              },
+              "restSeconds": 60,
+              "repsInReserve": 2.5
+            },
+            {
+              "exerciseId": "curl-martillo",
+              "sets": 3,
+              "repRange": {
+                "min": 11,
+                "max": 14
+              },
+              "restSeconds": 10,
+              "supersetGroup": "brazos",
+              "notes": "Encadena directo con los fondos, sin descanso real.",
+              "repsInReserve": 2.5
+            },
+            {
+              "exerciseId": "fondos-entre-bancos",
+              "sets": 3,
+              "repRange": {
+                "min": 9,
+                "max": 14
+              },
+              "restSeconds": 120,
+              "supersetGroup": "brazos",
+              "notes": "Cierra la ronda y descansa 2 minutos antes de repetir.",
+              "repsInReserve": 2.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "phase": "intensification",
+      "focus": "Una serie más en los básicos y cerca del fallo",
+      "notes": "Se añade una serie a los ejercicios principales de cada día y se trabaja a 1 o 2 repeticiones del fallo. Es la semana más dura del mesociclo.",
+      "days": [
+        {
+          "order": 1,
+          "title": "Torso / Empuje",
+          "focus": "Pectoral, espalda alta y hombro, con una pierna unilateral de apoyo",
+          "warmupNotes": "5 minutos: círculos de hombro, gato-camello, 10 sentadillas sin peso y una serie de flexiones a media intensidad.",
+          "blocks": [
+            {
+              "exerciseId": "flexiones",
+              "sets": 5,
+              "repRange": {
+                "min": 11,
+                "max": 22
+              },
+              "tempo": {
+                "eccentricSeconds": 3,
+                "bottomPauseSeconds": 0,
+                "concentricSeconds": 1,
+                "topPauseSeconds": 0
+              },
+              "restSeconds": 90,
+              "repsInReserve": 1.5
+            },
+            {
+              "exerciseId": "remo-mancuerna-una-mano",
+              "sets": 5,
+              "repRange": {
+                "min": 13,
+                "max": 17
+              },
+              "restSeconds": 90,
+              "intraSideRestSeconds": 40,
+              "repsInReserve": 1.5
+            },
+            {
+              "exerciseId": "press-militar-mancuernas",
+              "sets": 3,
+              "repRange": {
+                "min": 11,
+                "max": 14
+              },
+              "restSeconds": 90,
+              "repsInReserve": 1.5
+            },
+            {
+              "exerciseId": "sentadilla-bulgara",
+              "sets": 3,
+              "repRange": {
+                "min": 11,
+                "max": 14
+              },
+              "restSeconds": 90,
+              "intraSideRestSeconds": 40,
+              "repsInReserve": 1.5
+            },
+            {
+              "exerciseId": "curl-biceps-supino",
+              "sets": 3,
+              "repRange": {
+                "min": 11,
+                "max": 14
+              },
+              "tempo": {
+                "eccentricSeconds": 3,
+                "bottomPauseSeconds": 0,
+                "concentricSeconds": 1,
+                "topPauseSeconds": 0
+              },
+              "restSeconds": 60,
+              "repsInReserve": 1.5
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Pierna / Tracción",
+          "focus": "Cuádriceps e isquiotibiales, hombro lateral y tríceps",
+          "warmupNotes": "5 minutos: movilidad de cadera y tobillo, 10 sentadillas sin peso y una serie ligera de peso muerto rumano.",
+          "blocks": [
+            {
+              "exerciseId": "sentadilla-goblet",
+              "sets": 5,
+              "repRange": {
+                "min": 16,
+                "max": 22
+              },
+              "tempo": {
+                "eccentricSeconds": 2,
+                "bottomPauseSeconds": 1,
+                "concentricSeconds": 1,
+                "topPauseSeconds": 0
+              },
+              "restSeconds": 120,
+              "repsInReserve": 1.5
+            },
+            {
+              "exerciseId": "peso-muerto-rumano",
+              "sets": 5,
+              "repRange": {
+                "min": 13,
+                "max": 17
+              },
+              "restSeconds": 120,
+              "repsInReserve": 1.5
+            },
+            {
+              "exerciseId": "flexiones-declinadas",
+              "sets": 3,
+              "repRange": {
+                "min": 9,
+                "max": 17
+              },
+              "restSeconds": 90,
+              "repsInReserve": 1.5
+            },
+            {
+              "exerciseId": "elevaciones-laterales",
+              "sets": 4,
+              "repRange": {
+                "min": 13,
+                "max": 17
+              },
+              "restSeconds": 60,
+              "repsInReserve": 1.5
+            },
+            {
+              "exerciseId": "extension-triceps-tras-nuca",
+              "sets": 3,
+              "repRange": {
+                "min": 13,
+                "max": 17
+              },
+              "restSeconds": 60,
+              "repsInReserve": 1.5
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Hipertrofia global",
+          "focus": "Cuerpo completo con densidad alta y una superserie de brazo al cierre",
+          "warmupNotes": "5 minutos: movilidad de hombro y cadera, plancha de 30 s y una serie ligera de floor press.",
+          "blocks": [
+            {
+              "exerciseId": "floor-press",
+              "sets": 5,
+              "repRange": {
+                "min": 16,
+                "max": 22
+              },
+              "restSeconds": 120,
+              "repsInReserve": 1.5
+            },
+            {
+              "exerciseId": "renegade-row",
+              "sets": 4,
+              "repRange": {
+                "min": 9,
+                "max": 12
+              },
+              "restSeconds": 90,
+              "intraSideRestSeconds": 30,
+              "repsInReserve": 1.5
+            },
+            {
+              "exerciseId": "zancadas-mancuernas",
+              "sets": 3,
+              "repRange": {
+                "min": 13,
+                "max": 13
+              },
+              "restSeconds": 90,
+              "intraSideRestSeconds": 30,
+              "repsInReserve": 1.5
+            },
+            {
+              "exerciseId": "pajaros-vuelos-posteriores",
+              "sets": 3,
+              "repRange": {
+                "min": 16,
+                "max": 16
+              },
+              "restSeconds": 60,
+              "repsInReserve": 1.5
+            },
+            {
+              "exerciseId": "curl-martillo",
+              "sets": 3,
+              "repRange": {
+                "min": 11,
+                "max": 14
+              },
+              "restSeconds": 10,
+              "supersetGroup": "brazos",
+              "notes": "Encadena directo con los fondos, sin descanso real.",
+              "repsInReserve": 1.5
+            },
+            {
+              "exerciseId": "fondos-entre-bancos",
+              "sets": 3,
+              "repRange": {
+                "min": 9,
+                "max": 14
+              },
+              "restSeconds": 120,
+              "supersetGroup": "brazos",
+              "notes": "Cierra la ronda y descansa 2 minutos antes de repetir.",
+              "repsInReserve": 1.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "phase": "deload",
+      "focus": "Descarga: recuperar para volver más fuerte",
+      "notes": "Alrededor del 55 % del volumen de la semana 3 y lejos del fallo. No busques fatiga: esta semana existe para que la siguiente valga algo.",
+      "days": [
+        {
+          "order": 1,
+          "title": "Torso / Empuje",
+          "focus": "Pectoral, espalda alta y hombro, con una pierna unilateral de apoyo",
+          "warmupNotes": "5 minutos: círculos de hombro, gato-camello, 10 sentadillas sin peso y una serie de flexiones a media intensidad.",
+          "blocks": [
+            {
+              "exerciseId": "flexiones",
+              "sets": 3,
+              "repRange": {
+                "min": 10,
+                "max": 20
+              },
+              "tempo": {
+                "eccentricSeconds": 3,
+                "bottomPauseSeconds": 0,
+                "concentricSeconds": 1,
+                "topPauseSeconds": 0
+              },
+              "restSeconds": 90,
+              "repsInReserve": 4.5
+            },
+            {
+              "exerciseId": "remo-mancuerna-una-mano",
+              "sets": 3,
+              "repRange": {
+                "min": 12,
+                "max": 15
+              },
+              "restSeconds": 90,
+              "intraSideRestSeconds": 40,
+              "repsInReserve": 4.5
+            },
+            {
+              "exerciseId": "press-militar-mancuernas",
+              "sets": 2,
+              "repRange": {
+                "min": 10,
+                "max": 12
+              },
+              "restSeconds": 90,
+              "repsInReserve": 4.5
+            },
+            {
+              "exerciseId": "sentadilla-bulgara",
+              "sets": 2,
+              "repRange": {
+                "min": 10,
+                "max": 12
+              },
+              "restSeconds": 90,
+              "intraSideRestSeconds": 40,
+              "repsInReserve": 4.5
+            },
+            {
+              "exerciseId": "curl-biceps-supino",
+              "sets": 2,
+              "repRange": {
+                "min": 10,
+                "max": 12
+              },
+              "tempo": {
+                "eccentricSeconds": 3,
+                "bottomPauseSeconds": 0,
+                "concentricSeconds": 1,
+                "topPauseSeconds": 0
+              },
+              "restSeconds": 60,
+              "repsInReserve": 4.5
+            }
+          ]
+        },
+        {
+          "order": 2,
+          "title": "Pierna / Tracción",
+          "focus": "Cuádriceps e isquiotibiales, hombro lateral y tríceps",
+          "warmupNotes": "5 minutos: movilidad de cadera y tobillo, 10 sentadillas sin peso y una serie ligera de peso muerto rumano.",
+          "blocks": [
+            {
+              "exerciseId": "sentadilla-goblet",
+              "sets": 3,
+              "repRange": {
+                "min": 15,
+                "max": 20
+              },
+              "tempo": {
+                "eccentricSeconds": 2,
+                "bottomPauseSeconds": 1,
+                "concentricSeconds": 1,
+                "topPauseSeconds": 0
+              },
+              "restSeconds": 120,
+              "repsInReserve": 4.5
+            },
+            {
+              "exerciseId": "peso-muerto-rumano",
+              "sets": 3,
+              "repRange": {
+                "min": 12,
+                "max": 15
+              },
+              "restSeconds": 120,
+              "repsInReserve": 4.5
+            },
+            {
+              "exerciseId": "flexiones-declinadas",
+              "sets": 2,
+              "repRange": {
+                "min": 8,
+                "max": 15
+              },
+              "restSeconds": 90,
+              "repsInReserve": 4.5
+            },
+            {
+              "exerciseId": "elevaciones-laterales",
+              "sets": 2,
+              "repRange": {
+                "min": 12,
+                "max": 15
+              },
+              "restSeconds": 60,
+              "repsInReserve": 4.5
+            },
+            {
+              "exerciseId": "extension-triceps-tras-nuca",
+              "sets": 2,
+              "repRange": {
+                "min": 12,
+                "max": 15
+              },
+              "restSeconds": 60,
+              "repsInReserve": 4.5
+            }
+          ]
+        },
+        {
+          "order": 3,
+          "title": "Hipertrofia global",
+          "focus": "Cuerpo completo con densidad alta y una superserie de brazo al cierre",
+          "warmupNotes": "5 minutos: movilidad de hombro y cadera, plancha de 30 s y una serie ligera de floor press.",
+          "blocks": [
+            {
+              "exerciseId": "floor-press",
+              "sets": 3,
+              "repRange": {
+                "min": 15,
+                "max": 20
+              },
+              "restSeconds": 120,
+              "repsInReserve": 4.5
+            },
+            {
+              "exerciseId": "renegade-row",
+              "sets": 2,
+              "repRange": {
+                "min": 8,
+                "max": 10
+              },
+              "restSeconds": 90,
+              "intraSideRestSeconds": 30,
+              "repsInReserve": 4.5
+            },
+            {
+              "exerciseId": "zancadas-mancuernas",
+              "sets": 2,
+              "repRange": {
+                "min": 12,
+                "max": 12
+              },
+              "restSeconds": 90,
+              "intraSideRestSeconds": 30,
+              "repsInReserve": 4.5
+            },
+            {
+              "exerciseId": "pajaros-vuelos-posteriores",
+              "sets": 2,
+              "repRange": {
+                "min": 15,
+                "max": 15
+              },
+              "restSeconds": 60,
+              "repsInReserve": 4.5
+            },
+            {
+              "exerciseId": "curl-martillo",
+              "sets": 2,
+              "repRange": {
+                "min": 10,
+                "max": 12
+              },
+              "restSeconds": 10,
+              "supersetGroup": "brazos",
+              "notes": "Encadena directo con los fondos, sin descanso real.",
+              "repsInReserve": 4.5
+            },
+            {
+              "exerciseId": "fondos-entre-bancos",
+              "sets": 2,
+              "repRange": {
+                "min": 8,
+                "max": 12
+              },
+              "restSeconds": 120,
+              "supersetGroup": "brazos",
+              "notes": "Cierra la ronda y descansa 2 minutos antes de repetir.",
+              "repsInReserve": 4.5
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

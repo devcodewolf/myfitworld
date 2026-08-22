@@ -1,0 +1,109 @@
+---
+import type { GetStaticPaths } from 'astro';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BlockRow from '@/components/routine/BlockRow.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { getActiveMesocycle, getExerciseCatalog } from '@/data';
+import { PHASE_LABELS, formatDuration, formatReserve } from '@/core/labels';
+import { daySetCount, estimateDaySeconds, groupSupersets } from '@/core/training';
+import { routes } from '@/routes';
+
+export const getStaticPaths = (async () => {
+  const mesocycle = await getActiveMesocycle();
+  return mesocycle.weeks.flatMap((week) =>
+    week.days.map((day) => ({
+      params: { week: String(week.order), day: String(day.order) },
+      props: { week, day },
+    })),
+  );
+}) satisfies GetStaticPaths;
+
+const { week, day } = Astro.props;
+const catalog = await getExerciseCatalog();
+
+const groups = groupSupersets(day);
+const sets = daySetCount(day);
+const seconds = estimateDaySeconds(day, catalog);
+const reserve = day.blocks[0]?.repsInReserve;
+
+// Numeración continua sobre los bloques, respetando el agrupado por superserie.
+let position = 0;
+---
+
+<BaseLayout title={`Semana ${week.order} · Día ${day.order} · ${day.title}`} description={day.focus}>
+  <div class="mx-auto max-w-5xl px-5 py-10 sm:px-8 lg:px-12 lg:py-16">
+    <a
+      href={routes.week(week.order)}
+      class="inline-flex items-center gap-2 text-sm font-bold text-ink-dim transition-colors hover:text-ink"
+    >
+      <Icon name="arrow-right" size={16} class="rotate-180" />
+      Semana {week.order} · {PHASE_LABELS[week.phase]}
+    </a>
+
+    <header class="border-b border-line pt-6 pb-10">
+      <h1 class="text-display font-black text-balance text-ink">{day.title}</h1>
+      <p class="mt-4 max-w-[60ch] text-lg leading-relaxed text-ink-dim">{day.focus}</p>
+
+      <div class="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
+        <button
+          type="button"
+          disabled
+          class="inline-flex min-h-14 cursor-not-allowed items-center justify-center gap-3 rounded-full border border-line-strong px-8 text-lg font-extrabold text-ink-faint"
+        >
+          Entrenar
+        </button>
+        <div>
+          <p class="figures text-sm text-ink-dim">
+            Día {day.order} · {day.blocks.length} ejercicios · {sets} series ·{' '}
+            {formatDuration(seconds)}
+            {reserve !== undefined && ` · ${formatReserve(reserve)}`}
+          </p>
+          <p class="mt-1 text-sm text-ink-faint">
+            El modo entreno todavía no está construido: de momento puedes consultar el plan.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    {
+      day.warmupNotes && (
+        <section class="border-b border-line py-8" aria-labelledby="calentamiento">
+          <h2
+            id="calentamiento"
+            class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase"
+          >
+            Calentamiento
+          </h2>
+          <p class="mt-3 max-w-[65ch] text-base leading-relaxed text-ink-dim">{day.warmupNotes}</p>
+        </section>
+      )
+    }
+
+    <section class="pt-8" aria-labelledby="ejercicios">
+      <h2 id="ejercicios" class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase">
+        Ejercicios
+      </h2>
+      {
+        groups.map((group) =>
+          group.length === 1 ? (
+            <ul>
+              <BlockRow block={group[0]!} catalog={catalog} position={(position += 1)} />
+            </ul>
+          ) : (
+            <div class="my-4 rounded-card border border-line-strong bg-surface px-5">
+              <p class="figures pt-5 text-[0.72rem] font-bold tracking-[0.2em] text-ink-dim uppercase">
+                Superserie · {group.length} ejercicios encadenados
+              </p>
+              <ul>
+                {group.map((block) => (
+                  <BlockRow block={block} catalog={catalog} position={(position += 1)} />
+                ))}
+              </ul>
+            </div>
+          ),
+        )
+      }
+    </section>
+  </div>
+</BaseLayout>

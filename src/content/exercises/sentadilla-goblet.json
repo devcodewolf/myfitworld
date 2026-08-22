@@ -1,0 +1,30 @@
+{
+  "name": "Sentadilla goblet",
+  "primaryMuscles": [
+    "quads",
+    "glutes"
+  ],
+  "secondaryMuscles": [
+    "core",
+    "adductors",
+    "upper_back"
+  ],
+  "equipment": [
+    "dumbbell"
+  ],
+  "difficulty": "beginner",
+  "loadType": "external",
+  "cues": [
+    "Sujeta la mancuerna pegada al pecho, con los codos por dentro de las rodillas",
+    "Abre las rodillas hacia fuera siguiendo la punta de los pies",
+    "Pausa de un segundo abajo, sin perder la tensión"
+  ],
+  "commonMistakes": [
+    "Separar la mancuerna del pecho, que tira del torso hacia delante",
+    "Levantar los talones del suelo al bajar"
+  ],
+  "defaultRestSeconds": 120,
+  "substitutions": [
+    "zancadas-mancuernas"
+  ]
+}
