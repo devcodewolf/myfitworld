@@ -3,6 +3,8 @@ import { defineConfig } from 'astro/config';
 
 import tailwindcss from '@tailwindcss/vite';
 
+import vue from '@astrojs/vue';
+
 /**
  * `base` se decide en tiempo de build, no en el código.
  * Astro no sabe emitir rutas relativas (`base: './'` produce `/./`), así que la
@@ -16,7 +18,10 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   output: 'static',
   base: process.env.BASE_PATH ?? '/',
+
   vite: {
     plugins: [tailwindcss()],
   },
+
+  integrations: [vue()],
 });

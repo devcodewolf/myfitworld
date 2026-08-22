@@ -1,0 +1,26 @@
+---
+/**
+ * Banco de pruebas del temporizador.
+ *
+ * Temporal: existe para poder verificar el círculo, los sonidos y la vibración
+ * antes de que exista el modo entreno. Se borra cuando esa pantalla lo integre.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import TimerLab from '@/components/session/TimerLab.vue';
+---
+
+<BaseLayout title="Temporizador · Banco de pruebas" description="Prueba del temporizador circular.">
+  <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    <header>
+      <h1 class="text-figure font-black tracking-[-0.02em] text-ink">Temporizador</h1>
+      <p class="mt-1 max-w-[60ch] text-sm text-ink-dim">
+        Banco de pruebas provisional. Sirve para comprobar el círculo, los avisos y la vibración
+        antes de que exista el modo entreno; desaparecerá cuando esa pantalla lo integre.
+      </p>
+    </header>
+
+    <div class="pt-10">
+      <TimerLab client:only="vue" />
+    </div>
+  </div>
+</BaseLayout>
