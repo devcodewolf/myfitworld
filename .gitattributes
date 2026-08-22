@@ -1,0 +1,16 @@
+# Un único final de línea en el repositorio y en el disco: LF.
+#
+# Sin esto, en Windows Git guarda con LF y saca al disco con CRLF, mientras que
+# Prettier escribe LF: cada pasada del formateador marcaba cuarenta archivos
+# como modificados sin una sola línea de diferencia real.
+* text=auto eol=lf
+
+# Binarios: que Git no toque sus bytes.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.woff2 binary
+*.mp4 binary
