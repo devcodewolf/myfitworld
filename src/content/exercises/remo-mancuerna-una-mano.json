@@ -1,19 +1,8 @@
 {
   "name": "Remo a una mano con mancuerna",
-  "primaryMuscles": [
-    "lats",
-    "upper_back"
-  ],
-  "secondaryMuscles": [
-    "biceps",
-    "rear_delts",
-    "core"
-  ],
-  "equipment": [
-    "dumbbell",
-    "bench",
-    "chair"
-  ],
+  "primaryMuscles": ["lats", "upper_back"],
+  "secondaryMuscles": ["biceps", "rear_delts", "core"],
+  "equipment": ["dumbbell", "bench", "chair"],
   "difficulty": "beginner",
   "loadType": "external",
   "unilateral": true,
@@ -27,7 +16,5 @@
     "Rotar el tronco para ganar recorrido con impulso"
   ],
   "defaultRestSeconds": 90,
-  "substitutions": [
-    "renegade-row"
-  ]
+  "substitutions": ["renegade-row"]
 }

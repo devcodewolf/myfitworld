@@ -1,20 +1,8 @@
 {
   "name": "Sentadilla búlgara",
-  "primaryMuscles": [
-    "quads",
-    "glutes"
-  ],
-  "secondaryMuscles": [
-    "hamstrings",
-    "adductors",
-    "core"
-  ],
-  "equipment": [
-    "bodyweight",
-    "chair",
-    "bench",
-    "dumbbell"
-  ],
+  "primaryMuscles": ["quads", "glutes"],
+  "secondaryMuscles": ["hamstrings", "adductors", "core"],
+  "equipment": ["bodyweight", "chair", "bench", "dumbbell"],
   "difficulty": "advanced",
   "loadType": "bodyweight_plus",
   "unilateral": true,
@@ -28,8 +16,5 @@
     "Perder el equilibrio y rebotar con la pierna de atrás"
   ],
   "defaultRestSeconds": 90,
-  "substitutions": [
-    "zancadas-mancuernas",
-    "sentadilla-goblet"
-  ]
+  "substitutions": ["zancadas-mancuernas", "sentadilla-goblet"]
 }

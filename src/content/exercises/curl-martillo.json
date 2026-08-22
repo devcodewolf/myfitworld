@@ -1,13 +1,8 @@
 {
   "name": "Curl martillo",
-  "primaryMuscles": [
-    "biceps",
-    "forearms"
-  ],
+  "primaryMuscles": ["biceps", "forearms"],
   "secondaryMuscles": [],
-  "equipment": [
-    "dumbbell"
-  ],
+  "equipment": ["dumbbell"],
   "difficulty": "beginner",
   "loadType": "external",
   "cues": [
@@ -20,7 +15,5 @@
     "Usar el balanceo del cuerpo como impulso"
   ],
   "defaultRestSeconds": 60,
-  "substitutions": [
-    "curl-biceps-supino"
-  ]
+  "substitutions": ["curl-biceps-supino"]
 }

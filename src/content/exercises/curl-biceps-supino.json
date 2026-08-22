@@ -1,14 +1,8 @@
 {
   "name": "Curl de bíceps supino",
-  "primaryMuscles": [
-    "biceps"
-  ],
-  "secondaryMuscles": [
-    "forearms"
-  ],
-  "equipment": [
-    "dumbbell"
-  ],
+  "primaryMuscles": ["biceps"],
+  "secondaryMuscles": ["forearms"],
+  "equipment": ["dumbbell"],
   "difficulty": "beginner",
   "loadType": "external",
   "cues": [
@@ -21,7 +15,5 @@
     "Adelantar el codo, que convierte el curl en una elevación frontal"
   ],
   "defaultRestSeconds": 60,
-  "substitutions": [
-    "curl-martillo"
-  ]
+  "substitutions": ["curl-martillo"]
 }

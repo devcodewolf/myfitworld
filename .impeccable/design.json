@@ -1,265 +1,290 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-22T00:00:00Z",
+  "generatedAt": "2026-08-22T21:33:30Z",
   "title": "Design System: My Fitness World",
   "extensions": {
+    "status": {
+      "finishReview": "not-run",
+      "note": "Documenta el mundo tal y como está construido tras el rediseño. La revisión de acabado no se ha ejecutado sobre esta versión."
+    },
     "colorMeta": {
       "ground": {
         "role": "neutral",
-        "displayName": "Suelo de Sala",
-        "canonical": "#05070a",
-        "tonalRamp": ["#05070a", "#0e1116", "#171b22", "#232a35", "#39424f", "#5c6675", "#828d9c", "#f3f6f8"]
+        "displayName": "Suelo Negro Azulado",
+        "canonical": "#091017",
+        "tonalRamp": ["oklch(15.0% 0.018 248.9)", "oklch(26.4% 0.018 248.9)", "oklch(37.9% 0.018 248.9)", "oklch(49.3% 0.018 248.9)", "oklch(60.7% 0.018 248.9)", "oklch(72.1% 0.018 248.9)", "oklch(83.6% 0.018 248.9)", "oklch(95.0% 0.018 248.9)"]
       },
       "surface": {
         "role": "neutral",
-        "displayName": "Plano de Trabajo",
-        "canonical": "#0e1116",
-        "tonalRamp": ["#05070a", "#0e1116", "#171b22", "#232a35", "#39424f", "#5c6675", "#828d9c", "#f3f6f8"]
+        "displayName": "Superficie",
+        "canonical": "#141d26",
+        "tonalRamp": ["oklch(15.0% 0.022 248.8)", "oklch(26.4% 0.022 248.8)", "oklch(37.9% 0.022 248.8)", "oklch(49.3% 0.022 248.8)", "oklch(60.7% 0.022 248.8)", "oklch(72.1% 0.022 248.8)", "oklch(83.6% 0.022 248.8)", "oklch(95.0% 0.022 248.8)"]
       },
       "raised": {
         "role": "neutral",
-        "displayName": "Plano Próximo",
-        "canonical": "#171b22",
-        "tonalRamp": ["#05070a", "#0e1116", "#171b22", "#232a35", "#39424f", "#5c6675", "#828d9c", "#f3f6f8"]
+        "displayName": "Superficie Elevada",
+        "canonical": "#1e2934",
+        "tonalRamp": ["oklch(15.0% 0.026 248.8)", "oklch(26.4% 0.026 248.8)", "oklch(37.9% 0.026 248.8)", "oklch(49.3% 0.026 248.8)", "oklch(60.7% 0.026 248.8)", "oklch(72.1% 0.026 248.8)", "oklch(83.6% 0.026 248.8)", "oklch(95.0% 0.026 248.8)"]
       },
       "line": {
         "role": "neutral",
-        "displayName": "Hairline",
-        "canonical": "#232a35",
-        "tonalRamp": ["#05070a", "#0e1116", "#171b22", "#232a35", "#39424f", "#5c6675", "#828d9c", "#f3f6f8"]
+        "displayName": "Filete",
+        "canonical": "#2c3947",
+        "tonalRamp": ["oklch(15.0% 0.030 250.6)", "oklch(26.4% 0.030 250.6)", "oklch(37.9% 0.030 250.6)", "oklch(49.3% 0.030 250.6)", "oklch(60.7% 0.030 250.6)", "oklch(72.1% 0.030 250.6)", "oklch(83.6% 0.030 250.6)", "oklch(95.0% 0.030 250.6)"]
       },
       "line-strong": {
         "role": "neutral",
-        "displayName": "Hairline con Voz",
-        "canonical": "#39424f",
-        "tonalRamp": ["#05070a", "#0e1116", "#171b22", "#232a35", "#39424f", "#5c6675", "#828d9c", "#f3f6f8"]
+        "displayName": "Filete Marcado",
+        "canonical": "#45576a",
+        "tonalRamp": ["oklch(15.0% 0.038 250.1)", "oklch(26.4% 0.038 250.1)", "oklch(37.9% 0.038 250.1)", "oklch(49.3% 0.038 250.1)", "oklch(60.7% 0.038 250.1)", "oklch(72.1% 0.038 250.1)", "oklch(83.6% 0.038 250.1)", "oklch(95.0% 0.038 250.1)"]
       },
       "ink": {
         "role": "neutral",
-        "displayName": "Tinta Fría",
-        "canonical": "#f3f6f8",
-        "tonalRamp": ["#05070a", "#0e1116", "#171b22", "#232a35", "#39424f", "#5c6675", "#828d9c", "#f3f6f8"]
+        "displayName": "Tinta",
+        "canonical": "#f0f6fa",
+        "tonalRamp": ["oklch(15.0% 0.008 236.6)", "oklch(26.4% 0.008 236.6)", "oklch(37.9% 0.008 236.6)", "oklch(49.3% 0.008 236.6)", "oklch(60.7% 0.008 236.6)", "oklch(72.1% 0.008 236.6)", "oklch(83.6% 0.008 236.6)", "oklch(95.0% 0.008 236.6)"]
       },
       "ink-dim": {
         "role": "neutral",
         "displayName": "Tinta Atenuada",
-        "canonical": "#9aa7b6",
-        "tonalRamp": ["#05070a", "#0e1116", "#171b22", "#232a35", "#39424f", "#5c6675", "#9aa7b6", "#f3f6f8"]
+        "canonical": "#a9becd",
+        "contrast": { "ground": 9.96, "surface": 8.86, "raised": 7.69 },
+        "tonalRamp": ["oklch(15.0% 0.031 239.0)", "oklch(26.4% 0.031 239.0)", "oklch(37.9% 0.031 239.0)", "oklch(49.3% 0.031 239.0)", "oklch(60.7% 0.031 239.0)", "oklch(72.1% 0.031 239.0)", "oklch(83.6% 0.031 239.0)", "oklch(95.0% 0.031 239.0)"]
       },
       "ink-faint": {
         "role": "neutral",
         "displayName": "Tinta Tenue",
-        "canonical": "#828d9c",
-        "tonalRamp": ["#05070a", "#0e1116", "#171b22", "#232a35", "#39424f", "#5c6675", "#828d9c", "#f3f6f8"]
+        "canonical": "#869dae",
+        "contrast": { "ground": 6.78, "surface": 6.04, "raised": 5.24 },
+        "tonalRamp": ["oklch(15.0% 0.036 240.1)", "oklch(26.4% 0.036 240.1)", "oklch(37.9% 0.036 240.1)", "oklch(49.3% 0.036 240.1)", "oklch(60.7% 0.036 240.1)", "oklch(72.1% 0.036 240.1)", "oklch(83.6% 0.036 240.1)", "oklch(95.0% 0.036 240.1)"]
       },
-      "volt": {
+      "accent": {
         "role": "primary",
-        "displayName": "Verde Volt",
-        "canonical": "#ccf24a",
-        "tonalRamp": ["#0e1405", "#243409", "#3a5310", "#517317", "#69931f", "#7f9622", "#a8cc35", "#ccf24a"]
+        "displayName": "Cian Encendido",
+        "canonical": "#34dafa",
+        "contrast": { "ground": 11.43, "surface": 10.18, "raised": 8.83 },
+        "tonalRamp": ["oklch(15.0% 0.135 214.5)", "oklch(26.4% 0.135 214.5)", "oklch(37.9% 0.135 214.5)", "oklch(49.3% 0.135 214.5)", "oklch(60.7% 0.135 214.5)", "oklch(72.1% 0.135 214.5)", "oklch(83.6% 0.135 214.5)", "oklch(95.0% 0.135 214.5)"]
       },
-      "volt-ink": {
+      "accent-strong": {
         "role": "primary",
-        "displayName": "Tinta sobre Volt",
-        "canonical": "#0e1405",
-        "tonalRamp": ["#0e1405", "#243409", "#3a5310", "#517317", "#69931f", "#7f9622", "#a8cc35", "#ccf24a"]
+        "displayName": "Cian Profundo",
+        "canonical": "#00b6eb",
+        "tonalRamp": ["oklch(15.0% 0.141 227.9)", "oklch(26.4% 0.141 227.9)", "oklch(37.9% 0.141 227.9)", "oklch(49.3% 0.141 227.9)", "oklch(60.7% 0.141 227.9)", "oklch(72.1% 0.141 227.9)", "oklch(83.6% 0.141 227.9)", "oklch(95.0% 0.141 227.9)"]
+      },
+      "accent-ink": {
+        "role": "primary",
+        "displayName": "Tinta sobre Cian",
+        "canonical": "#031c30",
+        "contrast": { "accent": 10.35 },
+        "tonalRamp": ["oklch(15.0% 0.050 245.7)", "oklch(26.4% 0.050 245.7)", "oklch(37.9% 0.050 245.7)", "oklch(49.3% 0.050 245.7)", "oklch(60.7% 0.050 245.7)", "oklch(72.1% 0.050 245.7)", "oklch(83.6% 0.050 245.7)", "oklch(95.0% 0.050 245.7)"]
+      },
+      "phase-accumulation": {
+        "role": "secondary",
+        "displayName": "Azul Acumulación",
+        "canonical": "#88c0e1",
+        "tonalRamp": ["oklch(15.0% 0.075 234.9)", "oklch(26.4% 0.075 234.9)", "oklch(37.9% 0.075 234.9)", "oklch(49.3% 0.075 234.9)", "oklch(60.7% 0.075 234.9)", "oklch(72.1% 0.075 234.9)", "oklch(83.6% 0.075 234.9)", "oklch(95.0% 0.075 234.9)"]
+      },
+      "phase-progression": {
+        "role": "secondary",
+        "displayName": "Verdeazulado Progresión",
+        "canonical": "#7dcece",
+        "tonalRamp": ["oklch(15.0% 0.079 195.7)", "oklch(26.4% 0.079 195.7)", "oklch(37.9% 0.079 195.7)", "oklch(49.3% 0.079 195.7)", "oklch(60.7% 0.079 195.7)", "oklch(72.1% 0.079 195.7)", "oklch(83.6% 0.079 195.7)", "oklch(95.0% 0.079 195.7)"]
+      },
+      "phase-intensification": {
+        "role": "secondary",
+        "displayName": "Lavanda Intensificación",
+        "canonical": "#99a6e7",
+        "tonalRamp": ["oklch(15.0% 0.095 275.1)", "oklch(26.4% 0.095 275.1)", "oklch(37.9% 0.095 275.1)", "oklch(49.3% 0.095 275.1)", "oklch(60.7% 0.095 275.1)", "oklch(72.1% 0.095 275.1)", "oklch(83.6% 0.095 275.1)", "oklch(95.0% 0.095 275.1)"]
+      },
+      "phase-deload": {
+        "role": "secondary",
+        "displayName": "Verde Descarga",
+        "canonical": "#9dceb7",
+        "tonalRamp": ["oklch(15.0% 0.061 164.5)", "oklch(26.4% 0.061 164.5)", "oklch(37.9% 0.061 164.5)", "oklch(49.3% 0.061 164.5)", "oklch(60.7% 0.061 164.5)", "oklch(72.1% 0.061 164.5)", "oklch(83.6% 0.061 164.5)", "oklch(95.0% 0.061 164.5)"]
       }
     },
     "typographyMeta": {
-      "display": {
-        "displayName": "Display",
-        "purpose": "El h1 de cada página, uno solo. Se lee a dos o tres metros."
-      },
-      "figure": {
-        "displayName": "Cifra",
-        "purpose": "Cantidades a escala de titular: series, prescripción, número de semana. Siempre tabular."
-      },
-      "headline": {
-        "displayName": "Titular de Tarjeta",
-        "purpose": "El título de una tarjeta de día."
-      },
-      "title": {
-        "displayName": "Título",
-        "purpose": "Nombre de ejercicio en el listado del día y fase en una fila del libro de cuentas."
-      },
-      "body": {
-        "displayName": "Cuerpo",
-        "purpose": "Notas, claves de técnica y textos de estado, con medida de 55ch a 65ch."
-      },
-      "label": {
-        "displayName": "Rótulo",
-        "purpose": "Rótulo de sección en mayúsculas sobre ink-faint. Nunca hace de titular."
-      }
+      "display": { "displayName": "Display", "purpose": "El nombre de la sesión sobre la foto, la fase en la página de semana, el ejercicio en su ficha. Uno por pantalla." },
+      "figure": { "displayName": "Figure", "purpose": "La cifra grande: prescripción de un bloque, ordinal de semana, y en peso 900 los títulos de índice. Siempre tabular." },
+      "title": { "displayName": "Title", "purpose": "El título del día en las tarjetas fotográficas." },
+      "headline": { "displayName": "Headline", "purpose": "Nombre del ejercicio en la lista del día y nombre de la fase en la fila de semana." },
+      "body": { "displayName": "Body", "purpose": "Prosa larga y descripciones, con la medida entre 55 y 65 caracteres." },
+      "meta": { "displayName": "Meta", "purpose": "La segunda línea de todo: contadores, duraciones, músculos. Cifra en 700 sobre ink, palabra en ink-dim." },
+      "label": { "displayName": "Label", "purpose": "Rótulos de sección en versalitas y +0.2em. Variantes a +0.18em sobre las fotos y a 0.7rem/+0.16em en los dt." }
     },
-    "shadows": [],
-    "motion": [
+    "fonts": [
       {
-        "name": "ease-asentar",
-        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "Curva del único momento animado del sistema: la marca de la semana en curso al cargar la portada."
-      },
-      {
-        "name": "duration-asentar",
-        "value": "700ms",
-        "purpose": "Duración de ese mismo gesto. Arranca desde un estado ya visible, así que interrumpirlo nunca deja un elemento truncado."
-      },
-      {
-        "name": "duration-state",
-        "value": "150ms",
-        "purpose": "Transiciones de estado disparadas por el usuario (color de superficie, borde, avance de flecha, escala del CTA)."
-      },
-      {
-        "name": "reduced-motion",
-        "value": "@media (prefers-reduced-motion: reduce) { animation: none }",
-        "purpose": "Invariante: toda animación autoral se anula bajo preferencia de movimiento reducido."
+        "family": "Archivo",
+        "variable": true,
+        "weightRange": "400 900",
+        "files": ["src/assets/fonts/archivo-latin.woff2", "src/assets/fonts/archivo-latin-ext.woff2"],
+        "note": "Auto-alojada y subseteada. Se referencia desde CSS para que Vite reescriba las rutas con el base del despliegue."
       }
+    ],
+    "shadows": [],
+    "elevation": [
+      { "name": "hairline", "value": "1px solid var(--color-line)", "purpose": "La única declaración de elevación del sistema. En reposo." },
+      { "name": "hairline-strong", "value": "1px solid var(--color-line-strong)", "purpose": "El mismo filete cuando el elemento está activo, en hover, o agrupa una superserie." },
+      { "name": "panel-material", "value": "linear-gradient(to bottom, color-mix(in oklab, var(--color-raised) 85%, var(--color-accent) 4%), var(--color-surface) 62%)", "purpose": "Material de tarjeta: la superficie se aclara por el borde superior. Sustituye a la sombra." },
+      { "name": "glass", "value": "background: color-mix(in oklab, var(--color-ground) 65%, transparent); backdrop-filter: blur(4px)", "purpose": "Chips sobre fotografía. La barra superior usa la misma receta al 82% con blur medio." },
+      { "name": "photo-scrim", "value": "linear-gradient(to top, var(--color-ground) 4%, color-mix(in oklab, var(--color-ground) 72%, transparent) 46%, color-mix(in oklab, var(--color-accent) 14%, transparent))", "purpose": "El degradado que PhotoCard tiende siempre bajo el contenido: es lo que garantiza el contraste sobre cualquier foto." },
+      { "name": "room-light", "value": "radial-gradient(72rem 42rem at 10% -10%, color-mix(in oklab, var(--color-accent) 15%, transparent), transparent 60%), radial-gradient(58rem 36rem at 94% 4%, color-mix(in oklab, var(--color-phase-intensification) 13%, transparent), transparent 58%), radial-gradient(64rem 40rem at 50% 108%, color-mix(in oklab, var(--color-phase-progression) 10%, transparent), transparent 62%)", "purpose": "Los tres focos fijos del suelo de la página, con background-attachment: fixed." }
+    ],
+    "motion": [
+      { "name": "state", "value": "transition: color .15s cubic-bezier(0.4,0,0.2,1), background-color .15s, border-color .15s", "purpose": "Cambios de estado en enlaces, píldoras, raíles y filas." },
+      { "name": "photo-zoom", "value": "transform .5s cubic-bezier(0.4,0,0.2,1)", "purpose": "La foto de PhotoCard escala a 1.03 en hover; el marco no se mueve." },
+      { "name": "press", "value": "transform .15s cubic-bezier(0.4,0,0.2,1)", "purpose": "La acción primaria sube a 1.02 en hover y vuelve a 1 al pulsar." },
+      { "name": "advance", "value": "transform .15s cubic-bezier(0.4,0,0.2,1)", "purpose": "La flecha de la fila de semana avanza 0.25rem en hover." }
     ],
     "breakpoints": [
       { "name": "sm", "value": "640px" },
       { "name": "md", "value": "768px" },
-      { "name": "lg", "value": "1024px" }
-    ]
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ],
+    "focus": {
+      "value": "outline: 2px solid var(--color-accent); outline-offset: 3px; border-radius: 4px",
+      "purpose": "Anillo de foco común a todo el sistema, declarado en la capa base sobre :focus-visible."
+    },
+    "assets": {
+      "rasters": [
+        { "file": "src/assets/photos/hoy-mancuernas-zapatillas.jpg", "source": "StockSnap", "id": "DAVLOF8C3R", "license": "CC0" },
+        { "file": "src/assets/photos/dia-1-mancuernas-suelo.jpg", "source": "StockSnap", "id": "CYK8OIFEIE", "license": "CC0" },
+        { "file": "src/assets/photos/dia-2-discos-cenital.jpg", "source": "StockSnap", "id": "TDRGG50ZRR", "license": "CC0" },
+        { "file": "src/assets/photos/dia-3-suelo-madera.jpg", "source": "StockSnap", "id": "9FOM4OTWR9", "license": "CC0" }
+      ],
+      "note": "Provisionales. Se optimizan a WebP en build con sharp a través de astro:assets. Sustituir una foto es reemplazar el archivo con el mismo nombre, sin tocar componentes. Procedencia completa en src/assets/photos/PROCEDENCIA.md. No hay más rasters; los únicos otros binarios son las dos fuentes."
+    }
   },
   "components": [
     {
-      "name": "Primary Button",
+      "name": "Acción primaria",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "La única acción en volt de toda la aplicación: empezar el día que toca ahora.",
-      "html": "<a class=\"ds-btn-primary\" href=\"#\">Empezar Día 1 · Empuje<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></a>",
-      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem; min-height: 3.5rem; padding: 0.75rem 2rem; border-radius: 999px; background: var(--color-volt, #ccf24a); color: var(--color-volt-ink, #0e1405); font-family: Archivo, system-ui, sans-serif; font-size: 1.125rem; font-weight: 800; letter-spacing: -0.01em; text-decoration: none; transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-primary:hover { transform: scale(1.02); } .ds-btn-primary:active { transform: scale(1); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-volt, #ccf24a); outline-offset: 3px; border-radius: 999px; }"
+      "description": "El único degradado saturado de la app. Una por pantalla, y solo para la acción que mueve al usuario a entrenar.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Ver la sesión<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: .75rem; min-height: 3.5rem; padding: 0 1.75rem; border: 0; border-radius: 999px; font-family: 'Archivo', system-ui, sans-serif; font-size: 1rem; font-weight: 800; text-decoration: none; color: var(--color-accent-ink, #031c30); background-image: linear-gradient(100deg, var(--color-accent, #34dafa), color-mix(in oklab, var(--color-accent-strong, #00b6eb) 88%, var(--color-phase-intensification, #99a6e7))); transition: transform .15s cubic-bezier(.4,0,.2,1); } .ds-btn-primary:hover { transform: scale(1.02); } .ds-btn-primary:active { transform: scale(1); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-accent, #34dafa); outline-offset: 3px; }"
     },
     {
-      "name": "Disabled Button",
+      "name": "Acción no construida",
       "kind": "button",
       "refersTo": "button-disabled",
-      "description": "La forma honesta de una acción que todavía no existe. Nunca un volt atenuado.",
-      "html": "<button class=\"ds-btn-disabled\" type=\"button\" disabled>Entrenar</button>",
-      "css": ".ds-btn-disabled { display: inline-flex; align-items: center; justify-content: center; min-height: 3.5rem; padding: 0 2rem; border-radius: 999px; border: 1px solid var(--color-line-strong, #39424f); background: transparent; color: var(--color-ink-faint, #828d9c); font-family: Archivo, system-ui, sans-serif; font-size: 1.125rem; font-weight: 800; cursor: not-allowed; }"
+      "description": "Cuando la función todavía no existe, el control no se disfraza: cristal apagado, cursor bloqueado y una línea debajo que explica por qué.",
+      "html": "<div><button class=\"ds-btn-off\" type=\"button\" disabled>Entrenar</button><p class=\"ds-btn-off-note\">El modo entreno todavía no está construido: de momento puedes consultar el plan.</p></div>",
+      "css": ".ds-btn-off { display: inline-flex; align-items: center; justify-content: center; min-height: 3.5rem; padding: 0 1.75rem; border: 1px solid var(--color-line-strong, #45576a); border-radius: 999px; font-family: 'Archivo', system-ui, sans-serif; font-size: 1rem; font-weight: 800; cursor: not-allowed; color: var(--color-ink-faint, #869dae); background: color-mix(in oklab, var(--color-ground, #091017) 65%, transparent); backdrop-filter: blur(4px); } .ds-btn-off-note { margin: .75rem 0 0; font-family: 'Archivo', system-ui, sans-serif; font-size: .875rem; color: var(--color-ink-faint, #869dae); }"
     },
     {
-      "name": "Day Card",
-      "kind": "card",
-      "refersTo": "card-day",
-      "description": "Un día de la semana en curso: cifra de series a escala de titular, chips de grupo muscular y cierre alineado por mt-auto.",
-      "html": "<a class=\"ds-card-day\" href=\"#\"><h3>Empuje</h3><p class=\"ds-card-day__focus\">Pecho, hombro y tríceps</p><dl class=\"ds-figures ds-card-day__stats\"><dd class=\"ds-card-day__count\"><span class=\"ds-card-day__number\">18</span><span class=\"ds-card-day__unit\">series</span></dd><dd class=\"ds-card-day__meta\">Día 1 · 6 ejercicios · 58 min</dd></dl><ul class=\"ds-card-day__chips\"><li>Pecho</li><li>Hombro</li><li>Tríceps</li></ul><p class=\"ds-card-day__cta\">Ver el día<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></p></a>",
-      "css": ".ds-card-day { display: flex; flex-direction: column; padding: 1.5rem; border: 1px solid var(--color-line, #232a35); border-radius: var(--radius-card, 14px); background: var(--color-surface, #0e1116); color: var(--color-ink, #f3f6f8); font-family: Archivo, system-ui, sans-serif; text-decoration: none; transition: background-color 150ms, border-color 150ms; } .ds-card-day:hover { background: var(--color-raised, #171b22); border-color: var(--color-line-strong, #39424f); } .ds-card-day h3 { margin: 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; } .ds-card-day__focus { margin: 0.5rem 0 0; font-size: 0.875rem; line-height: 1.625; color: var(--color-ink-dim, #9aa7b6); } .ds-figures { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; } .ds-card-day__stats { margin: 1.5rem 0 0; } .ds-card-day__count { display: flex; align-items: baseline; gap: 0.5rem; margin: 0; } .ds-card-day__number { font-size: 2.5rem; font-weight: 800; line-height: 1; letter-spacing: -0.02em; } .ds-card-day__unit { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-ink-faint, #828d9c); } .ds-card-day__meta { margin: 0.25rem 0 0; font-size: 0.875rem; color: var(--color-ink-dim, #9aa7b6); } .ds-card-day__chips { display: flex; flex-wrap: wrap; gap: 0.375rem; margin: 1.5rem 0 0; padding: 0; list-style: none; } .ds-card-day__chips li { padding: 0.25rem 0.625rem; border: 1px solid var(--color-line, #232a35); border-radius: 999px; font-size: 0.72rem; font-weight: 600; color: var(--color-ink-dim, #9aa7b6); } .ds-card-day__cta { display: flex; align-items: center; gap: 0.5rem; margin: auto 0 0; padding-top: 1.5rem; font-size: 0.875rem; font-weight: 700; color: var(--color-ink-dim, #9aa7b6); transition: color 150ms; } .ds-card-day:hover .ds-card-day__cta { color: var(--color-ink, #f3f6f8); } .ds-card-day:hover .ds-card-day__cta svg { transform: translateX(0.25rem); } .ds-card-day__cta svg { transition: transform 150ms; }"
-    },
-    {
-      "name": "Week Ledger Row",
-      "kind": "custom",
-      "refersTo": "ledger-row",
-      "description": "Una semana que no está en curso. Sin radio y sin superficie propia: se lee como registro, no como tarjeta.",
-      "html": "<a class=\"ds-ledger-row ds-figures\" href=\"#\"><p class=\"ds-ledger-row__num\">02</p><div class=\"ds-ledger-row__body\"><h3>Acumulación</h3><p>Subir volumen manteniendo la técnica</p></div><p class=\"ds-ledger-row__stat\"><b>54</b> series</p><svg class=\"ds-ledger-row__arrow\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></a>",
-      "css": ".ds-ledger-row { display: grid; grid-template-columns: 4.5rem 1fr auto auto; align-items: center; column-gap: 2rem; padding: 1.25rem 0.25rem; border-bottom: 1px solid var(--color-line, #232a35); background: transparent; color: var(--color-ink, #f3f6f8); font-family: Archivo, system-ui, sans-serif; text-decoration: none; transition: background-color 150ms; } .ds-ledger-row:last-child { border-bottom: 0; } .ds-ledger-row:hover { background: var(--color-surface, #0e1116); } .ds-ledger-row__num { margin: 0; font-size: 2.5rem; font-weight: 800; line-height: 1; letter-spacing: -0.02em; color: var(--color-ink-faint, #828d9c); transition: color 150ms; } .ds-ledger-row:hover .ds-ledger-row__num { color: var(--color-ink, #f3f6f8); } .ds-ledger-row__body { min-width: 0; } .ds-ledger-row__body h3 { margin: 0; font-size: 1.125rem; font-weight: 700; } .ds-ledger-row__body p { margin: 0.125rem 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.875rem; color: var(--color-ink-dim, #9aa7b6); } .ds-ledger-row__stat { margin: 0; font-size: 0.875rem; color: var(--color-ink-dim, #9aa7b6); } .ds-ledger-row__stat b { color: var(--color-ink, #f3f6f8); } .ds-ledger-row__arrow { color: var(--color-ink-faint, #828d9c); transition: transform 150ms, color 150ms; } .ds-ledger-row:hover .ds-ledger-row__arrow { transform: translateX(0.25rem); color: var(--color-ink, #f3f6f8); }"
-    },
-    {
-      "name": "Nav Item",
-      "kind": "nav",
-      "refersTo": "nav-item",
-      "description": "Ítem del rail izquierdo. El estado activo se lee por superficie, peso y luz a la vez, más aria-current: sobrevive en escala de grises.",
-      "html": "<nav class=\"ds-nav\" aria-label=\"Navegación principal\"><p class=\"ds-nav__brand\">My Fitness World</p><ul><li><a class=\"ds-nav__item ds-nav__item--active\" href=\"#\" aria-current=\"page\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 6h16M4 12h16M4 18h16M4 6v0M7 3v3M7 9v3M7 15v3\"/></svg><span>Mesociclo</span></a></li><li><a class=\"ds-nav__item\" href=\"#\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10\"/></svg><span>Ejercicios</span></a></li></ul></nav>",
-      "css": ".ds-nav { width: 15rem; padding-bottom: 1rem; border-right: 1px solid var(--color-line, #232a35); background: var(--color-surface, #0e1116); font-family: Archivo, system-ui, sans-serif; } .ds-nav__brand { margin: 0; padding: 1.75rem 1.5rem 2rem; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--color-ink-faint, #828d9c); } .ds-nav ul { display: flex; flex-direction: column; gap: 0.25rem; margin: 0; padding: 0 0.75rem; list-style: none; } .ds-nav__item { display: flex; align-items: center; gap: 0.75rem; min-height: 3rem; padding: 0 0.75rem; border-radius: 12px; font-size: 0.95rem; font-weight: 600; text-decoration: none; color: var(--color-ink-dim, #9aa7b6); transition: background-color 150ms, color 150ms; } .ds-nav__item:hover { background: color-mix(in srgb, var(--color-raised, #171b22) 60%, transparent); color: var(--color-ink, #f3f6f8); } .ds-nav__item--active { background: var(--color-raised, #171b22); color: var(--color-ink, #f3f6f8); font-weight: 700; } .ds-nav__item:focus-visible { outline: 2px solid var(--color-volt, #ccf24a); outline-offset: 3px; }"
-    },
-    {
-      "name": "Now Marker",
-      "kind": "custom",
-      "refersTo": "typography.label",
-      "description": "La marca de la semana en curso: la palabra AHORA y una regla en volt. El único momento animado del sistema, y arranca ya visible.",
-      "html": "<div class=\"ds-now\"><div class=\"ds-now__head\"><h2 class=\"ds-now__title ds-figures\">Semana 01</h2><p class=\"ds-now__phase\">Adaptación</p><p class=\"ds-now__tag\">Ahora</p></div><div class=\"ds-now__rule\"></div></div>",
-      "css": ".ds-now { font-family: Archivo, system-ui, sans-serif; } .ds-figures { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; } .ds-now__head { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 1.25rem; row-gap: 0.5rem; } .ds-now__title { margin: 0; font-size: 2.5rem; font-weight: 800; line-height: 1; letter-spacing: -0.02em; color: var(--color-ink, #f3f6f8); } .ds-now__phase { margin: 0; font-size: 1.125rem; font-weight: 700; color: var(--color-ink-dim, #9aa7b6); } .ds-now__tag { margin: 0 0 0 auto; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-volt, #ccf24a); animation: ds-asentar-etiqueta 700ms cubic-bezier(0.16, 1, 0.3, 1) both; } .ds-now__rule { height: 2px; margin-top: 0.75rem; background: var(--color-volt, #ccf24a); transform-origin: left center; animation: ds-asentar 700ms cubic-bezier(0.16, 1, 0.3, 1) both; } @keyframes ds-asentar { from { opacity: 0.35; transform: scaleX(0.82); } to { opacity: 1; transform: scaleX(1); } } @keyframes ds-asentar-etiqueta { from { opacity: 0.35; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } } @media (prefers-reduced-motion: reduce) { .ds-now__rule, .ds-now__tag { animation: none; } }"
-    },
-    {
-      "name": "Media Frame (empty state)",
-      "kind": "card",
-      "refersTo": "media-frame",
-      "description": "El marco de media reserva el hueco por aspect-ratio exista o no el asset, y nombra lo que falta en vez de esconderlo.",
-      "html": "<figure class=\"ds-media\"><div class=\"ds-media__empty\"><p class=\"ds-media__label\">Croquis pendiente</p><p class=\"ds-media__text\">Aún no hay animación de Press de banca con mancuernas.</p></div></figure>",
-      "css": ".ds-media { position: relative; aspect-ratio: 4 / 3; margin: 0; overflow: hidden; border: 1px solid var(--color-line, #232a35); border-radius: var(--radius-card, 14px); background: var(--color-surface, #0e1116); font-family: Archivo, system-ui, sans-serif; } .ds-media__empty { position: absolute; inset: 0; display: grid; place-content: center; gap: 0.5rem; text-align: center; } .ds-media__label { margin: 0; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-ink-faint, #828d9c); } .ds-media__text { max-width: 24ch; margin: 0; padding: 0 1rem; font-size: 0.875rem; line-height: 1.625; color: var(--color-ink-faint, #828d9c); }"
-    },
-    {
-      "name": "Muscle Chip",
+      "name": "Chip de cristal",
       "kind": "chip",
-      "refersTo": "chip-muscle",
-      "description": "Etiqueta informativa de grupo muscular. No es interactiva y no tiene estado seleccionado.",
-      "html": "<ul class=\"ds-chips\"><li>Pecho</li><li>Hombro</li><li>Tríceps</li><li>Core</li></ul>",
-      "css": ".ds-chips { display: flex; flex-wrap: wrap; gap: 0.375rem; margin: 0; padding: 0; list-style: none; font-family: Archivo, system-ui, sans-serif; } .ds-chips li { padding: 0.25rem 0.625rem; border: 1px solid var(--color-line, #232a35); border-radius: 999px; font-size: 0.72rem; font-weight: 600; color: var(--color-ink-dim, #9aa7b6); }"
+      "refersTo": "chip-glass",
+      "description": "Los metadatos de una sesión sobre la fotografía: series, ejercicios, duración. Informativos, nunca filtros.",
+      "html": "<ul class=\"ds-chips\"><li class=\"ds-chip-glass\">18 series</li><li class=\"ds-chip-glass\">6 ejercicios</li><li class=\"ds-chip-glass\">52 min</li></ul>",
+      "css": ".ds-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0; padding: 0; list-style: none; font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; } .ds-chip-glass { padding: .375rem .875rem; border: 1px solid var(--color-line, #2c3947); border-radius: 999px; font-family: 'Archivo', system-ui, sans-serif; font-size: .875rem; font-weight: 600; color: var(--color-ink, #f0f6fa); background: color-mix(in oklab, var(--color-ground, #091017) 65%, transparent); backdrop-filter: blur(4px); }"
+    },
+    {
+      "name": "Chip de contorno",
+      "kind": "chip",
+      "refersTo": "chip-outline",
+      "description": "Etiquetas sobre superficie: músculos y nivel en el catálogo, ejercicios alternativos en la ficha. El de alternativa es el único interactivo.",
+      "html": "<ul class=\"ds-chips-outline\"><li class=\"ds-chip-outline\">Pectoral</li><li class=\"ds-chip-outline\">Tríceps</li><li><a class=\"ds-chip-link\" href=\"#\">Flexiones declinadas</a></li></ul>",
+      "css": ".ds-chips-outline { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0; padding: 0; list-style: none; } .ds-chip-outline { padding: .25rem .75rem; border: 1px solid var(--color-line, #2c3947); border-radius: 999px; font-family: 'Archivo', system-ui, sans-serif; font-size: .75rem; font-weight: 600; color: var(--color-ink-dim, #a9becd); } .ds-chip-link { display: inline-block; padding: .375rem .875rem; border: 1px solid var(--color-line, #2c3947); border-radius: 999px; font-family: 'Archivo', system-ui, sans-serif; font-size: .875rem; font-weight: 600; text-decoration: none; color: var(--color-ink-dim, #a9becd); transition: color .15s, border-color .15s; } .ds-chip-link:hover { color: var(--color-ink, #f0f6fa); border-color: var(--color-line-strong, #45576a); } .ds-chip-link:focus-visible { outline: 2px solid var(--color-accent, #34dafa); outline-offset: 3px; }"
+    },
+    {
+      "name": "Navegación de píldoras",
+      "kind": "nav",
+      "refersTo": "nav-pill",
+      "description": "La barra superior pegajosa. El estado activo se lee por superficie y peso, nunca por color, y lleva aria-current.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Navegación principal\"><a class=\"ds-nav-pill ds-nav-pill--active\" href=\"#\" aria-current=\"page\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 6h16M4 12h16M4 18h16M4 6v0M7 3v3M7 9v3M7 15v3\"/></svg>Mesociclo</a><a class=\"ds-nav-pill\" href=\"#\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10\"/></svg>Ejercicios</a><a class=\"ds-nav-pill\" href=\"#\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 20V10M10 20V4M16 20v-7M22 20H2\"/></svg>Historial</a></nav>",
+      "css": ".ds-nav { display: inline-flex; gap: .25rem; padding: .25rem; border: 1px solid var(--color-line, #2c3947); border-radius: 999px; background: var(--color-surface, #141d26); } .ds-nav-pill { display: flex; align-items: center; gap: .5rem; min-height: 2.75rem; padding: 0 1rem; border-radius: 999px; font-family: 'Archivo', system-ui, sans-serif; font-size: .875rem; font-weight: 600; white-space: nowrap; text-decoration: none; color: var(--color-ink-dim, #a9becd); transition: color .15s, background-color .15s; } .ds-nav-pill:hover { color: var(--color-ink, #f0f6fa); } .ds-nav-pill:focus-visible { outline: 2px solid var(--color-accent, #34dafa); outline-offset: 3px; } .ds-nav-pill--active { background: var(--color-raised, #1e2934); color: var(--color-ink, #f0f6fa); font-weight: 800; }"
+    },
+    {
+      "name": "Raíl de semanas y días",
+      "kind": "nav",
+      "refersTo": "rail-week",
+      "description": "La columna vertebral de la app: dónde estás dentro del mesociclo. Una fila de semanas y debajo los días de la semana abierta.",
+      "html": "<div class=\"ds-rail\"><ol class=\"ds-rail-row\"><li><a class=\"ds-week ds-week--active\" href=\"#\" aria-current=\"page\"><span class=\"ds-week-top\"><span class=\"ds-dot\" aria-hidden=\"true\"></span>Semana 01</span><span class=\"ds-week-phase\">Acumulación</span></a></li><li><a class=\"ds-week\" href=\"#\"><span class=\"ds-week-top\"><span class=\"ds-dot ds-dot--prog\" aria-hidden=\"true\"></span>Semana 02</span><span class=\"ds-week-phase ds-week-phase--prog\">Progresión</span></a></li></ol><ol class=\"ds-rail-row\"><li><a class=\"ds-day ds-day--active\" href=\"#\" aria-current=\"page\"><span class=\"ds-day-n\">Día 1</span><span class=\"ds-day-t\">Empuje</span></a></li><li><a class=\"ds-day\" href=\"#\"><span class=\"ds-day-n\">Día 2</span><span class=\"ds-day-t\">Tracción</span></a></li></ol></div>",
+      "css": ".ds-rail { display: flex; flex-direction: column; gap: .75rem; font-family: 'Archivo', system-ui, sans-serif; } .ds-rail-row { display: flex; gap: .5rem; margin: 0; padding: 0 0 .25rem; list-style: none; overflow-x: auto; } .ds-week { display: flex; flex-direction: column; justify-content: center; min-height: 3.5rem; padding: .5rem 1rem; border: 1px solid var(--color-line, #2c3947); border-radius: 1rem; text-decoration: none; background: var(--color-surface, #141d26); font-variant-numeric: tabular-nums; transition: border-color .15s, background-color .15s; } .ds-week:hover { border-color: var(--color-line-strong, #45576a); } .ds-week:focus-visible { outline: 2px solid var(--color-accent, #34dafa); outline-offset: 3px; } .ds-week--active { border-color: var(--color-line-strong, #45576a); background: var(--color-raised, #1e2934); } .ds-week-top { display: flex; align-items: center; gap: .5rem; font-size: .875rem; font-weight: 700; color: var(--color-ink, #f0f6fa); } .ds-dot { width: .5rem; height: .5rem; border-radius: 999px; background: var(--color-phase-accumulation, #88c0e1); } .ds-dot--prog { background: var(--color-phase-progression, #7dcece); } .ds-week-phase { padding-left: 1rem; font-size: .75rem; font-weight: 600; color: var(--color-phase-accumulation, #88c0e1); } .ds-week-phase--prog { color: var(--color-phase-progression, #7dcece); } .ds-day { display: flex; align-items: center; gap: .5rem; min-height: 2.75rem; padding: 0 1rem; border: 1px solid var(--color-line, #2c3947); border-radius: 999px; font-size: .875rem; text-decoration: none; color: var(--color-ink-dim, #a9becd); transition: color .15s, border-color .15s, background-color .15s; } .ds-day:hover { color: var(--color-ink, #f0f6fa); border-color: var(--color-line-strong, #45576a); } .ds-day:focus-visible { outline: 2px solid var(--color-accent, #34dafa); outline-offset: 3px; } .ds-day--active { border-color: var(--color-line-strong, #45576a); background: var(--color-raised, #1e2934); color: var(--color-ink, #f0f6fa); font-weight: 800; } .ds-day-n { font-weight: 700; font-variant-numeric: tabular-nums; } .ds-day-t { color: var(--color-ink-faint, #869dae); }"
+    },
+    {
+      "name": "Tarjeta fotográfica",
+      "kind": "card",
+      "refersTo": "card-photo",
+      "description": "La pieza de la que vive la interfaz. La foto va apagada y desaturada, y el degradado bajo el contenido es lo que garantiza el contraste sea cual sea la imagen.",
+      "html": "<a class=\"ds-photocard\" href=\"#\"><div class=\"ds-photocard-img\" aria-hidden=\"true\"></div><div class=\"ds-photocard-scrim\" aria-hidden=\"true\"></div><div class=\"ds-photocard-body\"><p class=\"ds-photocard-meta\"><span class=\"ds-bar\" aria-hidden=\"true\"></span><span>Semana 01 · Acumulación · Día 1</span></p><h3 class=\"ds-photocard-title\">Empuje y core</h3><ul class=\"ds-chips\"><li class=\"ds-chip-glass\">18 series</li><li class=\"ds-chip-glass\">52 min</li></ul></div></a>",
+      "css": ".ds-photocard { position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: flex-end; aspect-ratio: 21/9; min-height: 19rem; overflow: hidden; border: 1px solid var(--color-line, #2c3947); border-radius: 14px; text-decoration: none; font-family: 'Archivo', system-ui, sans-serif; } .ds-photocard-img { position: absolute; inset: 0; z-index: -1; opacity: .7; filter: saturate(.65); background: linear-gradient(135deg, #3a4a58, #10161d); transition: transform .5s cubic-bezier(.4,0,.2,1); } .ds-photocard:hover .ds-photocard-img { transform: scale(1.03); } .ds-photocard-scrim { position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, var(--color-ground, #091017) 4%, color-mix(in oklab, var(--color-ground, #091017) 72%, transparent) 46%, color-mix(in oklab, var(--color-accent, #34dafa) 14%, transparent)); } .ds-photocard-body { position: relative; padding: 1.5rem; } .ds-photocard-meta { display: flex; align-items: center; gap: .5rem; margin: 0; font-size: .72rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--color-ink-dim, #a9becd); font-variant-numeric: tabular-nums; } .ds-bar { width: 1.5rem; height: 2px; border-radius: 999px; background: var(--color-phase-accumulation, #88c0e1); } .ds-photocard-title { margin: .75rem 0 1.25rem; font-size: clamp(2.75rem, 6vw, 5rem); font-weight: 900; line-height: .95; letter-spacing: -.03em; text-wrap: balance; color: var(--color-ink, #f0f6fa); } .ds-photocard:focus-visible { outline: 2px solid var(--color-accent, #34dafa); outline-offset: 3px; }"
+    },
+    {
+      "name": "Tarjeta de material",
+      "kind": "card",
+      "refersTo": "card-panel",
+      "description": "La superficie sin fotografía: catálogo de ejercicios y agrupaciones de superserie. El degradado hace de luz de sala y sustituye a la sombra.",
+      "html": "<a class=\"ds-panel\" href=\"#\"><div class=\"ds-panel-media\" aria-hidden=\"true\"></div><div class=\"ds-panel-body\"><h2 class=\"ds-panel-title\">Sentadilla búlgara</h2><ul class=\"ds-chips-outline\"><li class=\"ds-chip-outline\">Cuádriceps</li><li class=\"ds-chip-outline\">Intermedio</li></ul></div></a>",
+      "css": ".ds-panel { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--color-line, #2c3947); border-radius: 14px; text-decoration: none; font-family: 'Archivo', system-ui, sans-serif; background-image: linear-gradient(to bottom, color-mix(in oklab, var(--color-raised, #1e2934) 85%, var(--color-accent, #34dafa) 4%), var(--color-surface, #141d26) 62%); transition: border-color .15s; } .ds-panel:hover { border-color: var(--color-line-strong, #45576a); } .ds-panel:focus-visible { outline: 2px solid var(--color-accent, #34dafa); outline-offset: 3px; } .ds-panel-media { aspect-ratio: 3/2; border-bottom: 1px solid var(--color-line, #2c3947); background: radial-gradient(60% 60% at 50% 35%, color-mix(in oklab, var(--color-accent, #34dafa) 7%, transparent), transparent); } .ds-panel-body { display: flex; flex-direction: column; gap: .75rem; padding: 1.25rem; } .ds-panel-title { margin: 0; font-size: 1.125rem; font-weight: 700; color: var(--color-ink, #f0f6fa); }"
+    },
+    {
+      "name": "Fila de semana",
+      "kind": "custom",
+      "refersTo": "card-panel",
+      "description": "Las listas largas no son tarjetas: son filas con filete inferior, ordinal en tamaño figure y una flecha que avanza en hover.",
+      "html": "<a class=\"ds-row\" href=\"#\"><p class=\"ds-row-n\">03</p><div class=\"ds-row-main\"><h3 class=\"ds-row-title\"><span class=\"ds-row-mark\" aria-hidden=\"true\"></span>Intensificación</h3><p class=\"ds-row-sub\">Menos repeticiones, más control excéntrico</p></div><p class=\"ds-row-fig\"><b>22</b> series</p><svg class=\"ds-row-arrow\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></a>",
+      "css": ".ds-row { display: grid; grid-template-columns: 4.5rem 1fr auto auto; align-items: center; column-gap: 2rem; padding: 1.25rem .25rem; border-bottom: 1px solid var(--color-line, #2c3947); text-decoration: none; font-family: 'Archivo', system-ui, sans-serif; transition: background-color .15s; } .ds-row:hover { background: var(--color-surface, #141d26); } .ds-row:focus-visible { outline: 2px solid var(--color-accent, #34dafa); outline-offset: 3px; } .ds-row-n { margin: 0; font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 800; line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; color: var(--color-ink-faint, #869dae); transition: color .15s; } .ds-row:hover .ds-row-n { color: var(--color-ink, #f0f6fa); } .ds-row-title { display: flex; align-items: center; gap: .625rem; margin: 0; font-size: 1.125rem; font-weight: 700; color: var(--color-phase-intensification, #99a6e7); } .ds-row-mark { width: 4px; height: .875rem; border-radius: 999px; background: var(--color-phase-intensification, #99a6e7); } .ds-row-sub { margin: .125rem 0 0 1.375rem; font-size: .875rem; color: var(--color-ink-dim, #a9becd); } .ds-row-fig { margin: 0; font-size: .875rem; color: var(--color-ink-dim, #a9becd); font-variant-numeric: tabular-nums; } .ds-row-fig b { color: var(--color-ink, #f0f6fa); } .ds-row-arrow { color: var(--color-ink-faint, #869dae); transition: transform .15s, color .15s; } .ds-row:hover .ds-row-arrow { transform: translateX(.25rem); color: var(--color-ink, #f0f6fa); }"
+    },
+    {
+      "name": "Hueco de media vacío",
+      "kind": "custom",
+      "refersTo": "card-panel",
+      "description": "El estado vacío está diseñado, no improvisado: reserva el hueco por aspect-ratio y nombra lo que falta en lugar de simular contenido.",
+      "html": "<figure class=\"ds-media\"><div class=\"ds-media-empty\"><svg width=\"44\" height=\"44\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10\"/></svg><p class=\"ds-media-label\">Croquis pendiente</p><p class=\"ds-media-note\">Aún no hay animación de sentadilla búlgara.</p></div></figure>",
+      "css": ".ds-media { position: relative; aspect-ratio: 4/3; margin: 0; overflow: hidden; border: 1px solid var(--color-line, #2c3947); border-radius: 14px; background: var(--color-surface, #141d26); font-family: 'Archivo', system-ui, sans-serif; } .ds-media-empty { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: .75rem; text-align: center; background: radial-gradient(60% 60% at 50% 35%, color-mix(in oklab, var(--color-accent, #34dafa) 7%, transparent), transparent); color: var(--color-line-strong, #45576a); } .ds-media-label { margin: 0; font-size: .72rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--color-ink-faint, #869dae); } .ds-media-note { max-width: 26ch; margin: 0; padding: 0 1rem; font-size: .875rem; color: var(--color-ink-faint, #869dae); }"
     }
   ],
   "narrative": {
-    "northStar": "La sala a oscuras con una sola luz encendida",
-    "overview": "Es de noche, la pantalla está apoyada a dos o tres metros y las manos están ocupadas. Todo el sistema parte de ahí: la sala está casi a oscuras (ground es un negro azulado, no un gris de dashboard), los planos se separan por luz y no por sombra, y hay exactamente una luz encendida —el verde volt— apuntando a lo único que importa en ese momento: lo que toca AHORA. Cuando esa luz se enciende en una pantalla, señala una sola cosa; si señalara tres, no señalaría ninguna.\n\nLa densidad no es uniforme, y esa desigualdad es el argumento del producto hecho materia visual. La semana en curso se abre en tarjetas grandes con cifras a tamaño de titular; las semanas 2 a 4 se comprimen en un libro de cuentas de filas finas separadas por hairlines. El sistema rechaza explícitamente la rejilla de cuatro tarjetas de semana idénticas: la jerarquía la impone el estado real del plan, no la simetría. Las páginas secundarias —semana, día, catálogo, ejercicio— heredan el mismo material pero sin una sola gota de volt: allí no hay nada ocurriendo ahora mismo.\n\nEl material es deliberadamente barato de renderizar y caro de imitar: tres superficies casi negras, dos grosores de línea de un píxel, una familia tipográfica variable auto-alojada, cero sombras, cero degradados, cero librerías de iconos. La riqueza sale del peso tipográfico, de las cifras tabulares cuadrando en columna y del contraste brutal entre el titular a clamp(2.75rem, 6vw, 5rem) y la etiqueta a 0.72rem con 0.2em de tracking.",
+    "northStar": "La sala a oscuras con la luz encendida sobre la barra",
+    "overview": "Es un plan por el que se avanza por fecha, no un panel que se lee. El eje de la interfaz es el raíl de semanas y días: siempre sabes en qué punto del mesociclo estás antes de saber ninguna otra cosa. Sobre ese raíl, la sesión que toca ocupa la pantalla como una tarjeta fotográfica a sangre con una sola acción encima. La app se mira de pie, a dos o tres metros, con las manos ocupadas y casi siempre de noche: de ahí el fondo negro azulado, el tamaño desmesurado de las cifras y el hecho de que solo haya un color encendido en toda la pantalla.\n\nEl material es fotografía. Bodegones reales de mancuernas, discos y suelo de madera, apagados al 70 % de opacidad y desaturados al 65 %, que llenan el ancho de las tarjetas de día y de la sesión protagonista. No son ilustración de relleno: son lo que da temperatura y peso a una interfaz que, sin ellas, sería una lista. Debajo del texto siempre cae un degradado que arranca del propio fondo de la app, así que el contraste no depende nunca de qué foto haya puesta. El suelo de la página lo iluminan tres focos radiales fijos —cian, lavanda y verdeazulado, todos por debajo del 15 % de mezcla— que no se mueven con el scroll y no tiñen el contenido.\n\nLo que este mundo rechaza está tan decidido como lo que abraza: no hay barra lateral, no hay sombras en ninguna parte, no hay iconos de librería ni emoji haciendo de icono, no hay tarjetas de solo texto en las superficies principales y no hay ningún segundo color saturado compitiendo con el cian. La profundidad se declara una vez, con un filete de un píxel; el material de las tarjetas es un degradado sutil, no una sombra.",
     "keyCharacteristics": [
-      "Casi negro por capas: ground → surface → raised, cada plano un escalón de luz.",
-      "Hairlines de 1px como único recurso de separación; ni una sombra en todo el build.",
-      "Un solo acento (volt), reservado por ley a lo que ocurre ahora.",
-      "Archivo variable (400–900), display apretado a -0.03em, etiquetas abiertas a 0.2em.",
-      "Toda cifra comparable en cifras tabulares mediante la utilidad .figures.",
-      "Ningún estado se distingue solo por color: sobrevive en escala de grises.",
-      "Un único momento animado en toda la aplicación, y arranca ya visible."
+      "Negro azulado con tres focos radiales fijos, nunca gris neutro",
+      "Un único cian saturado (#34dafa), reservado a la acción primaria y al AHORA",
+      "Cuatro pasteles de croma bajo que identifican las fases del mesociclo sin competir",
+      "Fotografía a sangre bajo degradado garantizado, con metadatos como chips de cristal",
+      "Archivo variable 400–900, cifras tabulares en todo lo comparable",
+      "Filete de un píxel como única declaración de elevación: cero sombras",
+      "Raíl de semanas y días como columna vertebral de la navegación"
     ],
     "rules": [
-      {
-        "name": "Regla del Volt Reservado",
-        "body": "El acento está reservado por ley a lo que está ocurriendo AHORA. En reposo vive en tres sitios y solo en la portada: el CTA primario, la etiqueta AHORA y #barra-ahora. Antes de pintar algo de volt, la pregunta es una sola: ¿esto es lo que toca en este instante? Si no, no lleva volt. El anillo de foco, ::selection y el skip link —que solo existe visualmente bajo foco de teclado— son superficies del navegador tematizadas y no cuentan para ese recuento; tampoco autorizan a extender el acento al contenido.",
-        "section": "colors"
-      },
-      {
-        "name": "Regla del Gris que Sobrevive",
-        "body": "Ningún estado puede distinguirse solo por color. La página actual en la navegación se marca con superficie, peso y luz a la vez (bg-raised, font-bold, text-ink) más aria-current=\"page\"; la semana en curso se marca con la palabra literal AHORA y una regla, no con un tono. Prueba de auditoría: en escala de grises, todo estado sigue siendo legible.",
-        "section": "colors"
-      },
-      {
-        "name": "Regla del Suelo de Contraste",
-        "body": "Ningún texto baja de 4.5:1 contra la superficie sobre la que se apoya. Si hace falta un cuarto nivel de jerarquía, se toma del tamaño o del peso —nunca bajando el valor por debajo del suelo.",
-        "section": "colors"
-      },
-      {
-        "name": "Regla de las Cifras Tabulares",
-        "body": "Toda cantidad comparable se compone con la utilidad .figures (tabular-nums + font-feature-settings: 'tnum' 1). Series, días, minutos, número de semana, número de posición: si dos números pueden acabar uno debajo del otro, cuadran en columna. Se aplica al contenedor —dl, p, fila—, no a cada número suelto.",
-        "section": "typography"
-      },
-      {
-        "name": "Regla de un Solo Display por Página",
-        "body": "La escala display es el ancla de orientación de la página. Hay exactamente un h1 a esa escala; cualquier segundo nivel baja a figure o a label.",
-        "section": "typography"
-      },
-      {
-        "name": "Regla del Ancho de 375",
-        "body": "Ningún contenido provoca desbordamiento horizontal a 375px de ancho (document.documentElement.scrollWidth === 375, verificado). Toda celda que pueda recibir texto largo lleva min-w-0, y el texto que no cabe se trunca en vez de ensanchar la fila.",
-        "section": "layout"
-      },
-      {
-        "name": "Regla de la Elevación Declarada Una Vez",
-        "body": "Cada nivel se anuncia con un único recurso —superficie o línea. Si un elemento ya tiene borde, no lleva sombra; si algún día llevara sombra, pierde el borde. En este sistema la respuesta correcta siempre ha sido el borde.",
-        "section": "elevation"
-      },
-      {
-        "name": "Regla del Momento Único",
-        "body": "Toda la aplicación tiene una sola animación autoral: la marca de la semana en curso al cargar la portada. #barra-ahora hace scaleX(0.82 → 1) desde transform-origin: left center con un asentamiento de opacidad, y #marcador-ahora hace translateY(3px → 0); ambas a 700ms cubic-bezier(0.16, 1, 0.3, 1) y ambas anuladas bajo prefers-reduced-motion. Arranca desde un estado ya visible por diseño: interrumpirla a media reproducción nunca deja un elemento truncado. Todo lo demás que se mueve es una transición de estado disparada por el usuario.",
-        "section": "elevation"
-      }
+      { "name": "La regla del único cian", "body": "El cian saturado está reservado a la acción primaria y a lo que está pasando AHORA. Nada decorativo lo usa, y los pasteles de fase nunca compiten con él. El anillo de foco, ::selection y el estado de foco del enlace de salto son superficies del navegador tematizadas, y quedan fuera de la cuenta.", "section": "colors" },
+      { "name": "La regla del gris", "body": "Ningún estado se distingue solo por color. La navegación activa y los elementos activos del raíl se leen por superficie (raised), por peso (700 → 800) y por luminosidad de la tinta, además de por aria-current: en escala de grises siguen siendo legibles.", "section": "colors" },
+      { "name": "La regla de la etiqueta", "body": "Un color de fase nunca viaja solo: siempre lleva al lado el nombre de la fase escrito.", "section": "colors" },
+      { "name": "La regla de las cifras tabulares", "body": "Toda cantidad comparable se compone con la utilidad .figures (tabular-nums + 'tnum' 1): series, semanas, días, duraciones, prescripciones y ordinales. Si dos números pueden acabar uno debajo del otro, van en cifras tabulares.", "section": "typography" },
+      { "name": "La regla de la unidad al lado", "body": "Una cifra grande nunca viaja sola: 4 × 10-20 no dice si son repeticiones o segundos, así que la unidad se escribe siempre junto a ella, en 0,875rem, +0,14em y ink-faint.", "section": "typography" },
+      { "name": "La regla del ordinal de dos dígitos", "body": "Semanas y posiciones se rellenan a dos dígitos (01, 02) para que la columna cuadre.", "section": "typography" },
+      { "name": "La regla del filete único", "body": "La elevación se declara una vez: filete de un píxel, nunca borde más sombra. Si algo tiene que destacar, sube de tono, no de altura.", "section": "elevation" }
     ],
     "dos": [
-      "Do preguntarse \"¿esto es lo que ocurre AHORA?\" antes de escribir volt en cualquier sitio. Si la respuesta no es un sí evidente, el color correcto es ink, ink-dim o ink-faint.",
-      "Do marcar todo estado con al menos dos señales (superficie + peso, o palabra + regla) y añadir el atributo ARIA correspondiente; debe sobrevivir en escala de grises.",
-      "Do envolver en .figures cualquier contenedor con cantidades comparables.",
-      "Do declarar la elevación una sola vez: o superficie, o hairline.",
-      "Do poner medida explícita (55ch–65ch) a toda columna de prosa, y min-w-0 a toda celda de rejilla que reciba texto variable.",
-      "Do dar un estado vacío honesto y nombrado (CROQUIS PENDIENTE, Todavía no has registrado…) en vez de esconder el hueco.",
-      "Do dibujar los iconos nuevos en Icon.astro con viewBox 24, un solo path y grosor 1.75."
+      "Do reservar accent (#34dafa) para la acción primaria y para lo que pasa ahora; como mucho una acción primaria por pantalla.",
+      "Do acompañar todo color de fase con el nombre de la fase escrito al lado.",
+      "Do duplicar la señal de cualquier estado activo: superficie raised + peso 800 + aria-current, para que sobreviva en escala de grises.",
+      "Do componer con .figures cualquier cantidad comparable, y escribir siempre la unidad junto a la cifra grande.",
+      "Do meter el contenido de una tarjeta fotográfica dentro de PhotoCard, que es quien garantiza el degradado de contraste bajo el texto.",
+      "Do reservar el hueco de toda media con aspect-ratio antes de saber si el asset existe.",
+      "Do declarar la elevación con un filete de un píxel en line, y subirlo a line-strong para el estado activo o el hover.",
+      "Do dibujar los iconos nuevos en Icon.astro con lienzo 24, trazo 1,75 y terminaciones redondeadas.",
+      "Do dar al menos 2,75rem de alto a todo lo que se pulse (3,5rem a la acción primaria).",
+      "Do decir la verdad en los estados vacíos: nombrar lo que falta en lugar de simular contenido.",
+      "Do sustituir una fotografía reemplazando el archivo de src/assets/photos/ con el mismo nombre, y mantener actualizado PROCEDENCIA.md con su origen y su licencia."
     ],
     "donts": [
-      "Don't usar volt en una página secundaria. Semana, día, catálogo y ficha de ejercicio no contienen acento, y esa ausencia es la que hace que la portada signifique algo.",
-      "Don't introducir un segundo acento ni recurrir a --color-volt-dim: está declarado y sin uso a propósito.",
-      "Don't añadir box-shadow a nada. No hay ni una sombra en el sistema; el borde ya hizo ese trabajo.",
-      "Don't combinar borde y sombra en el mismo elemento si algún día se introdujera una sombra.",
-      "Don't distinguir un estado únicamente por tono, ni marcar la semana en curso solo con color en lugar de la palabra AHORA.",
-      "Don't bajar ink-faint por debajo del suelo de 4.5:1 para recuperar jerarquía; tomarla del tamaño o del peso.",
-      "Don't añadir animaciones de entrada. El sistema tiene un único momento autoral; lo demás se mueve solo como respuesta a una acción del usuario y siempre respetando prefers-reduced-motion.",
-      "Don't cargar iframes, fuentes o imágenes de terceros en la carga inicial: el vídeo incrustado se crea al pulsar, y las fuentes van auto-alojadas.",
-      "Don't usar emoji ni una librería de iconos como sustituto de Icon.astro.",
-      "Don't cifrar la jerarquía de las semanas en una rejilla de tarjetas iguales: la semana en curso se abre, el resto es registro."
+      "Don't usar sombras. No hay ninguna en el proyecto y no se añade la primera; si algo tiene que destacar, sube de tono.",
+      "Don't poner borde y sombra a la vez, ni dos filetes concéntricos.",
+      "Don't distinguir un estado solo por color, ni usar un pastel de fase como color de acción.",
+      "Don't introducir un segundo color saturado: los pasteles existen precisamente para no competir con el cian.",
+      "Don't escribir accent-ink sobre una superficie; solo vive encima del acento.",
+      "Don't dejar texto sobre una fotografía sin el degradado de PhotoCard debajo, ni confiar en que la foto concreta ya tenga contraste suficiente.",
+      "Don't usar iconos de librería, fuentes de iconos ni emoji haciendo de icono.",
+      "Don't meter una segunda familia tipográfica: la jerarquía se hace con peso y tamaño.",
+      "Don't poner cifras comparables en tipografía proporcional.",
+      "Don't añadir una línea pequeña en versalitas encima de un título si no aporta un dato que el título no tiene: la que existe sobre las fotos localiza la sesión (semana, fase, día) o declara el estado «Tu próxima sesión»; una etiqueta decorativa en ese sitio no está justificada.",
+      "Don't deshabilitar un control sin decir al lado por qué está apagado.",
+      "Don't cargar media de terceros antes de que el usuario la pida."
     ]
   }
 }

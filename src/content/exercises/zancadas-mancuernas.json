@@ -1,17 +1,8 @@
 {
   "name": "Zancadas con mancuernas",
-  "primaryMuscles": [
-    "quads",
-    "glutes"
-  ],
-  "secondaryMuscles": [
-    "hamstrings",
-    "calves",
-    "core"
-  ],
-  "equipment": [
-    "dumbbell"
-  ],
+  "primaryMuscles": ["quads", "glutes"],
+  "secondaryMuscles": ["hamstrings", "calves", "core"],
+  "equipment": ["dumbbell"],
   "difficulty": "intermediate",
   "loadType": "bodyweight_plus",
   "unilateral": true,
@@ -25,7 +16,5 @@
     "Inclinar el torso hacia delante al subir"
   ],
   "defaultRestSeconds": 90,
-  "substitutions": [
-    "sentadilla-bulgara"
-  ]
+  "substitutions": ["sentadilla-bulgara"]
 }

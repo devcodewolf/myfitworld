@@ -1,19 +1,8 @@
 {
   "name": "Renegade row",
-  "primaryMuscles": [
-    "lats",
-    "upper_back",
-    "core"
-  ],
-  "secondaryMuscles": [
-    "biceps",
-    "chest",
-    "front_delts"
-  ],
-  "equipment": [
-    "dumbbell",
-    "floor"
-  ],
+  "primaryMuscles": ["lats", "upper_back", "core"],
+  "secondaryMuscles": ["biceps", "chest", "front_delts"],
+  "equipment": ["dumbbell", "floor"],
   "difficulty": "advanced",
   "loadType": "external",
   "unilateral": true,
@@ -27,7 +16,5 @@
     "Colocar los pies juntos y perder toda la estabilidad"
   ],
   "defaultRestSeconds": 90,
-  "substitutions": [
-    "remo-mancuerna-una-mano"
-  ]
+  "substitutions": ["remo-mancuerna-una-mano"]
 }

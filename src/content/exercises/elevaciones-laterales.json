@@ -1,15 +1,8 @@
 {
   "name": "Elevaciones laterales",
-  "primaryMuscles": [
-    "side_delts"
-  ],
-  "secondaryMuscles": [
-    "traps",
-    "front_delts"
-  ],
-  "equipment": [
-    "dumbbell"
-  ],
+  "primaryMuscles": ["side_delts"],
+  "secondaryMuscles": ["traps", "front_delts"],
+  "equipment": ["dumbbell"],
   "difficulty": "beginner",
   "loadType": "external",
   "cues": [
@@ -22,7 +15,5 @@
     "Usar impulso de cadera cuando el peso es excesivo"
   ],
   "defaultRestSeconds": 60,
-  "substitutions": [
-    "press-militar-mancuernas"
-  ]
+  "substitutions": ["press-militar-mancuernas"]
 }

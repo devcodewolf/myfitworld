@@ -1,17 +1,8 @@
 {
   "name": "Peso muerto rumano con mancuernas",
-  "primaryMuscles": [
-    "hamstrings",
-    "glutes"
-  ],
-  "secondaryMuscles": [
-    "lower_back",
-    "lats",
-    "forearms"
-  ],
-  "equipment": [
-    "dumbbell"
-  ],
+  "primaryMuscles": ["hamstrings", "glutes"],
+  "secondaryMuscles": ["lower_back", "lats", "forearms"],
+  "equipment": ["dumbbell"],
   "difficulty": "intermediate",
   "loadType": "external",
   "cues": [
@@ -24,7 +15,5 @@
     "Redondear la lumbar buscando tocar el suelo"
   ],
   "defaultRestSeconds": 120,
-  "substitutions": [
-    "sentadilla-goblet"
-  ]
+  "substitutions": ["sentadilla-goblet"]
 }

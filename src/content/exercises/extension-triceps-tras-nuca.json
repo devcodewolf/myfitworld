@@ -1,15 +1,8 @@
 {
   "name": "Extensión de tríceps tras nuca",
-  "primaryMuscles": [
-    "triceps"
-  ],
-  "secondaryMuscles": [
-    "front_delts",
-    "core"
-  ],
-  "equipment": [
-    "dumbbell"
-  ],
+  "primaryMuscles": ["triceps"],
+  "secondaryMuscles": ["front_delts", "core"],
+  "equipment": ["dumbbell"],
   "difficulty": "beginner",
   "loadType": "external",
   "cues": [
@@ -22,7 +15,5 @@
     "Arquear la espalda para poder con más peso"
   ],
   "defaultRestSeconds": 60,
-  "substitutions": [
-    "fondos-entre-bancos"
-  ]
+  "substitutions": ["fondos-entre-bancos"]
 }

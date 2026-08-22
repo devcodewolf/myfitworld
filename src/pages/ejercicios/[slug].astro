@@ -24,9 +24,11 @@ const substitutions = exercise.substitutions
 ---
 
 <BaseLayout title={`${exercise.name} · Ejercicios`} description={exercise.cues[0]}>
-  <div class="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:px-12 lg:py-14">
-    {/* Sin JavaScript esto lleva al catálogo. Si vienes de un día concreto, el
-        script del final reescribe el enlace para devolverte exactamente ahí. */}
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    {
+      /* Sin JavaScript esto lleva al catálogo. Si vienes de un día concreto, el
+        script del final reescribe el enlace para devolverte exactamente ahí. */
+    }
     <a
       id="volver"
       href={routes.exercises()}
@@ -79,7 +81,10 @@ const substitutions = exercise.substitutions
 
       <div>
         <section aria-labelledby="claves">
-          <h2 id="claves" class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase">
+          <h2
+            id="claves"
+            class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase"
+          >
             Claves de técnica
           </h2>
           <ul class="mt-5 space-y-4">
@@ -145,8 +150,8 @@ const substitutions = exercise.substitutions
             Tu historial
           </h2>
           <p class="mt-4 max-w-[55ch] text-base text-ink-faint">
-            Todavía no has registrado ninguna serie de este ejercicio. Cuando entrenes, aquí verás la
-            evolución de tus pesos y repeticiones.
+            Todavía no has registrado ninguna serie de este ejercicio. Cuando entrenes, aquí verás
+            la evolución de tus pesos y repeticiones.
           </p>
         </section>
       </div>

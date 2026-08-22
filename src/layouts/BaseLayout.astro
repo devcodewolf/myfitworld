@@ -22,20 +22,22 @@ const { title, description } = Astro.props;
   </head>
   <body class="min-h-dvh bg-ground text-ink">
     <!--
-      THESIS: The plan you are inside of, not a feed about fitness. It refuses the
-      four-identical-week-cards grid: the current week opens, the rest stay a ledger.
-      OWN-WORLD: Blue-black layered surfaces lit by two fixed radial washes, hairline
-      borders, no shadows. One saturated cyan accent (#34dafa) reserved by law for the
-      primary action and for what is happening now; a low-chroma pastel family
-      (sky/cyan/indigo/mint) identifies the mesocycle phases and never competes with it.
-      Archivo variable, display tight at -0.03em, every comparable figure tabular.
-      STORY: He sees where he is in the mesocycle, what today costs him in sets and
-      minutes, and starts training in one click.
-      FIRST VIEWPORT: Left rail; mesocycle name at display scale; real counters
-      (0 of 12 sessions); one primary action; the current week's three days side by
-      side on desktop; weeks 2-4 as a dense ledger below.
-      FORM: canon, the category standard chosen deliberately over the dealt hand;
-      craft bar Apple Fitness / Nike Training Club; seed 7f81f74b.
+      THESIS: A plan you move through by date, not a dashboard you read. The
+      week-and-day rail is the spine and photography carries every surface; it
+      refuses the sidebar-plus-text-cards app shell it replaced.
+      OWN-WORLD: Blue-black ground lit by three fixed radial washes. Full-bleed
+      still-life photography of real equipment, cooled and dimmed under a
+      ground-to-transparent gradient, with metadata as glass chips over it. One
+      saturated cyan (#34dafa) reserved for the primary action and for now; four
+      low-chroma pastels identify the mesocycle phases. Archivo variable, tabular
+      figures, hairline borders, no shadows.
+      STORY: He lands on the rail, sees which week and day he is on, and the next
+      session fills the screen with one action on it.
+      FIRST VIEWPORT: Top pill nav; mesocycle name and counters; week rail over
+      day rail; then the next session as a 21:9 photographic card carrying its
+      title at display scale, its chips and its action.
+      FORM: brief-pinned by two references the user supplied (FitPRO, NOW!);
+      no direction roll. Craft bar Apple Fitness / Nike Training Club; seed 7f81f74b.
       FINISH: unreviewed and undocumented is unfinished; this build ends with the
       finish review, the verdict, DESIGN.md, and every shipping raster carrying its
       provenance
@@ -46,11 +48,9 @@ const { title, description } = Astro.props;
     >
       Saltar al contenido
     </a>
-    <div class="lg:flex">
-      <AppNav />
-      <main id="contenido" class="min-w-0 flex-1 pb-24 lg:pb-0">
-        <slot />
-      </main>
-    </div>
+    <AppNav />
+    <main id="contenido">
+      <slot />
+    </main>
   </body>
 </html>

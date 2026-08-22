@@ -3,22 +3,21 @@ import type { GetStaticPaths } from 'astro';
 
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import DayCard from '@/components/routine/DayCard.astro';
-import Icon from '@/components/ui/Icon.astro';
+import WeekNav from '@/components/routine/WeekNav.astro';
 import { getActiveMesocycle, getExerciseCatalog } from '@/data';
 import { PHASE_LABELS, formatDuration, formatReserve } from '@/core/labels';
 import { estimateWeekSeconds, weekSetCount } from '@/core/training';
-import { routes } from '@/routes';
 import { PHASE_PALETTE } from '@/theme';
 
 export const getStaticPaths = (async () => {
   const mesocycle = await getActiveMesocycle();
   return mesocycle.weeks.map((week) => ({
     params: { week: String(week.order) },
-    props: { week },
+    props: { week, mesocycle },
   }));
 }) satisfies GetStaticPaths;
 
-const { week } = Astro.props;
+const { week, mesocycle } = Astro.props;
 const catalog = await getExerciseCatalog();
 
 const sets = weekSetCount(week);
@@ -27,16 +26,10 @@ const reserve = week.days[0]?.blocks[0]?.repsInReserve;
 ---
 
 <BaseLayout title={`Semana ${week.order} · ${PHASE_LABELS[week.phase]}`} description={week.focus}>
-  <div class="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:px-12 lg:py-16">
-    <a
-      href={routes.home()}
-      class="inline-flex items-center gap-2 text-sm font-bold text-ink-dim transition-colors hover:text-ink"
-    >
-      <Icon name="arrow-right" size={16} class="rotate-180" />
-      Mesociclo
-    </a>
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    <WeekNav mesocycle={mesocycle} activeWeek={week.order} />
 
-    <header class="border-b border-line pt-6 pb-10">
+    <header class="border-b border-line pt-8 pb-9">
       <h1 class:list={['text-display font-black', PHASE_PALETTE[week.phase].text]}>
         {PHASE_LABELS[week.phase]}
       </h1>
@@ -59,10 +52,16 @@ const reserve = week.days[0]?.blocks[0]?.repsInReserve;
       )
     }
 
-    <div class="grid gap-4 pt-8 md:grid-cols-3">
+    <div class="grid gap-5 pt-8 sm:grid-cols-2 lg:grid-cols-3">
       {
         week.days.map((day) => (
-          <DayCard day={day} weekOrder={week.order} phase={week.phase} catalog={catalog} />
+          <DayCard
+            day={day}
+            weekOrder={week.order}
+            phase={week.phase}
+            catalog={catalog}
+            eager={day.order === 1}
+          />
         ))
       }
     </div>

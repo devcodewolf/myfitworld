@@ -1,17 +1,8 @@
 {
   "name": "Press militar con mancuernas",
-  "primaryMuscles": [
-    "front_delts",
-    "side_delts"
-  ],
-  "secondaryMuscles": [
-    "triceps",
-    "core",
-    "upper_back"
-  ],
-  "equipment": [
-    "dumbbell"
-  ],
+  "primaryMuscles": ["front_delts", "side_delts"],
+  "secondaryMuscles": ["triceps", "core", "upper_back"],
+  "equipment": ["dumbbell"],
   "difficulty": "intermediate",
   "loadType": "external",
   "cues": [
@@ -24,7 +15,5 @@
     "Bajar solo hasta la frente en lugar de hasta la barbilla"
   ],
   "defaultRestSeconds": 90,
-  "substitutions": [
-    "elevaciones-laterales"
-  ]
+  "substitutions": ["elevaciones-laterales"]
 }

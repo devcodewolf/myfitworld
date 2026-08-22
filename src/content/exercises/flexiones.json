@@ -1,17 +1,8 @@
 {
   "name": "Flexiones",
-  "primaryMuscles": [
-    "chest",
-    "front_delts",
-    "triceps"
-  ],
-  "secondaryMuscles": [
-    "core"
-  ],
-  "equipment": [
-    "bodyweight",
-    "floor"
-  ],
+  "primaryMuscles": ["chest", "front_delts", "triceps"],
+  "secondaryMuscles": ["core"],
+  "equipment": ["bodyweight", "floor"],
   "difficulty": "intermediate",
   "loadType": "bodyweight",
   "cues": [
@@ -24,8 +15,5 @@
     "Bajar solo media repetición y contarla entera"
   ],
   "defaultRestSeconds": 90,
-  "substitutions": [
-    "flexiones-declinadas",
-    "floor-press"
-  ]
+  "substitutions": ["flexiones-declinadas", "floor-press"]
 }

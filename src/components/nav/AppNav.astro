@@ -12,35 +12,46 @@ const links: ReadonlyArray<{ href: string; label: string; icon: IconName }> = [
 ];
 ---
 
-<nav
-  aria-label="Navegación principal"
-  class="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 backdrop-blur lg:sticky lg:top-0 lg:h-dvh lg:w-60 lg:shrink-0 lg:border-t-0 lg:border-r lg:bg-surface lg:backdrop-blur-none"
+<header
+  class="sticky top-0 z-40 border-b border-line bg-[color-mix(in_oklab,var(--color-ground)_82%,transparent)] backdrop-blur-md"
 >
-  <p class="hidden px-6 pt-7 pb-8 text-[0.7rem] font-bold tracking-[0.22em] text-ink-faint uppercase lg:block">
-    My Fitness World
-  </p>
-  <ul class="flex lg:flex-col lg:gap-1 lg:px-3">
-    {
-      links.map((link) => {
-        const active = isActiveRoute(current, link.href);
-        return (
-          <li class="flex-1">
+  <div class="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-6 lg:px-8">
+    <a
+      href={routes.home()}
+      class="flex shrink-0 items-center gap-2.5 text-sm font-black tracking-[-0.01em] text-ink"
+    >
+      <span
+        class="accion-primaria grid size-8 place-content-center rounded-xl text-accent-ink"
+        aria-hidden="true"
+      >
+        <Icon name="catalog" size={18} />
+      </span>
+      <span class="hidden sm:inline">My Fitness World</span>
+    </a>
+
+    <nav
+      aria-label="Navegación principal"
+      class="ml-auto flex gap-1 overflow-x-auto rounded-full border border-line bg-surface p-1"
+    >
+      {
+        links.map((link) => {
+          const active = isActiveRoute(current, link.href);
+          return (
             <a
               href={link.href}
               aria-current={active ? 'page' : undefined}
               class:list={[
-                'flex min-h-14 flex-col items-center justify-center gap-1 text-[0.72rem] font-semibold transition-colors lg:min-h-12 lg:flex-row lg:justify-start lg:gap-3 lg:rounded-xl lg:px-3 lg:text-base',
-                // El estado activo se lee por superficie y peso, no por color:
-                // funciona igual en escala de grises.
-                active ? 'bg-raised font-bold text-ink' : 'text-ink-dim hover:text-ink lg:hover:bg-raised/60',
+                'flex min-h-11 shrink-0 items-center gap-2 rounded-full px-4 text-sm font-semibold whitespace-nowrap transition-colors',
+                // El estado activo se lee por superficie y peso, no por color.
+                active ? 'bg-raised font-bold text-ink' : 'text-ink-dim hover:text-ink',
               ]}
             >
-              <Icon name={link.icon} size={22} />
-              <span>{link.label}</span>
+              <Icon name={link.icon} size={18} class="shrink-0" />
+              <span class="hidden md:inline">{link.label}</span>
             </a>
-          </li>
-        );
-      })
-    }
-  </ul>
-</nav>
+          );
+        })
+      }
+    </nav>
+  </div>
+</header>
