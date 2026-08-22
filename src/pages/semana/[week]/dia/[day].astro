@@ -88,7 +88,12 @@ let position = 0;
         groups.map((group) =>
           group.length === 1 ? (
             <ul>
-              <BlockRow block={group[0]!} catalog={catalog} position={(position += 1)} />
+              <BlockRow
+                block={group[0]!}
+                catalog={catalog}
+                position={(position += 1)}
+                from={{ week: week.order, day: day.order }}
+              />
             </ul>
           ) : (
             <div class="my-4 rounded-card border border-line-strong bg-surface px-5">
@@ -97,7 +102,12 @@ let position = 0;
               </p>
               <ul>
                 {group.map((block) => (
-                  <BlockRow block={block} catalog={catalog} position={(position += 1)} />
+                  <BlockRow
+                    block={block}
+                    catalog={catalog}
+                    position={(position += 1)}
+                    from={{ week: week.order, day: day.order }}
+                  />
                 ))}
               </ul>
             </div>

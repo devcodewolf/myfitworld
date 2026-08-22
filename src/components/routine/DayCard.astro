@@ -1,18 +1,22 @@
 ---
-import type { Day } from '@/core/model';
+import type { Day, WeekPhase } from '@/core/model';
 import type { ExerciseCatalog } from '@/core/training';
 import { dayMuscleGroups, daySetCount, estimateDaySeconds } from '@/core/training';
 import { MUSCLE_LABELS, formatDuration } from '@/core/labels';
 import { routes } from '@/routes';
+import { PHASE_PALETTE } from '@/theme';
 import Icon from '@/components/ui/Icon.astro';
 
 interface Props {
   day: Day;
   weekOrder: number;
+  /** La fase de la semana a la que pertenece el día, que le presta su color. */
+  phase: WeekPhase;
   catalog: ExerciseCatalog;
 }
 
-const { day, weekOrder, catalog } = Astro.props;
+const { day, weekOrder, phase, catalog } = Astro.props;
+const palette = PHASE_PALETTE[phase];
 
 const sets = daySetCount(day);
 const seconds = estimateDaySeconds(day, catalog);
@@ -21,8 +25,9 @@ const muscles = dayMuscleGroups(day, catalog).slice(0, 4);
 
 <a
   href={routes.day(weekOrder, day.order)}
-  class="group flex flex-col rounded-card border border-line bg-surface p-6 transition-colors hover:border-line-strong hover:bg-raised"
+  class="panel group flex flex-col rounded-card border border-line p-6 transition-colors hover:border-line-strong"
 >
+  <span class:list={['mb-4 block h-1 w-9 rounded-full', palette.mark]} aria-hidden="true" />
   <h3 class="text-2xl font-extrabold tracking-[-0.02em] text-ink">{day.title}</h3>
   <p class="mt-2 text-sm leading-relaxed text-ink-dim">{day.focus}</p>
 

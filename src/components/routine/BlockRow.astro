@@ -1,21 +1,29 @@
 ---
 import type { ExerciseBlock } from '@/core/model';
 import type { ExerciseCatalog } from '@/core/training';
-import { EQUIPMENT_LABELS, MUSCLE_LABELS, formatRepRange } from '@/core/labels';
-import { routes } from '@/routes';
+import { estimateBlockSeconds } from '@/core/training';
+import { EQUIPMENT_LABELS, MUSCLE_LABELS, formatDuration, formatRepRange } from '@/core/labels';
+import { routes, type DayContext } from '@/routes';
 
 interface Props {
   block: ExerciseBlock;
   catalog: ExerciseCatalog;
   position: number;
+  /** Se propaga al enlace del ejercicio para poder volver a este día. */
+  from: DayContext;
 }
 
-const { block, catalog, position } = Astro.props;
+const { block, catalog, position, from } = Astro.props;
 const exercise = catalog.get(block.exerciseId);
 
+// La cifra grande siempre lleva su unidad al lado: sin ella, "4 × 10-20" no
+// dice si son repeticiones o segundos.
 const prescription = block.repRange
-  ? `${block.sets} × ${formatRepRange(block.repRange)}`
-  : `${block.sets} × ${block.workSeconds}s`;
+  ? { figure: `${block.sets} × ${formatRepRange(block.repRange)}`, unit: 'reps' }
+  : { figure: `${block.sets} × ${block.workSeconds}`, unit: 'segundos' };
+
+// Cuánto cuesta este ejercicio: trabajo, tempo, lados y descansos incluidos.
+const blockSeconds = estimateBlockSeconds(block, catalog);
 
 const tempo = block.tempo?.eccentricSeconds ?? 0;
 const details: string[] = [];
@@ -37,7 +45,7 @@ if (block.intraSideRestSeconds) details.push(`${block.intraSideRestSeconds} s en
       {
         exercise ? (
           <a
-            href={routes.exercise(exercise.id)}
+            href={routes.exercise(exercise.id, from)}
             class="decoration-line-strong underline-offset-4 hover:underline"
           >
             {exercise.name}
@@ -55,8 +63,14 @@ if (block.intraSideRestSeconds) details.push(`${block.intraSideRestSeconds} s en
   </div>
 
   <div class="figures col-start-2 sm:col-start-3 sm:text-right">
-    <p class="text-figure font-extrabold text-ink">{prescription}</p>
+    <p class="text-figure font-extrabold text-ink">
+      {prescription.figure}
+      <span class="ml-2 text-sm font-semibold tracking-[0.14em] text-ink-faint uppercase">
+        {prescription.unit}
+      </span>
+    </p>
     <p class="mt-1 text-sm text-ink-dim">
+      <span class="font-bold text-ink">{formatDuration(blockSeconds)}</span> en total ·{' '}
       {block.restSeconds} s de descanso
       {details.length > 0 && <span class="text-ink-faint"> · {details.join(' · ')}</span>}
     </p>

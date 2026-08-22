@@ -29,7 +29,7 @@ const links: ReadonlyArray<{ href: string; label: string; icon: IconName }> = [
               href={link.href}
               aria-current={active ? 'page' : undefined}
               class:list={[
-                'flex min-h-14 flex-col items-center justify-center gap-1 text-[0.72rem] font-semibold transition-colors lg:min-h-12 lg:flex-row lg:justify-start lg:gap-3 lg:rounded-xl lg:px-3 lg:text-[0.95rem]',
+                'flex min-h-14 flex-col items-center justify-center gap-1 text-[0.72rem] font-semibold transition-colors lg:min-h-12 lg:flex-row lg:justify-start lg:gap-3 lg:rounded-xl lg:px-3 lg:text-base',
                 // El estado activo se lee por superficie y peso, no por color:
                 // funciona igual en escala de grises.
                 active ? 'bg-raised font-bold text-ink' : 'text-ink-dim hover:text-ink lg:hover:bg-raised/60',

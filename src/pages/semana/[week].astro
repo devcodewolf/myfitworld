@@ -8,6 +8,7 @@ import { getActiveMesocycle, getExerciseCatalog } from '@/data';
 import { PHASE_LABELS, formatDuration, formatReserve } from '@/core/labels';
 import { estimateWeekSeconds, weekSetCount } from '@/core/training';
 import { routes } from '@/routes';
+import { PHASE_PALETTE } from '@/theme';
 
 export const getStaticPaths = (async () => {
   const mesocycle = await getActiveMesocycle();
@@ -36,7 +37,9 @@ const reserve = week.days[0]?.blocks[0]?.repsInReserve;
     </a>
 
     <header class="border-b border-line pt-6 pb-10">
-      <h1 class="text-display font-black text-ink">{PHASE_LABELS[week.phase]}</h1>
+      <h1 class:list={['text-display font-black', PHASE_PALETTE[week.phase].text]}>
+        {PHASE_LABELS[week.phase]}
+      </h1>
       <p class="mt-4 max-w-[60ch] text-lg leading-relaxed text-ink-dim">{week.focus}</p>
 
       <p class="figures mt-8 flex flex-wrap gap-x-8 gap-y-2 text-sm text-ink-dim">
@@ -57,7 +60,11 @@ const reserve = week.days[0]?.blocks[0]?.repsInReserve;
     }
 
     <div class="grid gap-4 pt-8 md:grid-cols-3">
-      {week.days.map((day) => <DayCard day={day} weekOrder={week.order} catalog={catalog} />)}
+      {
+        week.days.map((day) => (
+          <DayCard day={day} weekOrder={week.order} phase={week.phase} catalog={catalog} />
+        ))
+      }
     </div>
   </div>
 </BaseLayout>

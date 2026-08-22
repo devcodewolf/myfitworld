@@ -24,74 +24,30 @@ const substitutions = exercise.substitutions
 ---
 
 <BaseLayout title={`${exercise.name} · Ejercicios`} description={exercise.cues[0]}>
-  <div class="mx-auto max-w-5xl px-5 py-10 sm:px-8 lg:px-12 lg:py-16">
+  <div class="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:px-12 lg:py-14">
+    {/* Sin JavaScript esto lleva al catálogo. Si vienes de un día concreto, el
+        script del final reescribe el enlace para devolverte exactamente ahí. */}
     <a
+      id="volver"
       href={routes.exercises()}
       class="inline-flex items-center gap-2 text-sm font-bold text-ink-dim transition-colors hover:text-ink"
     >
       <Icon name="arrow-right" size={16} class="rotate-180" />
-      Ejercicios
+      <span data-volver-texto>Ejercicios</span>
     </a>
 
-    <div class="grid gap-10 pt-6 lg:grid-cols-[1fr_20rem] lg:gap-14">
-      <div>
-        <h1 class="text-display font-black text-balance text-ink">{exercise.name}</h1>
-        <p class="mt-4 text-lg text-ink-dim">
-          {exercise.primaryMuscles.map((muscle) => MUSCLE_LABELS[muscle]).join(' · ')}
-        </p>
+    <header class="pt-6">
+      <h1 class="text-display font-black text-balance text-ink">{exercise.name}</h1>
+      <p class="mt-3 text-lg text-ink-dim">
+        {exercise.primaryMuscles.map((muscle) => MUSCLE_LABELS[muscle]).join(' · ')}
+      </p>
+    </header>
 
-        <section class="border-t border-line pt-8 mt-10" aria-labelledby="claves">
-          <h2 id="claves" class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase">
-            Claves de técnica
-          </h2>
-          <ul class="mt-5 space-y-4">
-            {
-              exercise.cues.map((cue) => (
-                <li class="flex gap-3 text-base leading-relaxed text-ink">
-                  <Icon name="check" size={20} class="mt-0.5 shrink-0 text-ink-faint" />
-                  {cue}
-                </li>
-              ))
-            }
-          </ul>
-        </section>
-
-        <section class="border-t border-line pt-8 mt-10" aria-labelledby="errores">
-          <h2
-            id="errores"
-            class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase"
-          >
-            Errores comunes
-          </h2>
-          <ul class="mt-5 space-y-4">
-            {
-              exercise.commonMistakes.map((mistake) => (
-                <li class="max-w-[62ch] border-l border-line-strong pl-4 text-base leading-relaxed text-ink-dim">
-                  {mistake}
-                </li>
-              ))
-            }
-          </ul>
-        </section>
-
-        <section class="border-t border-line pt-8 mt-10" aria-labelledby="historial-ejercicio">
-          <h2
-            id="historial-ejercicio"
-            class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase"
-          >
-            Tu historial
-          </h2>
-          <p class="mt-4 max-w-[55ch] text-base text-ink-faint">
-            Todavía no has registrado ninguna serie de este ejercicio. Cuando entrenes, aquí verás la
-            evolución de tus pesos y repeticiones.
-          </p>
-        </section>
-      </div>
-
-      <aside class="lg:pt-3">
+    <div class="grid gap-10 pt-9 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-14">
+      <div class="lg:sticky lg:top-10 lg:self-start">
         <ExerciseMedia label={exercise.name} asset={exercise.media?.croquis} eager />
 
-        <dl class="mt-8 space-y-5 text-sm">
+        <dl class="mt-6 grid grid-cols-2 gap-x-6 gap-y-5 text-sm sm:grid-cols-3">
           <div>
             <dt class="text-[0.7rem] font-bold tracking-[0.16em] text-ink-faint uppercase">
               Material
@@ -118,27 +74,94 @@ const substitutions = exercise.substitutions
               </div>
             )
           }
-          {
-            substitutions.length > 0 && (
-              <div>
-                <dt class="text-[0.7rem] font-bold tracking-[0.16em] text-ink-faint uppercase">
-                  Alternativas
-                </dt>
-                <dd class="mt-1 flex flex-col gap-1">
-                  {substitutions.map((item) => (
+        </dl>
+      </div>
+
+      <div>
+        <section aria-labelledby="claves">
+          <h2 id="claves" class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase">
+            Claves de técnica
+          </h2>
+          <ul class="mt-5 space-y-4">
+            {
+              exercise.cues.map((cue) => (
+                <li class="flex gap-3 text-base leading-relaxed text-ink">
+                  <Icon name="check" size={20} class="mt-0.5 shrink-0 text-ink-faint" />
+                  {cue}
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section class="mt-10 border-t border-line pt-8" aria-labelledby="errores">
+          <h2
+            id="errores"
+            class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase"
+          >
+            Errores comunes
+          </h2>
+          <ul class="mt-5 space-y-4">
+            {
+              exercise.commonMistakes.map((mistake) => (
+                <li class="max-w-[62ch] border-l border-line-strong pl-4 text-base leading-relaxed text-ink-dim">
+                  {mistake}
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        {
+          substitutions.length > 0 && (
+            <section class="mt-10 border-t border-line pt-8" aria-labelledby="alternativas">
+              <h2
+                id="alternativas"
+                class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase"
+              >
+                Si hoy no puedes hacerlo
+              </h2>
+              <ul class="mt-4 flex flex-wrap gap-2">
+                {substitutions.map((item) => (
+                  <li>
                     <a
                       href={routes.exercise(item.id)}
-                      class="text-ink-dim transition-colors hover:text-ink"
+                      class="inline-block rounded-full border border-line px-3.5 py-1.5 text-sm font-semibold text-ink-dim transition-colors hover:border-line-strong hover:text-ink"
                     >
                       {item.name}
                     </a>
-                  ))}
-                </dd>
-              </div>
-            )
-          }
-        </dl>
-      </aside>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+
+        <section class="mt-10 border-t border-line pt-8" aria-labelledby="historial-ejercicio">
+          <h2
+            id="historial-ejercicio"
+            class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase"
+          >
+            Tu historial
+          </h2>
+          <p class="mt-4 max-w-[55ch] text-base text-ink-faint">
+            Todavía no has registrado ninguna serie de este ejercicio. Cuando entrenes, aquí verás la
+            evolución de tus pesos y repeticiones.
+          </p>
+        </section>
+      </div>
     </div>
   </div>
 </BaseLayout>
+
+<script>
+  import { parseDayContext, routes } from '@/routes';
+
+  const contexto = parseDayContext(window.location.search);
+  const enlace = document.getElementById('volver');
+  const texto = enlace?.querySelector('[data-volver-texto]');
+  if (contexto && enlace instanceof HTMLAnchorElement && texto) {
+    enlace.href = routes.day(contexto.week, contexto.day);
+    texto.textContent = `Semana ${contexto.week} · Día ${contexto.day}`;
+  }
+</script>

@@ -7,17 +7,20 @@
  * que se pulsa: en modo entreno no puede haber una petición a YouTube por serie.
  */
 import type { MediaAsset } from '@/core/model';
+import Icon from '@/components/ui/Icon.astro';
 
 interface Props {
   asset?: MediaAsset;
   /** El ejercicio activo en modo entreno carga de inmediato; el resto, en diferido. */
   eager?: boolean;
   label: string;
+  /** Proporción del hueco cuando todavía no hay asset. */
+  ratio?: string;
   class?: string;
 }
 
-const { asset, eager = false, label, class: className } = Astro.props;
-const ratio = asset?.aspectRatio ?? '4/3';
+const { asset, eager = false, label, ratio: ratioProp, class: className } = Astro.props;
+const ratio = asset?.aspectRatio ?? ratioProp ?? '4/3';
 ---
 
 <figure
@@ -26,11 +29,12 @@ const ratio = asset?.aspectRatio ?? '4/3';
 >
   {
     asset === undefined && (
-      <div class="absolute inset-0 grid place-content-center gap-2 text-center">
+      <div class="absolute inset-0 grid place-content-center justify-items-center gap-3 bg-[radial-gradient(60%_60%_at_50%_35%,color-mix(in_oklab,var(--color-accent)_7%,transparent),transparent)] text-center">
+        <Icon name="catalog" size={44} class="text-line-strong" />
         <p class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase">
           Croquis pendiente
         </p>
-        <p class="max-w-[24ch] px-4 text-sm text-ink-faint">
+        <p class="max-w-[26ch] px-4 text-sm text-ink-faint">
           Aún no hay animación de {label}.
         </p>
       </div>

@@ -4,6 +4,7 @@ import type { ExerciseCatalog } from '@/core/training';
 import { estimateWeekSeconds, weekSetCount } from '@/core/training';
 import { PHASE_LABELS, formatDuration } from '@/core/labels';
 import { routes } from '@/routes';
+import { PHASE_PALETTE } from '@/theme';
 import Icon from '@/components/ui/Icon.astro';
 
 interface Props {
@@ -15,6 +16,7 @@ const { week, catalog } = Astro.props;
 
 const sets = weekSetCount(week);
 const seconds = estimateWeekSeconds(week, catalog);
+const palette = PHASE_PALETTE[week.phase];
 ---
 
 <a
@@ -26,8 +28,11 @@ const seconds = estimateWeekSeconds(week, catalog);
   </p>
 
   <div class="min-w-0">
-    <h3 class="text-lg font-bold text-ink">{PHASE_LABELS[week.phase]}</h3>
-    <p class="mt-0.5 truncate text-sm text-ink-dim">{week.focus}</p>
+    <h3 class:list={['flex items-center gap-2.5 text-lg font-bold', palette.text]}>
+      <span class:list={['h-3.5 w-1 shrink-0 rounded-full', palette.mark]} aria-hidden="true" />
+      {PHASE_LABELS[week.phase]}
+    </h3>
+    <p class="mt-0.5 truncate pl-[1.375rem] text-sm text-ink-dim">{week.focus}</p>
   </div>
 
   <p class="figures col-start-2 text-sm text-ink-dim sm:col-start-auto">

@@ -27,22 +27,32 @@
 @theme {
   --font-sans: 'Archivo', 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif;
 
-  /* Escala de superficies: del fondo de sala a lo que está más cerca de ti. */
-  --color-ground: #05070a;
-  --color-surface: #0e1116;
-  --color-raised: #171b22;
-  --color-line: #232a35;
-  --color-line-strong: #39424f;
+  /* Superficies: negro azulado, croma bajo y escalón perceptual constante,
+     calculadas en OKLCH sobre el mismo tono que el acento. */
+  --color-ground: #091017;
+  --color-surface: #141d26;
+  --color-raised: #1e2934;
+  --color-line: #2c3947;
+  --color-line-strong: #45576a;
 
-  /* Texto. El secundario se tiñe de la temperatura del fondo, nunca gris puro. */
-  --color-ink: #f3f6f8;
-  --color-ink-dim: #9aa7b6;
-  --color-ink-faint: #828d9c;
+  /* Tintas: tomadas de la temperatura del fondo, nunca gris neutro.
+     Las tres pasan 4.5:1 sobre las tres superficies. */
+  --color-ink: #f0f6fa;
+  --color-ink-dim: #a9becd;
+  --color-ink-faint: #869dae;
 
-  /* Reservado por ley a una sola cosa: lo que toca AHORA. Nada más lo usa. */
-  --color-volt: #ccf24a;
-  --color-volt-ink: #0e1405;
-  --color-volt-dim: #7f9622;
+  /* El único croma alto del sistema, y por eso el que manda la atención:
+     acción primaria y lo que toca AHORA. Nada decorativo lo usa. */
+  --color-accent: #34dafa;
+  --color-accent-strong: #00b6eb;
+  --color-accent-ink: #031c30;
+
+  /* Fases del mesociclo. Pastel a propósito: identifican la semana sin
+     competir nunca con el acento, y siempre acompañadas de su etiqueta. */
+  --color-phase-accumulation: #88c0e1;
+  --color-phase-progression: #7dcece;
+  --color-phase-intensification: #99a6e7;
+  --color-phase-deload: #9dceb7;
 
   --radius-card: 14px;
 
@@ -63,7 +73,15 @@
   }
 
   body {
+    /* Tres focos de luz fijos y tenues sobre el fondo: dan profundidad a la
+       sala sin teñir el contenido ni desplazarse al hacer scroll. */
     background-color: var(--color-ground);
+    background-image:
+      radial-gradient(72rem 42rem at 10% -10%, color-mix(in oklab, var(--color-accent) 15%, transparent), transparent 60%),
+      radial-gradient(58rem 36rem at 94% 4%, color-mix(in oklab, var(--color-phase-intensification) 13%, transparent), transparent 58%),
+      radial-gradient(64rem 40rem at 50% 108%, color-mix(in oklab, var(--color-phase-progression) 10%, transparent), transparent 62%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
     color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -71,12 +89,12 @@
 
   /* Las superficies del navegador también son parte del diseño. */
   ::selection {
-    background-color: var(--color-volt);
-    color: var(--color-volt-ink);
+    background-color: var(--color-accent);
+    color: var(--color-accent-ink);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-volt);
+    outline: 2px solid var(--color-accent);
     outline-offset: 3px;
     border-radius: 4px;
   }
@@ -99,10 +117,32 @@
   ::-webkit-scrollbar-thumb:hover {
     background: var(--color-ink-faint);
   }
+}
 
+@layer components {
   /* Toda cifra comparable se compone en cifras tabulares: las columnas cuadran. */
   .figures {
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum' 1;
+  }
+
+  /* Material de las tarjetas: la superficie se aclara hacia arriba, como si la
+     luz de la sala les diera por el borde superior. Sustituye a la sombra, que
+     este mundo no usa; la elevación se sigue declarando una sola vez. */
+  .panel {
+    background-image: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-raised) 85%, var(--color-accent) 4%),
+      var(--color-surface) 62%
+    );
+  }
+
+  /* Acción primaria: el único degradado saturado de la app. */
+  .accion-primaria {
+    background-image: linear-gradient(
+      100deg,
+      var(--color-accent),
+      color-mix(in oklab, var(--color-accent-strong) 88%, var(--color-phase-intensification))
+    );
   }
 }
