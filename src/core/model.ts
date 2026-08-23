@@ -288,6 +288,16 @@ export const SettingsSchema = z.object({
   soundEnabled: z.boolean().default(true),
   vibrationEnabled: z.boolean().default(true),
   theme: z.enum(['dark', 'light', 'system']).default('dark'),
+  /**
+   * Descanso fijo entre series, en segundos. Sustituye a lo que prescribe cada
+   * ejercicio: se eligió un valor único y ajustable en vez de respetar los
+   * 90-120 s de los básicos frente a los 60 s de los accesorios.
+   *
+   * Lleva `default`, así que los documentos guardados antes de que existiera
+   * este campo siguen validando sin necesidad de migración.
+   */
+  restSeconds: z.number().int().min(15).max(300).default(60),
+  /** @deprecated Lo sustituye `restSeconds`. Se conserva por los datos ya guardados. */
   restMultiplier: z.number().min(0.5).max(1.5).default(1),
   autoStartRest: z.boolean().default(true),
   keepScreenAwake: z.boolean().default(true),

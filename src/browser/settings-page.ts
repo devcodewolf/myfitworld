@@ -83,11 +83,11 @@ function renderSettings(settings: Settings): void {
   bind('vibracion', settings.vibrationEnabled);
   bind('pantalla', settings.keepScreenAwake);
   bind('descanso-auto', settings.autoStartRest);
-  bind('multiplicador', String(settings.restMultiplier));
+  bind('descanso', String(settings.restSeconds));
   bind('peso-corporal', settings.bodyweightKg === undefined ? '' : String(settings.bodyweightKg));
 
-  const readout = el<HTMLOutputElement>('multiplicador-valor');
-  if (readout) readout.textContent = `${Math.round(settings.restMultiplier * 100)} %`;
+  const readout = el<HTMLOutputElement>('descanso-valor');
+  if (readout) readout.textContent = `${settings.restSeconds} s`;
 }
 
 export async function mountSettingsPage(): Promise<void> {
@@ -152,8 +152,8 @@ export async function mountSettingsPage(): Promise<void> {
     });
   }
 
-  el<HTMLInputElement>('multiplicador')?.addEventListener('change', (event) => {
-    void save({ restMultiplier: Number((event.currentTarget as HTMLInputElement).value) });
+  el<HTMLInputElement>('descanso')?.addEventListener('change', (event) => {
+    void save({ restSeconds: Number((event.currentTarget as HTMLInputElement).value) });
   });
 
   el<HTMLInputElement>('peso-corporal')?.addEventListener('change', (event) => {

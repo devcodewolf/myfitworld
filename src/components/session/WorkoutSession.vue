@@ -17,12 +17,11 @@ import {
   nextPendingIndex,
   recordStep,
   recordedValuesOf,
-  restSecondsFor,
   sessionProgress,
   type SessionStep,
 } from '@/core/session';
 import { formatRepRange } from '@/core/labels';
-import { findLastPerformance } from '@/core/prefill';
+import { defaultValuesFor, findLastPerformance } from '@/core/prefill';
 import { createAudioCues } from '@/browser/audio';
 import { HAPTIC, vibrate } from '@/browser/haptics';
 import { createWakeLock } from '@/browser/wake-lock';
@@ -42,6 +41,7 @@ const props = defineProps<{
   weekLabel: string;
   backHref: string;
   homeHref: string;
+  historyHref: string;
 }>();
 
 const repo = getRepository();
@@ -61,8 +61,8 @@ const foreign = ref<SessionLog | null>(null);
 const index = ref(0);
 const reps = ref<number | null>(null);
 const weightKg = ref<number | null>(null);
-const fromHistory = ref(false);
-const restMultiplier = ref(1);
+const origin = ref<'history' | 'suggested' | 'none'>('none');
+const restSeconds = ref(60);
 
 const step = computed<SessionStep | undefined>(() => plan[index.value]);
 const exercise = computed(() => (step.value ? catalog.get(step.value.exerciseId) : undefined));
@@ -95,24 +95,44 @@ const restTimer = useTimer({
 
 const workTimer = useTimer({ mode: 'countup' });
 
-/** Prellena los campos con lo ya registrado, o con la última vez que lo hiciste. */
+/**
+ * Deja la serie lista para marcarla sin teclear nada.
+ *
+ * Si ya la registraste en esta sesión, se recupera tal cual. Si no, manda lo
+ * que hiciste la última vez, y a falta de historial, lo que dice el plan y tu
+ * material declarado.
+ */
 async function loadValuesFor(current: SessionStep): Promise<void> {
   const already = session.value ? recordedValuesOf(session.value, current) : undefined;
   if (already) {
     reps.value = already.reps ?? already.seconds ?? null;
     weightKg.value = already.weightKg ?? null;
-    fromHistory.value = false;
+    origin.value = 'history';
     return;
   }
+
+  const currentBlock = props.day.blocks.find(
+    (item) => (item.key ?? item.exerciseId) === current.blockKey,
+  );
+  const currentExercise = catalog.get(current.exerciseId);
+  if (!currentBlock || !currentExercise) return;
+
   const history = await repo.sessions.listSessions({ status: 'completed' });
   const last = findLastPerformance(history, current.exerciseId, {
     excludeSessionId: session.value?.id,
   });
   const match =
     last?.log.sets.find((set) => set.setIndex === current.setIndex) ?? last?.log.sets.at(-1);
-  reps.value = match?.reps ?? match?.seconds ?? null;
-  weightKg.value = match?.weightKg ?? null;
-  fromHistory.value = match !== undefined;
+
+  const values = defaultValuesFor({
+    block: currentBlock,
+    loadType: currentExercise.loadType,
+    last: match,
+    equipment: settings.value?.availableLoads ?? [],
+  });
+  reps.value = values.reps ?? values.seconds ?? null;
+  weightKg.value = values.weightKg ?? null;
+  origin.value = values.source;
 }
 
 async function persist(next: SessionLog): Promise<void> {
@@ -128,7 +148,7 @@ async function begin(fresh: SessionLog): Promise<void> {
 
 onMounted(async () => {
   settings.value = await repo.settings.get();
-  restMultiplier.value = settings.value.restMultiplier;
+  restSeconds.value = settings.value.restSeconds;
   cues.setEnabled(settings.value.soundEnabled);
   if (settings.value.keepScreenAwake) void wakeLock.request();
 
@@ -161,7 +181,7 @@ onMounted(async () => {
         mesocycleId: props.mesocycleId,
         weekOrder: props.weekOrder,
         dayOrder: props.dayOrder,
-        restMultiplier: restMultiplier.value,
+        restMultiplier: settings.value.restMultiplier,
         ...(settings.value.bodyweightKg !== undefined
           ? { bodyweightKg: settings.value.bodyweightKg }
           : {}),
@@ -173,9 +193,8 @@ onMounted(async () => {
 
 onUnmounted(() => wakeLock.dispose());
 
-watch(restMultiplier, (value) => {
-  void repo.settings.save({ restMultiplier: value });
-  if (session.value) void persist({ ...session.value, restMultiplier: value });
+watch(restSeconds, (value) => {
+  void repo.settings.save({ restSeconds: value });
 });
 
 function startWork(): void {
@@ -218,9 +237,8 @@ async function advance(skipped: boolean): Promise<void> {
   index.value = following;
   await loadValuesFor(plan[following]!);
 
-  const rest = restSecondsFor(current, restMultiplier.value);
-  if (rest > 0 && (settings.value?.autoStartRest ?? true)) {
-    restTimer.start(rest);
+  if (restSeconds.value > 0 && (settings.value?.autoStartRest ?? true)) {
+    restTimer.start(restSeconds.value);
     phase.value = 'resting';
   } else {
     phase.value = 'ready';
@@ -305,13 +323,15 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
     v-else-if="phase === 'done' && session"
     :session="session"
     :previous="previous"
+    :day-title="day.title"
     :back-href="backHref"
     :home-href="homeHref"
+    :history-href="historyHref"
   />
 
   <div v-else-if="step && exercise" class="flex flex-col gap-8">
     <SessionHeader
-      v-model:rest-multiplier="restMultiplier"
+      v-model:rest-seconds="restSeconds"
       :title="day.title"
       :subtitle="`${weekLabel} · Día ${dayOrder}`"
       :done="progress.done"
@@ -320,14 +340,9 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
       :back-href="backHref"
     />
 
-    <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-12">
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,21rem)] lg:gap-10">
       <section class="flex flex-col gap-6" aria-labelledby="ejercicio-actual">
         <div>
-          <p class="figures text-sm font-bold text-ink-dim">
-            Serie {{ step.setIndex }} de {{ step.totalSets }}
-            <span v-if="step.side">· {{ step.side === 'left' ? 'Izquierda' : 'Derecha' }}</span>
-            <span v-if="step.chained" class="text-accent"> · encadena con el siguiente</span>
-          </p>
           <h2
             id="ejercicio-actual"
             class="text-figure font-black tracking-[-0.02em] text-balance text-ink"
@@ -335,13 +350,18 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
             {{ exercise.name }}
           </h2>
           <p class="figures mt-2 text-lg text-ink-dim">
-            {{ hint }} {{ step.workSeconds ? 'segundos' : 'reps' }} ·
-            {{ restSecondsFor(step, restMultiplier) }} s de descanso
+            <span class="font-bold text-ink">
+              Serie {{ step.setIndex }} de {{ step.totalSets }}
+            </span>
+            <span v-if="step.side">· {{ step.side === 'left' ? 'Izquierda' : 'Derecha' }}</span>
+            · {{ hint }} {{ step.workSeconds ? 'segundos' : 'reps' }} · {{ restSeconds }} s de
+            descanso
+            <span v-if="step.chained" class="text-accent">· encadena con el siguiente</span>
           </p>
         </div>
 
         <div
-          class="grid aspect-[16/10] max-h-80 place-content-center justify-items-center gap-2 rounded-card border border-line bg-surface text-center"
+          class="grid aspect-[16/10] max-h-104 place-content-center justify-items-center gap-2 rounded-card border border-line bg-surface text-center"
         >
           <p class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase">
             Croquis pendiente
@@ -363,12 +383,12 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
       </section>
 
       <section class="flex flex-col gap-8" aria-label="Serie en curso">
-        <CircularTimer v-if="phase === 'resting'" :timer="restTimer" label="Descanso" :size="240" />
+        <CircularTimer v-if="phase === 'resting'" :timer="restTimer" label="Descanso" :size="180" />
         <CircularTimer
           v-else
           :timer="workTimer"
           label="Serie"
-          :size="240"
+          :size="180"
           :controls="phase === 'working'"
         />
 
@@ -387,7 +407,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
           :load-type="exercise.loadType"
           :hint="hint"
           :timed="step.workSeconds !== undefined"
-          :from-history="fromHistory"
+          :origin="origin"
           :disabled="phase === 'resting'"
           @complete="advance(false)"
           @skip="advance(true)"

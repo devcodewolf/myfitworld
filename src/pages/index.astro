@@ -30,21 +30,18 @@ const nextChips = [
 
 <BaseLayout title={`${mesocycle.name} · My Fitness World`} description={mesocycle.description}>
   <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-    <header class="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
-      <div>
-        <h1 class="text-figure font-black tracking-[-0.02em] text-ink">
-          {mesocycle.name}
-        </h1>
-        <p class="figures mt-1 text-sm text-ink-dim">
-          {mesocycle.weeks.length} semanas · {totalSessions} sesiones · aún no has registrado ninguna
-        </p>
-      </div>
-      <p class:list={['text-sm font-bold', palette.text]}>
-        Semana {String(currentWeek.order).padStart(2, '0')} · {PHASE_LABELS[currentWeek.phase]}
-      </p>
-    </header>
+    <div class="flex justify-between gap-4">
+      <header class="flex flex-wrap justify-between gap-x-8 gap-y-3">
+        <div>
+          <h1 class="text-figure font-black tracking-[-0.02em] text-ink">
+            {mesocycle.name}
+          </h1>
+          <p class="figures mt-1 text-sm text-ink-dim">
+            {mesocycle.weeks.length} semanas · {totalSessions} sesiones · aún no has registrado ninguna
+          </p>
+        </div>
+      </header>
 
-    <div class="pt-6">
       <WeekNav mesocycle={mesocycle} activeWeek={currentWeek.order} />
     </div>
 
@@ -52,8 +49,11 @@ const nextChips = [
       /* La sesión que toca ocupa dos tercios y manda; los otros dos días se
 			apilan a su derecha y adoptan entre los dos su misma altura. */
     }
+    <p class:list={['text-sm font-bold', palette.text]}>
+      Semana {String(currentWeek.order).padStart(2, '0')} · {PHASE_LABELS[currentWeek.phase]}
+    </p>
     <section
-      class="grid gap-5 pt-8 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]"
+      class="grid gap-5 pt-4 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]"
       aria-labelledby="siguiente"
     >
       <h2 id="siguiente" class="sr-only">Tu próxima sesión</h2>

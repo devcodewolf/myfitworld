@@ -19,7 +19,7 @@ const props = defineProps<{
   /** Serie a tiempo: se registran segundos en vez de repeticiones. */
   timed: boolean;
   /** De dónde salen los valores prellenados. */
-  fromHistory: boolean;
+  origin: 'history' | 'suggested' | 'none';
   disabled?: boolean;
 }>();
 
@@ -79,8 +79,12 @@ const FIELD =
       </label>
     </div>
 
-    <p v-if="fromHistory" class="text-sm text-ink-faint">
-      Prellenado con lo que hiciste la última vez.
+    <p v-if="origin !== 'none'" class="text-sm text-ink-faint">
+      {{
+        origin === 'history'
+          ? 'Prellenado con lo que hiciste la última vez.'
+          : 'Sugerido por el plan y tu material. Cámbialo si hace falta.'
+      }}
     </p>
 
     <div class="flex flex-wrap gap-3">

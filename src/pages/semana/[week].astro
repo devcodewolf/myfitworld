@@ -26,24 +26,24 @@ const reserve = week.days[0]?.blocks[0]?.repsInReserve;
 ---
 
 <BaseLayout title={`Semana ${week.order} · ${PHASE_LABELS[week.phase]}`} description={week.focus}>
-  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-    <WeekNav mesocycle={mesocycle} activeWeek={week.order} />
-
-    <header class="border-b border-line pt-8 pb-9">
-      <h1 class:list={['text-display font-black', PHASE_PALETTE[week.phase].text]}>
-        {PHASE_LABELS[week.phase]}
-      </h1>
-      <p class="mt-4 max-w-[60ch] text-lg leading-relaxed text-ink-dim">{week.focus}</p>
-
-      <p class="figures mt-8 flex flex-wrap gap-x-8 gap-y-2 text-sm text-ink-dim">
-        <span>
-          Semana <span class="font-bold text-ink">{String(week.order).padStart(2, '0')}</span> de 4
-        </span>
-        <span><span class="font-bold text-ink">{week.days.length}</span> días</span>
-        <span><span class="font-bold text-ink">{sets}</span> series</span>
-        <span><span class="font-bold text-ink">{formatDuration(seconds)}</span> estimadas</span>
-        {reserve !== undefined && <span class="text-ink-faint">{formatReserve(reserve)}</span>}
-      </p>
+  <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-6 lg:py-6">
+    <header class="flex flex-wrap justify-between gap-4 border-b border-line pt-8 pb-9">
+      <div>
+        <h1 class:list={['text-display font-black', PHASE_PALETTE[week.phase].text]}>
+          {PHASE_LABELS[week.phase]}
+        </h1>
+        <p class="mt-4 max-w-[60ch] text-lg leading-relaxed text-ink-dim">{week.focus}</p>
+        <p class="figures mt-8 flex flex-wrap gap-x-8 gap-y-2 text-sm text-ink-dim">
+          <span>
+            Semana <span class="font-bold text-ink">{String(week.order).padStart(2, '0')}</span> de 4
+          </span>
+          <span><span class="font-bold text-ink">{week.days.length}</span> días</span>
+          <span><span class="font-bold text-ink">{sets}</span> series</span>
+          <span><span class="font-bold text-ink">{formatDuration(seconds)}</span> estimadas</span>
+          {reserve !== undefined && <span class="text-ink-faint">{formatReserve(reserve)}</span>}
+        </p>
+      </div>
+      <WeekNav mesocycle={mesocycle} activeWeek={week.order} />
     </header>
 
     {

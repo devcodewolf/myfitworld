@@ -35,6 +35,8 @@
   --color-raised: #1e2934;
   --color-line: #2c3947;
   --color-line-strong: #45576a;
+  /* Más oscuro que el fondo, para la viñeta que hunde los bordes de la sala. */
+  --color-shade: #04080d;
 
   /* Tintas: tomadas de la temperatura del fondo, nunca gris neutro.
      Las tres pasan 4.5:1 sobre las tres superficies. */
@@ -78,6 +80,13 @@
        sala sin teñir el contenido ni desplazarse al hacer scroll. */
     background-color: var(--color-ground);
     background-image:
+      /* Viñeta: oscurece los bordes y hunde el centro, como una sala con la luz
+         puesta sobre lo que estás haciendo. Va primera para quedar por encima. */
+      radial-gradient(
+        120% 90% at 50% 40%,
+        transparent 45%,
+        color-mix(in oklab, var(--color-shade) 78%, transparent) 100%
+      ),
       radial-gradient(
         72rem 42rem at 10% -10%,
         color-mix(in oklab, var(--color-accent) 15%, transparent),
@@ -148,6 +157,28 @@
       color-mix(in oklab, var(--color-raised) 85%, var(--color-accent) 4%),
       var(--color-surface) 62%
     );
+  }
+
+  /* La cabecera es una banda de material, no una caja translúcida: se aclara
+     hacia arriba, como las tarjetas, y su filete inferior se desvanece por los
+     extremos en vez de cortar la pantalla con una recta de lado a lado. La
+     elevación se sigue declarando una sola vez, en ese filete. */
+  .cabecera {
+    background-image: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-surface) 90%, transparent),
+      color-mix(in oklab, var(--color-ground) 78%, transparent)
+    );
+    border-bottom: 1px solid transparent;
+    border-image: linear-gradient(
+        to right,
+        transparent,
+        var(--color-line) 15%,
+        var(--color-line-strong) 50%,
+        var(--color-line) 85%,
+        transparent
+      )
+      1;
   }
 
   /* Acción primaria: el único degradado saturado de la app. */

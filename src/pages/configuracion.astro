@@ -112,24 +112,22 @@ const toggles = [
       </ul>
 
       <div class="mt-5 rounded-card border border-line px-4 py-4">
-        <label for="multiplicador" class="text-sm font-bold text-ink">
-          Multiplicador de descanso
-        </label>
+        <label for="descanso" class="text-sm font-bold text-ink"> Descanso entre series </label>
         <p class="mt-1 text-sm text-ink-faint">
-          Aprieta o afloja todos los descansos de golpe. Al 80 % descansas cuatro quintas partes.
+          El mismo para todos los ejercicios. También se cambia sobre la marcha desde la pantalla de
+          entreno.
         </p>
         <div class="mt-3 flex items-center gap-4">
           <input
-            id="multiplicador"
+            id="descanso"
             type="range"
-            min="0.5"
-            max="1.5"
-            step="0.05"
+            min="15"
+            max="180"
+            step="5"
             class="w-full accent-accent"
           />
-          <output
-            id="multiplicador-valor"
-            class="figures w-16 text-right text-sm font-bold text-ink"></output>
+          <output id="descanso-valor" class="figures w-16 text-right text-sm font-bold text-ink"
+          ></output>
         </div>
       </div>
 

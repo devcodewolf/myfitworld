@@ -1,59 +1,38 @@
 <script setup lang="ts">
 /**
  * Barra superior del modo entreno: dónde vas, cuánto queda y la salida.
- *
- * El multiplicador de descanso está aquí y no en ajustes porque es una decisión
- * que se toma a mitad de sesión, cuando notas que vas sobrado o fundido.
  */
+import RestSwitch from '@/components/session/RestSwitch.vue';
+
 defineProps<{
   title: string;
   subtitle: string;
   done: number;
   total: number;
   ratio: number;
-  restMultiplier: number;
+  restSeconds: number;
   backHref: string;
 }>();
 
-const emit = defineEmits<{ 'update:restMultiplier': [value: number] }>();
-
-const OPTIONS = [0.8, 1, 1.2] as const;
-const LABELS: Record<number, string> = { 0.8: 'Apretado', 1: 'Normal', 1.2: 'Holgado' };
+const emit = defineEmits<{ 'update:restSeconds': [value: number] }>();
 </script>
 
 <template>
   <header class="border-b border-line pb-4">
-    <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+    <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
       <div class="min-w-0">
         <h1 class="text-2xl font-extrabold tracking-[-0.02em] text-ink">{{ title }}</h1>
         <p class="figures mt-0.5 text-sm text-ink-dim">{{ subtitle }}</p>
       </div>
 
-      <div class="flex items-center gap-4">
-        <div class="flex items-center gap-1.5" role="group" aria-label="Multiplicador de descanso">
-          <span class="text-[0.7rem] font-bold tracking-[0.16em] text-ink-faint uppercase">
-            Descanso
-          </span>
-          <button
-            v-for="option in OPTIONS"
-            :key="option"
-            type="button"
-            :aria-pressed="restMultiplier === option"
-            class="min-h-11 rounded-full border px-3 text-sm font-bold transition-colors"
-            :class="
-              restMultiplier === option
-                ? 'border-line-strong bg-raised text-ink'
-                : 'border-line text-ink-dim hover:text-ink'
-            "
-            @click="emit('update:restMultiplier', option)"
-          >
-            {{ LABELS[option] }}
-          </button>
-        </div>
-
+      <div class="flex items-center gap-3">
+        <RestSwitch
+          :seconds="restSeconds"
+          @update:seconds="(value) => emit('update:restSeconds', value)"
+        />
         <a
           :href="backHref"
-          class="min-h-11 self-center text-sm font-bold text-ink-dim transition-colors hover:text-ink"
+          class="inline-flex min-h-11 items-center rounded-full border border-line-strong bg-raised px-5 text-sm font-bold text-ink transition-colors hover:border-ink-faint"
         >
           Salir
         </a>

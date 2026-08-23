@@ -1,12 +1,22 @@
 /**
  * Con qué valores llega cada serie ya rellena al modo entreno.
  *
- * Regla: **solo se prellena con lo que hiciste de verdad**. Si no hay historial
- * de ese ejercicio, los campos se quedan vacíos y la UI enseña el rango como
- * pista. Prellenar un peso inventado sería peor que no prellenar nada, porque
- * acabaría registrado como si lo hubieras levantado.
+ * Dos orígenes y ninguno más: **lo que hiciste la última vez**, y si no hay
+ * historial, **lo que dice el plan y tu inventario** (el mínimo del rango y el
+ * peso más ligero que puedas montar). Nada sale de la nada, y cada valor sabe
+ * de dónde viene para poder decirlo en pantalla: escribir un peso que nunca
+ * has levantado sería peor que dejar el campo vacío.
  */
-import type { ExerciseBlock, ExerciseLog, SessionLog, Slug } from '@/core/model';
+import type {
+  ExerciseBlock,
+  ExerciseLog,
+  LoadItem,
+  LoadType,
+  SessionLog,
+  SetLog,
+  Slug,
+} from '@/core/model';
+import { achievableLoads } from '@/core/equipment';
 import { blockKeyOf } from '@/core/training';
 
 export interface LastPerformance {
@@ -100,4 +110,64 @@ function findPreviousSet(
 /** Clave con la que se guarda el registro de este bloque. */
 export function logKeyFor(block: ExerciseBlock): string {
   return blockKeyOf(block);
+}
+
+export interface DefaultValues {
+  readonly reps?: number;
+  readonly weightKg?: number;
+  readonly seconds?: number;
+  /** De dónde sale cada valor, para poder decirlo en pantalla. */
+  readonly source: 'history' | 'suggested' | 'none';
+}
+
+export interface DefaultsInput {
+  readonly block: ExerciseBlock;
+  readonly loadType: LoadType;
+  /** Lo registrado la última vez, si lo hay. */
+  readonly last?: SetLog | undefined;
+  readonly equipment: readonly LoadItem[];
+}
+
+/**
+ * Con qué llega rellena una serie antes de tocarla.
+ *
+ * Orden de preferencia: lo que hiciste la última vez, y si no hay historial, lo
+ * prescrito. Las repeticiones parten del mínimo del rango, que es el objetivo a
+ * batir, y el peso del más ligero que puedas montar a dos manos con tu material.
+ *
+ * Sigue sin inventarse nada: una sugerencia sale del plan o de tu inventario,
+ * nunca de la nada, y se marca como sugerencia para que sepas de dónde viene.
+ */
+export function defaultValuesFor({
+  block,
+  loadType,
+  last,
+  equipment,
+}: DefaultsInput): DefaultValues {
+  if (last) {
+    return {
+      ...(last.reps !== undefined ? { reps: last.reps } : {}),
+      ...(last.weightKg !== undefined ? { weightKg: last.weightKg } : {}),
+      ...(last.seconds !== undefined ? { seconds: last.seconds } : {}),
+      source: 'history',
+    };
+  }
+
+  const reps = block.repRange?.min;
+  const seconds = block.workSeconds;
+  const needsWeight = loadType !== 'bodyweight';
+  const weightKg = needsWeight
+    ? achievableLoads(equipment, { mode: 'perHand', pairs: true })[0]
+    : undefined;
+
+  if (reps === undefined && seconds === undefined && weightKg === undefined) {
+    return { source: 'none' };
+  }
+
+  return {
+    ...(reps !== undefined ? { reps } : {}),
+    ...(seconds !== undefined ? { seconds } : {}),
+    ...(weightKg !== undefined ? { weightKg } : {}),
+    source: 'suggested',
+  };
 }

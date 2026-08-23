@@ -55,21 +55,21 @@ describe('perfiles y ajustes', () => {
     const repo = createLocalRepository(createDeps().deps);
     const ajustes = await repo.settings.get();
     expect(ajustes.theme).toBe('dark');
-    expect(ajustes.restMultiplier).toBe(1);
+    expect(ajustes.restSeconds).toBe(60);
     expect(ajustes.availableLoads).toEqual([]);
   });
 
   it('guarda cambios parciales sin perder el resto', async () => {
     const repo = createLocalRepository(createDeps().deps);
-    await repo.settings.save({ restMultiplier: 0.8 });
+    await repo.settings.save({ restSeconds: 40 });
     const ajustes = await repo.settings.save({ soundEnabled: false });
-    expect(ajustes.restMultiplier).toBe(0.8);
+    expect(ajustes.restSeconds).toBe(40);
     expect(ajustes.soundEnabled).toBe(false);
   });
 
   it('rechaza un ajuste fuera de rango en vez de guardarlo', async () => {
     const repo = createLocalRepository(createDeps().deps);
-    await expect(repo.settings.save({ restMultiplier: 9 })).rejects.toThrow();
+    await expect(repo.settings.save({ restSeconds: 9999 })).rejects.toThrow();
   });
 });
 

@@ -46,6 +46,7 @@ const exercises = Object.fromEntries(
       weekLabel={`Semana ${String(week.order).padStart(2, '0')} · ${PHASE_LABELS[week.phase]}`}
       backHref={routes.day(week.order, day.order)}
       homeHref={routes.home()}
+      historyHref={routes.history()}
     />
   </div>
 </BaseLayout>

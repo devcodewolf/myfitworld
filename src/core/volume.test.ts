@@ -1,9 +1,17 @@
 import { describe, expect, it } from 'vitest';
 
-import type { Exercise, ExerciseLog, SessionLog, SetLog, Slug } from '@/core/model';
+import type {
+  Exercise,
+  ExerciseBlock,
+  ExerciseLog,
+  LoadItem,
+  SessionLog,
+  SetLog,
+  Slug,
+} from '@/core/model';
 import type { ExerciseCatalog } from '@/core/training';
 import { compareVolume, sessionVolume, setsByMuscle, totalsAcross } from '@/core/volume';
-import { findLastPerformance, prefillSets } from '@/core/prefill';
+import { defaultValuesFor, findLastPerformance, prefillSets } from '@/core/prefill';
 
 const serie = (extra: Partial<SetLog> = {}): SetLog => ({
   id: crypto.randomUUID(),
@@ -238,5 +246,66 @@ describe('prellenado desde el historial', () => {
       '2left',
       '2right',
     ]);
+  });
+});
+
+describe('valores por defecto de una serie', () => {
+  const bloque = {
+    exerciseId: 'press-militar-mancuernas',
+    sets: 3,
+    repRange: { min: 10, max: 12 },
+    restSeconds: 90,
+    perSideLogging: false,
+  } as ExerciseBlock;
+
+  const material: LoadItem[] = [
+    { id: crypto.randomUUID(), kind: 'dumbbell', weightKg: 9, count: 2 },
+    { id: crypto.randomUUID(), kind: 'dumbbell', weightKg: 12, count: 2 },
+  ];
+
+  it('lo que hiciste la última vez manda sobre cualquier sugerencia', () => {
+    const valores = defaultValuesFor({
+      block: bloque,
+      loadType: 'external',
+      last: serie({ reps: 11, weightKg: 12 }),
+      equipment: material,
+    });
+    expect(valores).toEqual({ reps: 11, weightKg: 12, source: 'history' });
+  });
+
+  it('sin historial sugiere el mínimo del rango y el peso más ligero que puedas montar', () => {
+    const valores = defaultValuesFor({ block: bloque, loadType: 'external', equipment: material });
+    expect(valores).toEqual({ reps: 10, weightKg: 9, source: 'suggested' });
+  });
+
+  it('un ejercicio de peso corporal no sugiere kilos', () => {
+    const valores = defaultValuesFor({
+      block: bloque,
+      loadType: 'bodyweight',
+      equipment: material,
+    });
+    expect(valores.weightKg).toBeUndefined();
+    expect(valores.reps).toBe(10);
+  });
+
+  it('sin material declarado sugiere repeticiones pero no peso', () => {
+    const valores = defaultValuesFor({ block: bloque, loadType: 'external', equipment: [] });
+    expect(valores).toEqual({ reps: 10, source: 'suggested' });
+  });
+
+  it('una serie a tiempo sugiere sus segundos, no repeticiones', () => {
+    const isometrico = { ...bloque, repRange: undefined, workSeconds: 45 } as ExerciseBlock;
+    const valores = defaultValuesFor({
+      block: isometrico,
+      loadType: 'bodyweight',
+      equipment: material,
+    });
+    expect(valores).toEqual({ seconds: 45, source: 'suggested' });
+  });
+
+  it('sin nada que sugerir lo dice, en vez de inventar un cero', () => {
+    const vacio = { ...bloque, repRange: undefined } as ExerciseBlock;
+    const valores = defaultValuesFor({ block: vacio, loadType: 'bodyweight', equipment: [] });
+    expect(valores).toEqual({ source: 'none' });
   });
 });
