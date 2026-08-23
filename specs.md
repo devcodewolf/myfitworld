@@ -73,7 +73,8 @@ src/
 │  ├─ equipment.ts       Cargas alcanzables con el material declarado
 │  ├─ progression.ts     Regla de subir peso y marcas personales
 │  ├─ prefill.ts         Última actuación → valores prellenados
-│  └─ session.ts         Plan de pasos de una sesión y registro de lo hecho
+│  ├─ session.ts         Plan de pasos de una sesión y registro de lo hecho
+│  └─ history.ts         Volumen por semana, barras por músculo y avisos de carga
 ├─ storage/              Persistencia
 │  ├─ kv.ts              Puerto `KeyValueStore` + memoria + localStorage
 │  ├─ document.ts        Documento versionado, migraciones y cuarentena
@@ -298,11 +299,11 @@ administración que las edite en caliente, hay que asumir una consecuencia:
 **Construido y verificado:** navegación del mesociclo, semanas y días; catálogo y fichas de ejercicio;
 ajustes conectados a la persistencia; temporizador circular con avisos de Web Audio, vibración y wake
 lock; **modo entreno completo** (plan de pasos con superseries en rondas, registro por serie,
-autoguardado, reanudación tras recarga y resumen con comparativa); dominio y almacenamiento con 116
-tests.
+autoguardado, reanudación tras recarga y resumen con comparativa); historial con volumen por semana
+y avisos de subir peso; dominio y almacenamiento con 129 tests.
 
-**Pendiente, por orden previsto:** historial con gráfica de volumen · avisos de progresión y récords
-en pantalla · sistema de croquis SVG · extras (sustituciones, generador de mesociclo).
+**Pendiente, por orden previsto:** sistema de croquis SVG · extras (sustituciones de ejercicio,
+generador de mesociclo a partir del anterior).
 
 **Deuda declarada:**
 

@@ -1,16 +1,111 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getActiveMesocycle, getExerciseCatalog } from '@/data';
+import { trackedBlocksOf } from '@/core/history';
+import { routes } from '@/routes';
+
+const mesocycle = await getActiveMesocycle();
+const catalog = await getExerciseCatalog();
+
+// Solo viaja al cliente lo que la pantalla necesita: los músculos y el nombre
+// de cada ejercicio, y los bloques con rango. Ni claves de técnica ni errores.
+const payload = {
+  muscles: Object.fromEntries(
+    [...catalog.entries()].map(([id, exercise]) => [
+      id,
+      { primaryMuscles: exercise.primaryMuscles, secondaryMuscles: exercise.secondaryMuscles },
+    ]),
+  ),
+  names: Object.fromEntries([...catalog.entries()].map(([id, exercise]) => [id, exercise.name])),
+  blocks: trackedBlocksOf(mesocycle),
+  phases: Object.fromEntries(mesocycle.weeks.map((week) => [week.order, week.phase])),
+};
 ---
 
 <BaseLayout
   title="Historial · My Fitness World"
-  description="Sesiones completadas y evolución de tus pesos."
+  description="Sesiones completadas, volumen por semana y avisos de progresión."
 >
-  <div class="mx-auto max-w-4xl px-5 py-10 sm:px-8 lg:px-12 lg:py-16">
-    <h1 class="text-display font-black text-ink">Historial</h1>
-    <p class="mt-6 max-w-[55ch] text-lg leading-relaxed text-ink-dim">
-      Aún no hay ninguna sesión registrada. En cuanto entrenes con el modo entreno, aquí verás cada
-      sesión completada, el volumen por grupo muscular y la evolución de tus pesos.
+  <div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    <header>
+      <h1 class="text-figure font-black tracking-[-0.02em] text-ink">Historial</h1>
+      <p class="mt-1 text-sm text-ink-dim">Lo que has entrenado de verdad, sesión a sesión.</p>
+    </header>
+
+    <p
+      id="fallo"
+      hidden
+      role="alert"
+      class="mt-8 rounded-card border border-line-strong px-4 py-3 text-sm text-ink-dim"
+    >
     </p>
+
+    <div id="vacio" hidden class="pt-12">
+      <p class="max-w-[55ch] text-lg leading-relaxed text-ink-dim">
+        Todavía no hay ninguna sesión registrada. En cuanto termines la primera, aquí verás el
+        volumen de cada semana por grupo muscular, tus sesiones una a una y el aviso de cuándo toca
+        subir peso.
+      </p>
+      <a
+        href={routes.home()}
+        class="accion-primaria mt-8 inline-flex min-h-14 items-center rounded-full px-7 text-base font-extrabold text-accent-ink"
+      >
+        Ir al mesociclo
+      </a>
+    </div>
+
+    <div id="panel-historial" hidden class="flex flex-col gap-12 pt-10">
+      <section id="avisos" hidden aria-labelledby="titulo-avisos">
+        <h2
+          id="titulo-avisos"
+          class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase"
+        >
+          Toca subir peso
+        </h2>
+      </section>
+
+      <section aria-labelledby="titulo-volumen">
+        <h2
+          id="titulo-volumen"
+          class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase"
+        >
+          Series por grupo muscular
+        </h2>
+        <p class="mt-2 max-w-[60ch] text-sm text-ink-faint">
+          Las secundarias cuentan media serie. La barra más larga de cada semana es su músculo más
+          trabajado.
+        </p>
+        <div id="semanas" class="mt-5 flex flex-col gap-4"></div>
+      </section>
+
+      <section aria-labelledby="titulo-sesiones">
+        <h2
+          id="titulo-sesiones"
+          class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase"
+        >
+          Sesiones
+        </h2>
+        <div id="sesiones" class="mt-2"></div>
+      </section>
+    </div>
   </div>
 </BaseLayout>
+
+<script id="datos-historial" type="application/json" is:inline set:html={JSON.stringify(payload)} />
+
+<script>
+  import { mountHistoryPage, type HistoryPayload } from '@/browser/history-page';
+
+  // Sin esto, cualquier fallo al leer los datos deja la pantalla en blanco y
+  // sin explicación, que es peor que un mensaje feo.
+  try {
+    const raw = document.getElementById('datos-historial')?.textContent ?? '{}';
+    await mountHistoryPage(JSON.parse(raw) as HistoryPayload);
+  } catch (error) {
+    const box = document.getElementById('fallo');
+    if (box) {
+      box.hidden = false;
+      box.textContent = `No se pudo leer el historial: ${error instanceof Error ? error.message : String(error)}`;
+    }
+  }
+</script>

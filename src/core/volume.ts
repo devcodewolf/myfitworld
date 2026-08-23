@@ -5,8 +5,7 @@
  * en una sola cifra**: sumar 9 kg × 12 reps con 20 flexiones da un número que
  * no significa nada. Se cuentan por separado y se muestran por separado.
  */
-import type { MuscleGroup, SessionLog, SetLog } from '@/core/model';
-import type { ExerciseCatalog } from '@/core/training';
+import type { Exercise, MuscleGroup, SessionLog, SetLog, Slug } from '@/core/model';
 
 export interface VolumeTotals {
   /** Suma de peso por repeticiones, en kg. Solo series con peso registrado. */
@@ -75,12 +74,21 @@ export function totalsAcross(sessions: readonly SessionLog[]): VolumeTotals {
 }
 
 /**
+ * Lo único que hace falta saber de un ejercicio para repartir series.
+ *
+ * Más estrecho que el catálogo entero a propósito: así la pantalla de historial
+ * puede mandar al cliente solo los músculos, en vez de las claves de técnica y
+ * los errores comunes de los dieciséis ejercicios.
+ */
+export type MuscleSource = ReadonlyMap<Slug, Pick<Exercise, 'primaryMuscles' | 'secondaryMuscles'>>;
+
+/**
  * Series efectivas por grupo muscular. Las secundarias cuentan media serie,
  * que es la convención habitual para no inflar el volumen de los accesorios.
  */
 export function setsByMuscle(
   sessions: readonly SessionLog[],
-  catalog: ExerciseCatalog,
+  catalog: MuscleSource,
 ): Map<MuscleGroup, number> {
   const byMuscle = new Map<MuscleGroup, number>();
   const add = (muscle: MuscleGroup, amount: number): void => {

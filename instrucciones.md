@@ -41,6 +41,9 @@ vez que marcas una, anotas el peso y las repeticiones reales, y arranca solo el 
 **Terminas.** Resumen de la sesión: volumen total, duración real y comparativa con la misma sesión de
 la semana anterior.
 
+**Y en Historial** queda todo: cada sesión con su fecha, las series por grupo muscular de cada semana,
+y el aviso de en qué ejercicios has tocado techo dos veces seguidas y toca subir peso.
+
 ---
 
 ## 3. Cómo está organizado tu plan
@@ -153,13 +156,13 @@ Sé honesto con esto al usarlo: hay partes que todavía no existen.
   reanudación si recargas, y resumen al terminar.
 - **Ajustes**: declarar tu material, ver qué cargas puedes montar, sonido, vibración, mantener la
   pantalla encendida, multiplicador de descanso, peso corporal, y exportar e importar tus datos.
+- **El historial**: tus sesiones una a una, las series por grupo muscular de cada semana, y el aviso
+  de en qué ejercicios toca subir peso, con cuánto según tu material.
 
 ### Todavía no
 
-- **El historial.** La página existe y está vacía. Las sesiones ya se guardan, pero falta la pantalla
-  que las enseñe con su gráfica de volumen.
-- **El aviso de subir peso.** La regla está escrita y probada, pero todavía no aparece en pantalla.
 - **Los croquis de los ejercicios.** Donde tienen que ir se ve "Croquis pendiente".
+- **Sustituciones de ejercicio** y **generador de mesociclo nuevo** a partir del anterior.
 
 ---
 
