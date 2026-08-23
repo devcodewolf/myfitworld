@@ -17,7 +17,7 @@ Todo vive en tu navegador. No hay servidor, no hay cuenta, no hay nadie más vie
 
 ## 2. El recorrido de un día de entreno
 
-Así es como se usa cuando está todo terminado. Lo que ya funciona y lo que no, en la sección 7.
+Esto ya funciona de principio a fin. Lo que falta, en la sección 7.
 
 **Abres la app.** Lo primero que ves es dónde estás: el raíl de semanas arriba (Semana 01 a 04, cada
 una con el color de su fase) y debajo el raíl de días de esa semana. No hay que buscar nada.
@@ -148,16 +148,17 @@ Sé honesto con esto al usarlo: hay partes que todavía no existen.
 - La lista completa de ejercicios de cada día con su prescripción, descansos y tempos.
 - El catálogo de ejercicios y la ficha de cada uno, con sus claves de técnica y errores comunes.
 - Volver al día del que venías al entrar en un ejercicio desde una sesión.
+- **El modo entreno**, con todo lo descrito en la sección 2: un ejercicio a la vez, temporizador
+  circular, avisos sonoros y vibración, registro de peso y repeticiones, autoguardado en cada serie,
+  reanudación si recargas, y resumen al terminar.
 - **Ajustes**: declarar tu material, ver qué cargas puedes montar, sonido, vibración, mantener la
   pantalla encendida, multiplicador de descanso, peso corporal, y exportar e importar tus datos.
 
 ### Todavía no
 
-- **El modo entreno.** El botón *Entrenar* está desactivado y lo dice. Es la siguiente fase grande.
-- **Los temporizadores en pantalla.** La matemática está escrita y probada, pero el círculo todavía no
-  se ve.
-- **Los avisos sonoros.**
-- **El historial.** La página existe y está vacía, porque no hay sesiones que enseñar.
+- **El historial.** La página existe y está vacía. Las sesiones ya se guardan, pero falta la pantalla
+  que las enseñe con su gráfica de volumen.
+- **El aviso de subir peso.** La regla está escrita y probada, pero todavía no aparece en pantalla.
 - **Los croquis de los ejercicios.** Donde tienen que ir se ve "Croquis pendiente".
 
 ---

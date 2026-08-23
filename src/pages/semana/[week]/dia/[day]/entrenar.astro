@@ -1,0 +1,51 @@
+---
+import type { GetStaticPaths } from 'astro';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import WorkoutSession from '@/components/session/WorkoutSession.vue';
+import { getActiveMesocycle, getExerciseCatalog } from '@/data';
+import { PHASE_LABELS } from '@/core/labels';
+import { routes } from '@/routes';
+
+export const getStaticPaths = (async () => {
+  const mesocycle = await getActiveMesocycle();
+  return mesocycle.weeks.flatMap((week) =>
+    week.days.map((day) => ({
+      params: { week: String(week.order), day: String(day.order) },
+      props: { week, day, mesocycleId: mesocycle.id },
+    })),
+  );
+}) satisfies GetStaticPaths;
+
+const { week, day, mesocycleId } = Astro.props;
+const catalog = await getExerciseCatalog();
+
+// Solo viajan al cliente los ejercicios que aparecen en este día.
+const used = new Set(day.blocks.map((block) => block.exerciseId));
+const exercises = Object.fromEntries(
+  [...catalog.entries()].filter(([id]) => used.has(id)).map(([id, exercise]) => [id, exercise]),
+);
+---
+
+<BaseLayout
+  title={`Entrenando · ${day.title}`}
+  description={`Sesión en curso: ${day.title}, semana ${week.order}.`}
+>
+  <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+    {
+      /* client:only porque toda la pantalla depende de lo que haya guardado en
+        este navegador: no hay nada útil que renderizar en el servidor. */
+    }
+    <WorkoutSession
+      client:only="vue"
+      day={day}
+      exercises={exercises}
+      mesocycleId={mesocycleId}
+      weekOrder={week.order}
+      dayOrder={day.order}
+      weekLabel={`Semana ${String(week.order).padStart(2, '0')} · ${PHASE_LABELS[week.phase]}`}
+      backHref={routes.day(week.order, day.order)}
+      homeHref={routes.home()}
+    />
+  </div>
+</BaseLayout>

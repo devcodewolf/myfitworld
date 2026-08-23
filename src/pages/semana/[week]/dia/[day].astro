@@ -7,6 +7,7 @@ import WeekNav from '@/components/routine/WeekNav.astro';
 import PhotoCard from '@/components/ui/PhotoCard.astro';
 import { getActiveMesocycle, getExerciseCatalog } from '@/data';
 import { PHASE_LABELS, formatDuration, formatReserve } from '@/core/labels';
+import { routes } from '@/routes';
 import { daySetCount, estimateDaySeconds, groupSupersets } from '@/core/training';
 import { PHASE_PALETTE, dayPhoto } from '@/theme';
 
@@ -62,13 +63,12 @@ let position = 0;
         <p class="mt-3 max-w-[55ch] text-base leading-relaxed text-ink-dim">{day.focus}</p>
 
         <div class="mt-5 flex flex-wrap items-center gap-4">
-          <button
-            type="button"
-            disabled
-            class="inline-flex min-h-14 cursor-not-allowed items-center justify-center gap-3 rounded-full border border-line-strong bg-[color-mix(in_oklab,var(--color-ground)_65%,transparent)] px-7 text-base font-extrabold text-ink-faint backdrop-blur-sm"
+          <a
+            href={routes.train(week.order, day.order)}
+            class="accion-primaria inline-flex min-h-14 items-center justify-center gap-3 rounded-full px-7 text-base font-extrabold text-accent-ink transition-transform hover:scale-[1.02] active:scale-100"
           >
             Entrenar
-          </button>
+          </a>
           <ul class="figures flex flex-wrap gap-2">
             {
               chips.map((chip) => (
@@ -79,9 +79,6 @@ let position = 0;
             }
           </ul>
         </div>
-        <p class="mt-3 text-sm text-ink-faint">
-          El modo entreno todavía no está construido: de momento puedes consultar el plan.
-        </p>
       </PhotoCard>
     </div>
 

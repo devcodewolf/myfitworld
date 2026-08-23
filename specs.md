@@ -27,8 +27,9 @@ Restricciones vigentes, decididas y no negociables sin hablarlo con el propietar
 - **Sin PWA.** No hay service worker ni modo offline instalable.
 - **Cero dependencias innecesarias.** Nada de librerías de UI, de gráficas, de fechas ni de audio. El
   sonido se genera con la Web Audio API y los gráficos se dibujan con SVG a mano.
-- **Vue solo como isla**, y únicamente en el modo entreno. Todo lo demás es Astro y JavaScript plano.
-  Todavía no hay ninguna isla montada: `@astrojs/vue` se añadirá en la fase del modo entreno.
+- **Vue solo como isla**, y únicamente en el modo entreno (`client:only="vue"`). Todo lo demás es
+  Astro y JavaScript plano. Es la única isla del proyecto y así debe seguir: si una pantalla nueva
+  parece necesitar Vue, primero hay que justificar por qué no basta con vanilla.
 - **El peso nunca se escribe a mano** en datos ni en UI. Sale siempre de `src/core/equipment.ts`.
 
 ---
@@ -71,13 +72,14 @@ src/
 │  ├─ volume.ts          Agregados de volumen
 │  ├─ equipment.ts       Cargas alcanzables con el material declarado
 │  ├─ progression.ts     Regla de subir peso y marcas personales
-│  └─ prefill.ts         Última actuación → valores prellenados
+│  ├─ prefill.ts         Última actuación → valores prellenados
+│  └─ session.ts         Plan de pasos de una sesión y registro de lo hecho
 ├─ storage/              Persistencia
 │  ├─ kv.ts              Puerto `KeyValueStore` + memoria + localStorage
 │  ├─ document.ts        Documento versionado, migraciones y cuarentena
 │  ├─ repository.ts      Interfaces del repositorio + implementación local
 │  └─ backup.ts          Exportar e importar JSON
-├─ browser/              Adaptadores de navegador
+├─ browser/              Adaptadores de navegador: audio, vibración, wake lock, repositorio
 ├─ components/  layouts/  pages/  styles/  assets/
 ```
 
@@ -294,12 +296,13 @@ administración que las edite en caliente, hay que asumir una consecuencia:
 ## 7. Estado actual
 
 **Construido y verificado:** navegación del mesociclo, semanas y días; catálogo y fichas de ejercicio;
-página de ajustes conectada a la persistencia (material, interruptores, multiplicador, peso corporal,
-exportar e importar); dominio puro y capa de almacenamiento con 94 tests.
+ajustes conectados a la persistencia; temporizador circular con avisos de Web Audio, vibración y wake
+lock; **modo entreno completo** (plan de pasos con superseries en rondas, registro por serie,
+autoguardado, reanudación tras recarga y resumen con comparativa); dominio y almacenamiento con 116
+tests.
 
-**Pendiente, por orden previsto:** sistema de croquis SVG · temporizador circular con Web Audio ·
-modo entreno como isla de Vue · avisos de progresión y récords · historial con gráfica de volumen ·
-extras (sustituciones, generador de mesociclo).
+**Pendiente, por orden previsto:** historial con gráfica de volumen · avisos de progresión y récords
+en pantalla · sistema de croquis SVG · extras (sustituciones, generador de mesociclo).
 
 **Deuda declarada:**
 
