@@ -1,6 +1,7 @@
 ---
 import '@/styles/global.css';
 import AppNav from '@/components/nav/AppNav.astro';
+import PlateMark from '@/components/ui/PlateMark.astro';
 
 interface Props {
   title: string;
@@ -20,7 +21,7 @@ const { title, description } = Astro.props;
     {description && <meta name="description" content={description} />}
     <title>{title}</title>
   </head>
-  <body class="min-h-dvh bg-ground text-ink">
+  <body class="min-h-dvh text-ink">
     <!--
       THESIS: A plan you move through by date, not a dashboard you read. The
       week-and-day rail is the spine and photography carries every surface; it
@@ -48,8 +49,9 @@ const { title, description } = Astro.props;
     >
       Saltar al contenido
     </a>
+    <PlateMark />
     <AppNav />
-    <main id="contenido">
+    <main id="contenido" class="mx-auto w-full max-w-[92rem] lg:px-6 lg:pb-10">
       <slot />
     </main>
   </body>

@@ -75,10 +75,15 @@
     scrollbar-color: var(--color-line-strong) var(--color-ground);
   }
 
-  body {
-    /* Tres focos de luz fijos y tenues sobre el fondo: dan profundidad a la
-       sala sin teñir el contenido ni desplazarse al hacer scroll. */
-    background-color: var(--color-ground);
+  /* Los focos y la viñeta viven en una capa propia del elemento raíz, no en el
+     fondo del body: si los pintara el body, el disco del fondo quedaría por
+     debajo de ellos y no se vería nunca. */
+  html::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
     background-image:
       /* Viñeta: oscurece los bordes y hunde el centro, como una sala con la luz
          puesta sobre lo que estás haciendo. Va primera para quedar por encima. */
@@ -89,21 +94,22 @@
       ),
       radial-gradient(
         72rem 42rem at 10% -10%,
-        color-mix(in oklab, var(--color-accent) 15%, transparent),
+        color-mix(in oklab, var(--color-accent) 17%, transparent),
         transparent 60%
       ),
       radial-gradient(
         58rem 36rem at 94% 4%,
-        color-mix(in oklab, var(--color-phase-intensification) 13%, transparent),
+        color-mix(in oklab, var(--color-phase-intensification) 15%, transparent),
         transparent 58%
       ),
       radial-gradient(
         64rem 40rem at 50% 108%,
-        color-mix(in oklab, var(--color-phase-progression) 10%, transparent),
+        color-mix(in oklab, var(--color-phase-progression) 11%, transparent),
         transparent 62%
       );
-    background-attachment: fixed;
-    background-repeat: no-repeat;
+  }
+
+  body {
     color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -179,6 +185,30 @@
         transparent
       )
       1;
+  }
+
+  /* Un disco de peso visto de frente, enorme y saliéndose por la esquina.
+     Geometría vectorial nítida de un objeto real de este mundo, no una textura
+     inventada: se siente antes de reconocerse, y es lo que le da al fondo algo
+     a lo que agarrarse. Fijo, así que no se arrastra con el scroll. */
+  .disco {
+    position: fixed;
+    right: -22rem;
+    bottom: -26rem;
+    z-index: -1;
+    width: 68rem;
+    height: 68rem;
+    pointer-events: none;
+    color: var(--color-line-strong);
+    opacity: 0.3;
+  }
+
+  @media (max-width: 48rem) {
+    .disco {
+      right: -30rem;
+      bottom: -32rem;
+      opacity: 0.3;
+    }
   }
 
   /* Acción primaria: el único degradado saturado de la app. */
