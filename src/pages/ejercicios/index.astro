@@ -36,7 +36,7 @@ const exercises = [...catalog.values()].sort((a, b) => a.name.localeCompare(b.na
             >
               <ExerciseMedia
                 label={exercise.name}
-                asset={exercise.media?.thumbnail}
+                asset={exercise.media?.thumbnail ?? exercise.media?.video}
                 ratio="3/2"
                 class="rounded-none border-0 border-b border-line"
               />

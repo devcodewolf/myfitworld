@@ -21,6 +21,7 @@ import {
   type SessionStep,
 } from '@/core/session';
 import { formatRepRange } from '@/core/labels';
+import { routes } from '@/routes';
 import { defaultValuesFor, findLastPerformance } from '@/core/prefill';
 import { createAudioCues } from '@/browser/audio';
 import { HAPTIC, vibrate } from '@/browser/haptics';
@@ -73,6 +74,20 @@ const completed = computed(() =>
   session.value ? completedKeysOf(session.value, plan) : new Set<string>(),
 );
 const progress = computed(() => sessionProgress(plan, completed.value));
+/** Vídeo del ejercicio en pantalla, con la ruta ya resuelta contra el `base`. */
+const video = computed(() => {
+  const asset = exercise.value?.media?.video;
+  if (asset?.kind !== 'video') return null;
+  const source = asset.sources[0];
+  if (!source) return null;
+  return {
+    src: routes.asset(source.src),
+    type: source.type,
+    alt: asset.alt,
+    aspectRatio: asset.aspectRatio,
+  };
+});
+
 const hint = computed(() =>
   block.value?.repRange
     ? formatRepRange(block.value.repRange)
@@ -360,7 +375,26 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
           </p>
         </div>
 
+        <!-- El vídeo del ejercicio activo se reproduce solo y en bucle: es lo que estás
+             mirando entre serie y serie, sin tocar nada. Solo carga el del ejercicio en
+             pantalla. Las plantillas de Vue no entienden los comentarios de Astro: con
+             {/* */} el texto acaba impreso en la página. -->
+        <video
+          v-if="video"
+          :key="video.src"
+          class="max-h-104 w-full rounded-card border border-line object-cover"
+          :style="{ aspectRatio: video.aspectRatio }"
+          :aria-label="video.alt"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+        >
+          <source :src="video.src" :type="video.type" />
+        </video>
         <div
+          v-else
           class="grid aspect-[16/10] max-h-104 place-content-center justify-items-center gap-2 rounded-card border border-line bg-surface text-center"
         >
           <p class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase">

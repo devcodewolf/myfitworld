@@ -15,5 +15,18 @@
     "Bajar solo media repetición y contarla entera"
   ],
   "defaultRestSeconds": 90,
-  "substitutions": ["flexiones-declinadas", "floor-press"]
+  "substitutions": ["flexiones-declinadas", "floor-press"],
+  "media": {
+    "video": {
+      "kind": "video",
+      "sources": [
+        {
+          "src": "ejercicios/flexiones.mp4",
+          "type": "video/mp4"
+        }
+      ],
+      "alt": "Flexiones vistas de lado, con el cuerpo en tabla.",
+      "aspectRatio": "16/9"
+    }
+  }
 }

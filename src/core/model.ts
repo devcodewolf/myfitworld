@@ -86,6 +86,11 @@ const MediaCommonSchema = z.object({
     .default('4/3'),
 });
 
+/**
+ * Las rutas (`src`) son relativas a `public/`, sin barra inicial. Quien las
+ * pinta las pasa por `routes.asset()`, que es lo que las hace sobrevivir a un
+ * despliegue en subcarpeta.
+ */
 export const MediaAssetSchema = z.discriminatedUnion('kind', [
   MediaCommonSchema.extend({
     kind: z.literal('image'),

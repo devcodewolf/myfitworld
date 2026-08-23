@@ -200,7 +200,7 @@
     height: 68rem;
     pointer-events: none;
     color: var(--color-line-strong);
-    opacity: 0.3;
+    opacity: 0.2;
   }
 
   @media (max-width: 48rem) {

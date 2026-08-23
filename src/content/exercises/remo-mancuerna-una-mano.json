@@ -16,5 +16,18 @@
     "Rotar el tronco para ganar recorrido con impulso"
   ],
   "defaultRestSeconds": 90,
-  "substitutions": ["renegade-row"]
+  "substitutions": ["renegade-row"],
+  "media": {
+    "video": {
+      "kind": "video",
+      "sources": [
+        {
+          "src": "ejercicios/remo-una-mano.mp4",
+          "type": "video/mp4"
+        }
+      ],
+      "alt": "Remo a una mano con mancuerna, con la espalda plana y el codo hacia la cadera.",
+      "aspectRatio": "16/9"
+    }
+  }
 }

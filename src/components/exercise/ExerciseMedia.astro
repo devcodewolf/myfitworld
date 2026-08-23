@@ -7,6 +7,7 @@
  * que se pulsa: en modo entreno no puede haber una petición a YouTube por serie.
  */
 import type { MediaAsset } from '@/core/model';
+import { routes } from '@/routes';
 import Icon from '@/components/ui/Icon.astro';
 
 interface Props {
@@ -16,10 +17,19 @@ interface Props {
   label: string;
   /** Proporción del hueco cuando todavía no hay asset. */
   ratio?: string;
+  /** Controles del vídeo. Por defecto, en todas partes menos en modo entreno. */
+  controls?: boolean;
   class?: string;
 }
 
-const { asset, eager = false, label, ratio: ratioProp, class: className } = Astro.props;
+const {
+  asset,
+  eager = false,
+  label,
+  ratio: ratioProp,
+  controls = !eager,
+  class: className,
+} = Astro.props;
 const ratio = asset?.aspectRatio ?? ratioProp ?? '4/3';
 ---
 
@@ -42,7 +52,7 @@ const ratio = asset?.aspectRatio ?? ratioProp ?? '4/3';
   {
     asset?.kind === 'image' && (
       <img
-        src={asset.src}
+        src={routes.asset(asset.src)}
         alt={asset.alt}
         loading={eager ? 'eager' : 'lazy'}
         decoding="async"
@@ -54,7 +64,7 @@ const ratio = asset?.aspectRatio ?? ratioProp ?? '4/3';
   {
     asset?.kind === 'croquis' && (
       <img
-        src={asset.src}
+        src={routes.asset(asset.src)}
         alt={asset.alt}
         loading={eager ? 'eager' : 'lazy'}
         decoding="async"
@@ -70,13 +80,14 @@ const ratio = asset?.aspectRatio ?? ratioProp ?? '4/3';
         loop
         playsinline
         autoplay={eager}
-        preload={eager ? 'auto' : 'none'}
-        poster={asset.poster}
+        controls={controls}
+        preload={eager ? 'auto' : 'metadata'}
+        poster={asset.poster ? routes.asset(asset.poster) : undefined}
         aria-label={asset.alt}
         class="size-full object-cover"
       >
         {asset.sources.map((source) => (
-          <source src={source.src} type={source.type} />
+          <source src={routes.asset(source.src)} type={source.type} />
         ))}
       </video>
     )

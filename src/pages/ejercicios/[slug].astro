@@ -47,7 +47,12 @@ const substitutions = exercise.substitutions
 
     <div class="grid gap-10 pt-9 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-14">
       <div class="lg:sticky lg:top-10 lg:self-start">
-        <ExerciseMedia label={exercise.name} asset={exercise.media?.croquis} eager />
+        <ExerciseMedia
+          label={exercise.name}
+          asset={exercise.media?.croquis ?? exercise.media?.video}
+          eager
+          controls
+        />
 
         <dl class="mt-6 grid grid-cols-2 gap-x-6 gap-y-5 text-sm sm:grid-cols-3">
           <div>
