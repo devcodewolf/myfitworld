@@ -28,8 +28,17 @@ export const routes = {
     url(`ejercicios/${slug}`) + (from ? `?desde=${from.week}-${from.day}` : ''),
   history: () => url('historial'),
   settings: () => url('configuracion'),
-  asset: (path: string) => url(path),
+  /**
+   * Un asset propio se reconstruye con el `base` del despliegue; uno remoto se
+   * devuelve tal cual. Sin esta distinción, una foto de Unsplash acabaría
+   * pedida como `/entreno/https://images.unsplash.com/...`.
+   */
+  asset: (path: string) => (isRemote(path) ? path : url(path)),
 } as const;
+
+function isRemote(path: string): boolean {
+  return /^(https?:)?\/\//.test(path) || path.startsWith('data:');
+}
 
 /**
  * Lee el contexto de vuelta de una cadena de consulta. Es entrada no confiable

@@ -1,6 +1,23 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 
+/**
+ * Interruptor construido sobre el propio checkbox: sigue siendo un checkbox
+ * para el teclado, para el lector de pantalla y para el script que lo lee, y
+ * solo cambia de piel. Encendido va en tinta, no en acento: el cian está
+ * reservado a la acción primaria y a lo que toca ahora, y cuatro interruptores
+ * encendidos lo gastarían.
+ */
+const SWITCH =
+  'relative h-7 w-12 shrink-0 cursor-pointer appearance-none rounded-full border border-line-strong bg-surface transition-colors before:absolute before:top-0.5 before:left-0.5 before:size-5 before:rounded-full before:bg-ink-faint before:transition-transform before:content-[""] checked:border-ink checked:bg-ink checked:before:translate-x-5 checked:before:bg-ground';
+
+/** El galón del desplegable vive en global.css: la URL del SVG no cabe en una clase. */
+const CHEVRON = 'desplegable pr-11';
+
+/** Campos del formulario de material: mismo alto, mismo radio, sin cromo del SO. */
+const FIELD =
+  'min-h-11 rounded-full border border-line bg-surface px-4 text-ink transition-colors hover:border-line-strong';
+
 const toggles = [
   { id: 'sonido', label: 'Avisos sonoros', hint: 'Pitidos de inicio de serie y fin de descanso.' },
   { id: 'vibracion', label: 'Vibración', hint: 'Acompaña a cada aviso en el móvil.' },
@@ -50,10 +67,7 @@ const toggles = [
       <form id="form-material" class="mt-5 flex flex-wrap items-end gap-3">
         <label class="flex flex-col gap-1 text-sm">
           <span class="text-ink-dim">Tipo</span>
-          <select
-            name="tipo"
-            class="min-h-11 rounded-full border border-line bg-surface px-4 text-ink"
-          >
+          <select name="tipo" class={`${FIELD} ${CHEVRON}`}>
             <option value="dumbbell">Mancuerna</option>
             <option value="kettlebell">Kettlebell</option>
             <option value="plate">Disco</option>
@@ -68,7 +82,7 @@ const toggles = [
             step="0.5"
             min="0.5"
             required
-            class="figures min-h-11 w-28 rounded-full border border-line bg-surface px-4 text-ink"
+            class={`${FIELD} figures w-28`}
           />
         </label>
         <label class="flex flex-col gap-1 text-sm">
@@ -80,7 +94,7 @@ const toggles = [
             min="1"
             value="2"
             required
-            class="figures min-h-11 w-24 rounded-full border border-line bg-surface px-4 text-ink"
+            class={`${FIELD} figures w-24`}
           />
         </label>
         <button
@@ -105,7 +119,7 @@ const toggles = [
                 <span class="block text-sm font-bold text-ink">{toggle.label}</span>
                 <span class="block text-sm text-ink-faint">{toggle.hint}</span>
               </label>
-              <input id={toggle.id} type="checkbox" class="size-6 shrink-0 accent-accent" />
+              <input id={toggle.id} type="checkbox" role="switch" class={SWITCH} />
             </li>
           ))
         }
@@ -124,7 +138,7 @@ const toggles = [
             min="15"
             max="180"
             step="5"
-            class="w-full accent-accent"
+            class="w-full accent-[var(--color-ink)]"
           />
           <output id="descanso-valor" class="figures w-16 text-right text-sm font-bold text-ink"
           ></output>
@@ -142,7 +156,7 @@ const toggles = [
           step="0.1"
           min="20"
           max="300"
-          class="figures mt-3 min-h-11 w-32 rounded-full border border-line bg-surface px-4 text-ink"
+          class={`${FIELD} figures mt-3 w-32`}
         />
       </div>
     </section>
@@ -167,10 +181,7 @@ const toggles = [
 
         <label class="flex flex-col gap-1 text-sm">
           <span class="text-ink-dim">Al importar</span>
-          <select
-            id="modo-import"
-            class="min-h-11 rounded-full border border-line bg-surface px-4 text-ink"
-          >
+          <select id="modo-import" class={`${FIELD} ${CHEVRON}`}>
             <option value="merge">Fusionar con lo que ya tengo</option>
             <option value="replace">Reemplazarlo todo</option>
           </select>

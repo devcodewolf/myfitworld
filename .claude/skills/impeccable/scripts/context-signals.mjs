@@ -129,11 +129,13 @@ function gitSignals(cwd) {
     // directly; the remote need not be in `git remote` output (tests and
     // partial clones fabricate refs/remotes/origin/* without a remote).
     const ref = run(['symbolic-ref', '--short', `refs/remotes/${r}/HEAD`]);
-    if (ref && ref.startsWith(`${r}/`)) remoteHeads.push({ name: ref.slice(r.length + 1), rev: ref });
+    if (ref && ref.startsWith(`${r}/`))
+      remoteHeads.push({ name: ref.slice(r.length + 1), rev: ref });
   }
-  const onIntegrationBranch = branch === 'HEAD'
-    || conventional.includes(branch)
-    || remoteHeads.some((head) => head.name === branch);
+  const onIntegrationBranch =
+    branch === 'HEAD' ||
+    conventional.includes(branch) ||
+    remoteHeads.some((head) => head.name === branch);
   let base = null;
   let baseRev = null;
   if (!onIntegrationBranch) {
@@ -165,9 +167,11 @@ function gitSignals(cwd) {
     // candidate too when the remote default IS develop: it sits before the
     // remote-default entries in the order, so it must lead with their rev
     // itself or a stale local develop would win.
-    const advertisedRevs = (name) => remoteHeads.filter((head) => head.name === name).map((head) => head.rev);
+    const advertisedRevs = (name) =>
+      remoteHeads.filter((head) => head.name === name).map((head) => head.rev);
     addCandidate('develop', [...new Set([...advertisedRevs('develop'), ...revsFor('develop')])]);
-    for (const head of remoteHeads) addCandidate(head.name, [...new Set([head.rev, ...revsFor(head.name)])]);
+    for (const head of remoteHeads)
+      addCandidate(head.name, [...new Set([head.rev, ...revsFor(head.name)])]);
     for (const name of ['main', 'master']) addCandidate(name, revsFor(name));
     for (const c of candidates) {
       const rev = c.revs.find((r) => run(['rev-parse', '--verify', '--quiet', r]) !== null);
@@ -189,11 +193,14 @@ function gitSignals(cwd) {
   if (fromDiff) {
     changed = fromDiff.split('\n').filter(Boolean);
   } else if (fromStatus) {
-    changed = fromStatus.split(/\r?\n/).filter(Boolean).map((l) => {
-      const p = l.slice(3);
-      const arrow = p.indexOf(' -> ');
-      return arrow === -1 ? p : p.slice(arrow + 4);
-    });
+    changed = fromStatus
+      .split(/\r?\n/)
+      .filter(Boolean)
+      .map((l) => {
+        const p = l.slice(3);
+        const arrow = p.indexOf(' -> ');
+        return arrow === -1 ? p : p.slice(arrow + 4);
+      });
   }
   return {
     isRepo: true,
@@ -213,7 +220,11 @@ function probePort(port, timeout = 250) {
     const finish = (ok) => {
       if (settled) return;
       settled = true;
-      try { sock.destroy(); } catch { /* ignore */ }
+      try {
+        sock.destroy();
+      } catch {
+        /* ignore */
+      }
       resolve(ok);
     };
     sock.setTimeout(timeout);
@@ -237,8 +248,17 @@ async function devServerSignals() {
 
 // Extensions the detector scans (mirrors the engine's walkDir set + HTML).
 const SCANNABLE_EXT = new Set([
-  '.html', '.htm', '.css', '.scss',
-  '.jsx', '.tsx', '.js', '.ts', '.vue', '.svelte', '.astro',
+  '.html',
+  '.htm',
+  '.css',
+  '.scss',
+  '.jsx',
+  '.tsx',
+  '.js',
+  '.ts',
+  '.vue',
+  '.svelte',
+  '.astro',
 ]);
 // Where UI source typically lives. The detector walks these and skips
 // node_modules / dist / build and all hidden dirs automatically.
@@ -253,8 +273,14 @@ function isVendoredPath(rel) {
   const dirSegments = rel.split(/[\\/]/).slice(0, -1);
   return dirSegments.some(
     (seg) =>
-      (seg.startsWith('.') && seg !== '.vitepress' && seg !== '.vuepress' && seg !== '.storybook') ||
-      seg === 'node_modules' || seg === 'dist' || seg === 'build' || seg === '__pycache__',
+      (seg.startsWith('.') &&
+        seg !== '.vitepress' &&
+        seg !== '.vuepress' &&
+        seg !== '.storybook') ||
+      seg === 'node_modules' ||
+      seg === 'dist' ||
+      seg === 'build' ||
+      seg === '__pycache__',
   );
 }
 

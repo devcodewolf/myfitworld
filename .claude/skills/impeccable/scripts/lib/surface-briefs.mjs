@@ -10,7 +10,11 @@ export function getSurfaceBriefDir(projectRoot) {
 
 function normalizeRouteTarget(route) {
   if (!route.startsWith('/') || route.includes('..')) return null;
-  const normalized = route.split(/[?#]/, 1)[0].replace(/\/{2,}/g, '/').replace(/\/$/, '') || '/';
+  const normalized =
+    route
+      .split(/[?#]/, 1)[0]
+      .replace(/\/{2,}/g, '/')
+      .replace(/\/$/, '') || '/';
   return `route:${normalized}`;
 }
 
@@ -27,12 +31,16 @@ export function normalizeSurfaceTarget(target, { projectRoot = process.cwd() } =
       return null;
     }
   }
-  if (/^route:/i.test(trimmed)) return normalizeRouteTarget(trimmed.slice(trimmed.indexOf(':') + 1).trim());
+  if (/^route:/i.test(trimmed))
+    return normalizeRouteTarget(trimmed.slice(trimmed.indexOf(':') + 1).trim());
   if (trimmed === '/') return normalizeRouteTarget(trimmed);
   if (trimmed.startsWith('/')) {
     const absolute = path.resolve(trimmed);
     const relativeToProject = path.relative(projectRoot, absolute);
-    const isProjectFile = relativeToProject && !relativeToProject.startsWith('..') && !path.isAbsolute(relativeToProject);
+    const isProjectFile =
+      relativeToProject &&
+      !relativeToProject.startsWith('..') &&
+      !path.isAbsolute(relativeToProject);
     if (!isProjectFile && !fs.existsSync(absolute)) return normalizeRouteTarget(trimmed);
   }
   const abs = path.isAbsolute(trimmed) ? trimmed : path.resolve(projectRoot, trimmed);
@@ -44,7 +52,9 @@ export function normalizeSurfaceTarget(target, { projectRoot = process.cwd() } =
 export function surfaceBriefPathForTarget(target, { projectRoot = process.cwd() } = {}) {
   const normalized = normalizeSurfaceTarget(target, { projectRoot });
   if (!normalized) return null;
-  const slugInput = normalized.startsWith('route:') ? `route${normalized.slice('route:'.length)}` : normalized;
+  const slugInput = normalized.startsWith('route:')
+    ? `route${normalized.slice('route:'.length)}`
+    : normalized;
   const slug = slugFromTarget(slugInput, { cwd: projectRoot });
   return slug ? path.join(getSurfaceBriefDir(projectRoot), `${slug}.md`) : null;
 }
@@ -60,7 +70,12 @@ export function parseSurfaceBrief(text, filePath = null) {
       const raw = line.slice(colon + 1).trim();
       if (!key) continue;
       if (/^(?:\[|\{|\")/.test(raw) || /^(?:true|false|null|-?\d+(?:\.\d+)?)$/.test(raw)) {
-        try { meta[key] = JSON.parse(raw); continue; } catch { /* keep string */ }
+        try {
+          meta[key] = JSON.parse(raw);
+          continue;
+        } catch {
+          /* keep string */
+        }
       }
       meta[key] = raw.replace(/^['"]|['"]$/g, '');
     }
@@ -72,9 +87,14 @@ export function parseSurfaceBrief(text, filePath = null) {
   return {
     path: filePath,
     text: String(text || ''),
-    body: match ? String(text || '').slice(match[0].length).trim() : String(text || '').trim(),
+    body: match
+      ? String(text || '')
+          .slice(match[0].length)
+          .trim()
+      : String(text || '').trim(),
     meta,
-    slug: typeof meta.slug === 'string' ? meta.slug : filePath ? path.basename(filePath, '.md') : null,
+    slug:
+      typeof meta.slug === 'string' ? meta.slug : filePath ? path.basename(filePath, '.md') : null,
     primaryTarget,
     relatedTargets,
     targets: [primaryTarget, ...relatedTargets].filter(Boolean),
@@ -85,7 +105,10 @@ export function listSurfaceBriefs(projectRoot = process.cwd()) {
   const dir = getSurfaceBriefDir(projectRoot);
   let names;
   try {
-    names = fs.readdirSync(dir).filter((name) => name.endsWith('.md')).sort();
+    names = fs
+      .readdirSync(dir)
+      .filter((name) => name.endsWith('.md'))
+      .sort();
   } catch {
     return [];
   }
@@ -112,7 +135,10 @@ export function resolveSurfaceBrief(projectRoot = process.cwd(), target = null) 
   const normalized = normalizeSurfaceTarget(target, { projectRoot });
   if (!normalized) return { brief: null, candidates: briefs, reason: 'invalid-target' };
   const exactPath = surfaceBriefPathForTarget(normalized, { projectRoot });
-  const exact = briefs.find((brief) => brief.path === exactPath && (!brief.targets.length || brief.targets.includes(normalized)));
+  const exact = briefs.find(
+    (brief) =>
+      brief.path === exactPath && (!brief.targets.length || brief.targets.includes(normalized)),
+  );
   if (exact) return { brief: exact, candidates: briefs, reason: 'slug' };
   const mapped = briefs.filter((brief) => brief.targets.includes(normalized));
   return {
@@ -129,10 +155,15 @@ export function writeSurfaceBrief({
   body,
 }) {
   const normalizedPrimary = normalizeSurfaceTarget(primaryTarget, { projectRoot });
-  if (!normalizedPrimary) throw new Error('surface brief requires a concrete project-relative primary target or URL');
-  const normalizedRelated = [...new Set(relatedTargets
-    .map((target) => normalizeSurfaceTarget(target, { projectRoot }))
-    .filter((target) => target && target !== normalizedPrimary))];
+  if (!normalizedPrimary)
+    throw new Error('surface brief requires a concrete project-relative primary target or URL');
+  const normalizedRelated = [
+    ...new Set(
+      relatedTargets
+        .map((target) => normalizeSurfaceTarget(target, { projectRoot }))
+        .filter((target) => target && target !== normalizedPrimary),
+    ),
+  ];
   const slug = slugFromTarget(normalizedPrimary, { cwd: projectRoot });
   const filePath = surfaceBriefPathForTarget(normalizedPrimary, { projectRoot });
   fs.mkdirSync(path.dirname(filePath), { recursive: true });

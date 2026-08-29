@@ -30,7 +30,7 @@ const {
   controls = !eager,
   class: className,
 } = Astro.props;
-const ratio = asset?.aspectRatio ?? ratioProp ?? '4/3';
+const ratio = ratioProp ?? '4/3';
 ---
 
 <figure
@@ -39,12 +39,9 @@ const ratio = asset?.aspectRatio ?? ratioProp ?? '4/3';
 >
   {
     asset === undefined && (
-      <div class="absolute inset-0 grid place-content-center justify-items-center gap-3 bg-[radial-gradient(60%_60%_at_50%_35%,color-mix(in_oklab,var(--color-accent)_7%,transparent),transparent)] text-center">
-        <Icon name="catalog" size={44} class="text-line-strong" />
-        <p class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase">
-          Croquis pendiente
-        </p>
-        <p class="max-w-[26ch] px-4 text-sm text-ink-faint">Aún no hay animación de {label}.</p>
+      <div class="absolute inset-0 grid place-content-center justify-items-center gap-2 text-center">
+        <Icon name="catalog" size={36} class="text-line" />
+        <p class="max-w-[26ch] px-4 text-sm text-ink-faint">Sin imagen de {label} todavía.</p>
       </div>
     )
   }
@@ -81,6 +78,7 @@ const ratio = asset?.aspectRatio ?? ratioProp ?? '4/3';
         playsinline
         autoplay={eager}
         controls={controls}
+        data-hover-play={!eager && !controls ? '' : undefined}
         preload={eager ? 'auto' : 'metadata'}
         poster={asset.poster ? routes.asset(asset.poster) : undefined}
         aria-label={asset.alt}
@@ -115,6 +113,19 @@ const ratio = asset?.aspectRatio ?? ratioProp ?? '4/3';
 </figure>
 
 <script>
+  // En una rejilla, un vídeo que se reproduce solo cuesta megabytes por tarjeta
+  // y compite con los de al lado. Se despierta al pasar por encima y se rebobina
+  // al salir, así que la tarjeta en reposo pesa lo que su primer fotograma.
+  document.querySelectorAll<HTMLVideoElement>('video[data-hover-play]').forEach((video) => {
+    const card = video.closest('a') ?? video.parentElement;
+    if (!card) return;
+    card.addEventListener('mouseenter', () => void video.play().catch(() => {}));
+    card.addEventListener('mouseleave', () => {
+      video.pause();
+      video.currentTime = 0;
+    });
+  });
+
   // El iframe de terceros se crea al pulsar, nunca antes.
   document.querySelectorAll<HTMLButtonElement>('[data-embed-provider]').forEach((button) => {
     button.addEventListener('click', () => {

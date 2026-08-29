@@ -154,10 +154,10 @@ const substitutions = exercise.substitutions
           >
             Tu historial
           </h2>
-          <p class="mt-4 max-w-[55ch] text-base text-ink-faint">
-            Todavía no has registrado ninguna serie de este ejercicio. Cuando entrenes, aquí verás
-            la evolución de tus pesos y repeticiones.
-          </p>
+          {/* Lo rellena el script del final leyendo el repositorio de este navegador. */}
+          <div id="historial-cuerpo" class="mt-4" data-ejercicio={exercise.id}>
+            <p class="text-base text-ink-faint">Leyendo lo que has registrado…</p>
+          </div>
         </section>
       </div>
     </div>
@@ -166,6 +166,21 @@ const substitutions = exercise.substitutions
 
 <script>
   import { parseDayContext, routes } from '@/routes';
+  import { mountExerciseHistory } from '@/browser/exercise-history';
+  import type { Slug } from '@/core/model';
+
+  // Un fallo aquí dejaría la sección con el texto de carga para siempre, así que
+  // se dice en pantalla en vez de en la consola.
+  const cuerpo = document.getElementById('historial-cuerpo');
+  const ejercicio = cuerpo?.dataset.ejercicio;
+  if (cuerpo && ejercicio) {
+    try {
+      await mountExerciseHistory(ejercicio as Slug);
+    } catch (error) {
+      cuerpo.textContent = `No se pudo leer tu historial: ${error instanceof Error ? error.message : String(error)}`;
+      cuerpo.className = 'mt-4 text-base text-ink-dim';
+    }
+  }
 
   const contexto = parseDayContext(window.location.search);
   const enlace = document.getElementById('volver');

@@ -15,5 +15,13 @@
     "Juntar las mancuernas arriba perdiendo la tensión del pectoral"
   ],
   "defaultRestSeconds": 120,
-  "substitutions": ["flexiones"]
+  "substitutions": ["flexiones"],
+  "media": {
+    "thumbnail": {
+      "kind": "image",
+      "src": "https://images.unsplash.com/photo-1585152968992-d2b9444408cc?w=900&q=72&auto=format&fit=crop",
+      "alt": "Un hombre tumbado empuja dos mancuernas hacia arriba desde el pecho",
+      "aspectRatio": "3/2"
+    }
+  }
 }

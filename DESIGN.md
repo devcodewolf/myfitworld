@@ -171,11 +171,13 @@ sangre con una sola acción encima. La app se mira de pie, a dos o tres metros, 
 ocupadas y casi siempre de noche: de ahí el fondo negro azulado, el tamaño desmesurado de las
 cifras y el hecho de que solo haya un color encendido en toda la pantalla.
 
-El material es fotografía. Bodegones reales de mancuernas, discos y suelo de madera, apagados al
-70 % de opacidad y desaturados al 65 %, que llenan el ancho de las tarjetas de día y de la sesión
-protagonista. No son ilustración de relleno: son lo que da temperatura y peso a una interfaz que,
-sin ellas, sería una lista. Debajo del texto siempre cae un degradado que arranca del propio
-fondo de la app, así que el contraste no depende nunca de qué foto haya puesta. El suelo de la
+El material es fotografía, **a plena luz y a plena saturación**. Bodegones de mancuernas y suelo
+de madera en las tarjetas de día, y una foto de ejecución por ejercicio en el catálogo. No son
+ilustración de relleno: son lo que da temperatura y peso a una interfaz que, sin ellas, sería una
+lista, y una foto apagada al 70 % deja de leerse como foto para convertirse en textura sucia. El
+contraste del texto no se compra bajando la imagen entera, sino con un velo que solo existe donde
+hay letras: transparente en el 82 % superior y opaco al llegar al pie. Así el motivo se ve y el
+texto se lee sea cual sea la foto que haya debajo. El suelo de la
 página lo iluminan tres focos radiales fijos —cian, lavanda y verdeazulado, todos por debajo del
 15 % de mezcla— que no se mueven con el scroll y no tiñen el contenido.
 
@@ -433,9 +435,10 @@ de separación:
 
 `PhotoCard` es la pieza de la que vive la interfaz. Reserva su hueco con `aspect-ratio` (21:9 la
 protagonista, con 19rem de alto mínimo; 5:4 las tarjetas de día), recorta la foto a `object-cover`
-al 70 % de opacidad y 65 % de saturación y encima —siempre, sin excepción— tiende un degradado de
-tres paradas que va del suelo opaco abajo, al suelo al 72 % en el 46 % de la altura, y termina en
-un 14 % de acento arriba. El contenido se ancla abajo con 1,25–1,5rem de padding. En hover la foto
+**sin filtro de ningún tipo** y encima —siempre, sin excepción— tiende un velo de cuatro paradas
+que va del suelo opaco en el pie, al suelo al 88 % en el 28 % de la altura, al 45 % en el 58 %, y
+llega a transparente en el 82 %. El velo existe donde hay texto y desaparece donde hay motivo.
+El contenido se ancla abajo con 1,25–1,5rem de padding. En hover la foto
 escala a 1,03 en medio segundo; el marco no se mueve. La imagen se sirve por `astro:assets` en dos
 anchos (480 y 960) y solo la protagonista carga en `eager`.
 

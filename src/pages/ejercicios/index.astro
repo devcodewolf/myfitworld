@@ -4,9 +4,25 @@ import ExerciseMedia from '@/components/exercise/ExerciseMedia.astro';
 import { getExerciseCatalog } from '@/data';
 import { DIFFICULTY_LABELS, MUSCLE_LABELS } from '@/core/labels';
 import { routes } from '@/routes';
+import type { MuscleGroup } from '@/core/model';
 
 const catalog = await getExerciseCatalog();
 const exercises = [...catalog.values()].sort((a, b) => a.name.localeCompare(b.name, 'es'));
+
+// Los filtros salen del catálogo, no de una lista escrita a mano: si mañana
+// entra un ejercicio de un músculo nuevo, su filtro aparece solo.
+const muscleCounts = new Map<MuscleGroup, number>();
+for (const exercise of exercises) {
+  for (const muscle of exercise.primaryMuscles) {
+    muscleCounts.set(muscle, (muscleCounts.get(muscle) ?? 0) + 1);
+  }
+}
+const filters = [...muscleCounts.entries()].sort(
+  (a, b) => b[1] - a[1] || MUSCLE_LABELS[a[0]].localeCompare(MUSCLE_LABELS[b[0]], 'es'),
+);
+
+const FILTER =
+  'inline-flex min-h-11 shrink-0 cursor-pointer items-center gap-2 rounded-full border border-line px-4 text-sm font-bold whitespace-nowrap text-ink-dim transition-colors hover:border-line-strong hover:text-ink aria-pressed:border-transparent aria-pressed:bg-ink aria-pressed:text-ground';
 ---
 
 <BaseLayout
@@ -17,31 +33,56 @@ const exercises = [...catalog.values()].sort((a, b) => a.name.localeCompare(b.na
     <header>
       <h1 class="text-figure font-black tracking-[-0.02em] text-ink">Ejercicios</h1>
       <p class="figures mt-1 text-sm text-ink-dim">
-        {exercises.length} ejercicios en el catálogo del mesociclo
+        <span id="visibles">{exercises.length}</span> de {exercises.length} en el catálogo del mesociclo
       </p>
     </header>
 
     {
-      /* El croquis manda en la tarjeta: ocupa el ancho completo y el texto se
-        reduce a lo que hace falta para elegir. Dos columnas en escritorio para
-        que la imagen tenga tamaño de verdad. */
+      /* Filtro por músculo principal. Sin él, encontrar los de pierna es leerse
+        las dieciséis. En móvil se arrastra en horizontal: replegado ocupaba seis
+        filas y empujaba la primera tarjeta fuera de la pantalla. */
     }
-    <ul class="grid gap-5 pt-7 sm:grid-cols-2 xl:grid-cols-3">
+    <div
+      class="rail -mx-4 mt-7 flex gap-2 overflow-x-auto px-4 pb-1 sm:-mx-6 sm:px-6 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0"
+      role="group"
+      aria-label="Filtrar por músculo"
+    >
+      <button type="button" class={FILTER} data-muscle="" aria-pressed="true">Todos</button>
+      {
+        filters.map(([muscle, count]) => (
+          <button type="button" class={FILTER} data-muscle={muscle} aria-pressed="false">
+            {MUSCLE_LABELS[muscle]}
+            <span class="figures text-xs text-ink-faint">{count}</span>
+          </button>
+        ))
+      }
+    </div>
+
+    {
+      /* La foto manda en la tarjeta y se ve a plena luz: es lo que permite
+        reconocer el ejercicio de un vistazo. El texto va debajo, sobre material
+        opaco, así que su contraste no depende nunca de la imagen. */
+    }
+    <ul id="rejilla" class="grid gap-5 pt-7 sm:grid-cols-2 xl:grid-cols-3">
       {
         exercises.map((exercise) => (
-          <li>
+          <li data-muscles={exercise.primaryMuscles.join(' ')}>
             <a
               href={routes.exercise(exercise.id)}
               class="panel group flex h-full flex-col overflow-hidden rounded-card border border-line transition-colors hover:border-line-strong"
             >
-              <ExerciseMedia
-                label={exercise.name}
-                asset={exercise.media?.thumbnail ?? exercise.media?.video}
-                ratio="3/2"
-                class="rounded-none border-0 border-b border-line"
-              />
+              <div class="relative overflow-hidden border-b border-line">
+                <ExerciseMedia
+                  label={exercise.name}
+                  asset={exercise.media?.thumbnail ?? exercise.media?.video}
+                  eager={false}
+                  controls={false}
+                  ratio="3/2"
+                  class="rounded-none border-0 transition-transform duration-500 group-hover:scale-[1.04]"
+                />
+              </div>
               <div class="flex flex-1 flex-col p-5">
-                <h2 class="text-lg font-bold text-ink">{exercise.name}</h2>
+                <h2 class="text-lg font-bold text-balance text-ink">{exercise.name}</h2>
                 <ul class="mt-3 flex flex-wrap gap-2">
                   {exercise.primaryMuscles.slice(0, 2).map((muscle) => (
                     <li class="rounded-full border border-line px-3 py-1 text-xs font-semibold text-ink-dim">
@@ -58,5 +99,33 @@ const exercises = [...catalog.values()].sort((a, b) => a.name.localeCompare(b.na
         ))
       }
     </ul>
+
+    <p id="sin-resultados" hidden class="pt-12 text-lg text-ink-dim">
+      Ningún ejercicio del mesociclo trabaja ese músculo como principal.
+    </p>
   </div>
 </BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-muscle]');
+  const cards = document.querySelectorAll<HTMLLIElement>('#rejilla > li');
+  const counter = document.getElementById('visibles');
+  const empty = document.getElementById('sin-resultados');
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const wanted = button.dataset.muscle ?? '';
+      buttons.forEach((other) => other.setAttribute('aria-pressed', String(other === button)));
+
+      let shown = 0;
+      cards.forEach((card) => {
+        const matches = wanted === '' || (card.dataset.muscles ?? '').split(' ').includes(wanted);
+        card.hidden = !matches;
+        if (matches) shown += 1;
+      });
+
+      if (counter) counter.textContent = String(shown);
+      if (empty) empty.hidden = shown > 0;
+    });
+  });
+</script>

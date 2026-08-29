@@ -15,5 +15,13 @@
     "Adelantar el codo, que convierte el curl en una elevación frontal"
   ],
   "defaultRestSeconds": 60,
-  "substitutions": ["curl-martillo"]
+  "substitutions": ["curl-martillo"],
+  "media": {
+    "thumbnail": {
+      "kind": "image",
+      "src": "https://images.unsplash.com/photo-1704223523321-7b0b44a1a0b9?w=900&q=72&auto=format&fit=crop",
+      "alt": "Un hombre flexiona el codo con una mancuerna en supinación en una sala en penumbra",
+      "aspectRatio": "3/2"
+    }
+  }
 }

@@ -21,20 +21,52 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // All known harness directories
 const HARNESS_DIRS = [
-  '.claude', '.cursor', '.gemini', '.codex', '.agents', '.agent', '.github', '.grok',
+  '.claude',
+  '.cursor',
+  '.gemini',
+  '.codex',
+  '.agents',
+  '.agent',
+  '.github',
+  '.grok',
   '.hermes',
-  '.trae', '.trae-cn', '.pi', '.opencode', '.kiro', '.rovodev', '.vibe', '.qoder',
+  '.trae',
+  '.trae-cn',
+  '.pi',
+  '.opencode',
+  '.kiro',
+  '.rovodev',
+  '.vibe',
+  '.qoder',
 ];
 
 const CODEX_HARNESSES = new Set(['.codex', '.agents']);
 
 // Valid sub-command names
 const VALID_COMMANDS = [
-  'craft', 'init', 'extract', 'document', 'shape',
-  'critique', 'audit',
-  'polish', 'bolder', 'quieter', 'distill', 'harden', 'onboard', 'live',
-  'animate', 'colorize', 'typeset', 'layout', 'delight', 'overdrive',
-  'clarify', 'adapt', 'optimize',
+  'craft',
+  'init',
+  'extract',
+  'document',
+  'shape',
+  'critique',
+  'audit',
+  'polish',
+  'bolder',
+  'quieter',
+  'distill',
+  'harden',
+  'onboard',
+  'live',
+  'animate',
+  'colorize',
+  'typeset',
+  'layout',
+  'delight',
+  'overdrive',
+  'clarify',
+  'adapt',
+  'optimize',
 ];
 
 // Marker to identify pinned skills (so unpin doesn't delete user skills)
@@ -95,7 +127,8 @@ function commandPrefixForSkillsDir(skillsDir) {
 }
 
 function generatePinnedSkill(command, metadata, commandPrefix, isCodex) {
-  const desc = metadata[command]?.description || `Shortcut for ${commandPrefix}impeccable ${command}.`;
+  const desc =
+    metadata[command]?.description || `Shortcut for ${commandPrefix}impeccable ${command}.`;
   const hint = metadata[command]?.argumentHint || '[target]';
   const providerFrontmatter = isCodex
     ? `metadata:\n  argument-hint: "${hint}"`
@@ -196,7 +229,7 @@ function unpin(command, projectRoot) {
 }
 
 // --- CLI ---
-const [,, action, command] = process.argv;
+const [, , action, command] = process.argv;
 
 if (!action || !command) {
   console.log('Usage: node pin.mjs <pin|unpin> <command>');

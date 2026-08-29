@@ -16,5 +16,13 @@
     "Perder el equilibrio y rebotar con la pierna de atrás"
   ],
   "defaultRestSeconds": 90,
-  "substitutions": ["zancadas-mancuernas", "sentadilla-goblet"]
+  "substitutions": ["zancadas-mancuernas", "sentadilla-goblet"],
+  "media": {
+    "thumbnail": {
+      "kind": "image",
+      "src": "https://images.unsplash.com/photo-1571019613914-85f342c6a11e?w=900&q=72&auto=format&fit=crop",
+      "alt": "Una mujer baja en zancada con el pie trasero elevado, con mancuernas en las manos",
+      "aspectRatio": "3/2"
+    }
+  }
 }

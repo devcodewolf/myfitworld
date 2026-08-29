@@ -2,10 +2,26 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getActiveMesocycle, getExerciseCatalog } from '@/data';
 import { trackedBlocksOf } from '@/core/history';
+import { PHASE_LABELS } from '@/core/labels';
+import { daySetCount } from '@/core/training';
 import { routes } from '@/routes';
 
 const mesocycle = await getActiveMesocycle();
 const catalog = await getExerciseCatalog();
+
+// El estado vacío enseña la forma de lo que va a llegar, así que necesita el
+// plan entero: doce huecos con nombre, no un párrafo diciendo que no hay nada.
+const plan = mesocycle.weeks.map((week) => ({
+  order: week.order,
+  phase: week.phase,
+  days: week.days.map((day) => ({
+    order: day.order,
+    title: day.title,
+    sets: daySetCount(day),
+    href: routes.day(week.order, day.order),
+  })),
+}));
+const firstDay = plan[0]?.days[0];
 
 // Solo viaja al cliente lo que la pantalla necesita: los músculos y el nombre
 // de cada ejercicio, y los bloques con rango. Ni claves de técnica ni errores.
@@ -40,18 +56,55 @@ const payload = {
     >
     </p>
 
-    <div id="vacio" hidden class="pt-12">
-      <p class="max-w-[55ch] text-lg leading-relaxed text-ink-dim">
-        Todavía no hay ninguna sesión registrada. En cuanto termines la primera, aquí verás el
-        volumen de cada semana por grupo muscular, tus sesiones una a una y el aviso de cuándo toca
-        subir peso.
+    <div id="vacio" hidden class="pt-10">
+      <p class="max-w-[58ch] text-lg leading-relaxed text-ink-dim">
+        Todavía no has registrado ninguna sesión. Estas son las doce que tienes por delante: según
+        las vayas terminando, cada hueco se llena con lo que hiciste de verdad, y aquí aparecen el
+        volumen por grupo muscular y el aviso de cuándo toca subir peso.
       </p>
-      <a
-        href={routes.home()}
-        class="accion-primaria mt-8 inline-flex min-h-14 items-center rounded-full px-7 text-base font-extrabold text-accent-ink"
-      >
-        Ir al mesociclo
-      </a>
+
+      {
+        firstDay && (
+          <a
+            href={firstDay.href}
+            class="accion-primaria mt-7 inline-flex min-h-14 items-center rounded-full px-7 text-base font-extrabold text-accent-ink transition-transform hover:scale-[1.02] active:scale-100"
+          >
+            Empezar por {firstDay.title}
+          </a>
+        )
+      }
+
+      <ol class="mt-10 flex flex-col gap-7">
+        {
+          plan.map((week) => (
+            <li>
+              <h2 class="figures flex items-baseline gap-3 text-sm font-bold text-ink-dim">
+                Semana {String(week.order).padStart(2, '0')}
+                <span
+                  class="h-1.5 w-1.5 rounded-full"
+                  style={`background-color: var(--color-phase-${week.phase})`}
+                  aria-hidden="true"
+                />
+                <span class="font-semibold text-ink-faint">{PHASE_LABELS[week.phase]}</span>
+              </h2>
+              <ul class="mt-3 grid gap-3 sm:grid-cols-3">
+                {week.days.map((day) => (
+                  <li>
+                    <a
+                      href={day.href}
+                      class="flex min-h-24 flex-col justify-between rounded-card border border-dashed border-line px-4 py-3 transition-colors hover:border-line-strong hover:bg-surface"
+                    >
+                      <span class="figures text-xs font-bold text-ink-faint">Día {day.order}</span>
+                      <span class="text-sm font-bold text-ink-dim">{day.title}</span>
+                      <span class="figures text-xs text-ink-faint">{day.sets} series</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ol>
     </div>
 
     <div id="panel-historial" hidden class="flex flex-col gap-12 pt-10">

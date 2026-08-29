@@ -88,6 +88,33 @@ const video = computed(() => {
   };
 });
 
+/** Sin vídeo, la foto del ejercicio. Un hueco vacío no ayuda a nadie a las 23:00. */
+const photo = computed(() => {
+  const asset = exercise.value?.media?.thumbnail;
+  if (asset?.kind !== 'image') return null;
+  return { src: routes.asset(asset.src), alt: asset.alt, aspectRatio: asset.aspectRatio ?? '3/2' };
+});
+
+/**
+ * Las series de este ejercicio y en cuál vas. Cada estado cambia la forma de la
+ * marca además del color: hecha va maciza, la de ahora va anillada y las que
+ * faltan van huecas, así que se distingue sin depender de ver el color.
+ */
+const setMarks = computed(() => {
+  const current = step.value;
+  if (!current) return [];
+  return plan
+    .filter((item) => item.blockKey === current.blockKey)
+    .map((item) => ({
+      key: item.key,
+      label: item.side
+        ? `${item.setIndex}${item.side === 'left' ? 'I' : 'D'}`
+        : String(item.setIndex),
+      done: completed.value.has(item.key),
+      now: item.key === current.key,
+    }));
+});
+
 const hint = computed(() =>
   block.value?.repRange
     ? formatRepRange(block.value.repRange)
@@ -393,15 +420,20 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
         >
           <source :src="video.src" :type="video.type" />
         </video>
+        <img
+          v-else-if="photo"
+          :key="photo.src"
+          :src="photo.src"
+          :alt="photo.alt"
+          class="max-h-104 w-full rounded-card border border-line object-cover"
+          :style="{ aspectRatio: photo.aspectRatio }"
+        />
         <div
           v-else
-          class="grid aspect-[16/10] max-h-104 place-content-center justify-items-center gap-2 rounded-card border border-line bg-surface text-center"
+          class="grid aspect-[16/10] max-h-104 place-content-center rounded-card border border-line bg-surface px-4 text-center"
         >
-          <p class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase">
-            Croquis pendiente
-          </p>
-          <p class="max-w-[28ch] px-4 text-sm text-ink-faint">
-            Aún no hay animación de {{ exercise.name }}.
+          <p class="max-w-[28ch] text-sm text-ink-faint">
+            Sin imagen de {{ exercise.name }} todavía.
           </p>
         </div>
 
@@ -425,6 +457,26 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
           :size="180"
           :controls="phase === 'working'"
         />
+
+        <!-- El anillo dice cuánto llevas de esta serie, pero no cuántas van del
+             ejercicio. Esta fila sí, y es lo que se mira de reojo entre serie y serie. -->
+        <ol v-if="setMarks.length > 1" class="flex flex-wrap items-center justify-center gap-2">
+          <li
+            v-for="mark in setMarks"
+            :key="mark.key"
+            class="figures grid size-9 place-content-center rounded-full border text-xs font-extrabold"
+            :class="
+              mark.now
+                ? 'border-accent text-accent'
+                : mark.done
+                  ? 'border-ink bg-ink text-ground'
+                  : 'border-line text-ink-faint'
+            "
+            :aria-current="mark.now ? 'step' : undefined"
+          >
+            {{ mark.label }}
+          </li>
+        </ol>
 
         <button
           v-if="phase === 'ready'"

@@ -15,5 +15,13 @@
     "Convertirlo en un remo llevando los codos hacia atrás"
   ],
   "defaultRestSeconds": 60,
-  "substitutions": ["remo-mancuerna-una-mano"]
+  "substitutions": ["remo-mancuerna-una-mano"],
+  "media": {
+    "thumbnail": {
+      "kind": "image",
+      "src": "https://images.unsplash.com/photo-1600677396360-9c4e8e46e7d4?w=900&q=72&auto=format&fit=crop",
+      "alt": "Primer plano de la espalda alta y los hombros posteriores en contracción",
+      "aspectRatio": "3/2"
+    }
+  }
 }

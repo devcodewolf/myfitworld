@@ -15,5 +15,13 @@
     "Usar el balanceo del cuerpo como impulso"
   ],
   "defaultRestSeconds": 60,
-  "substitutions": ["curl-biceps-supino"]
+  "substitutions": ["curl-biceps-supino"],
+  "media": {
+    "thumbnail": {
+      "kind": "image",
+      "src": "https://images.unsplash.com/photo-1674834726923-3ba828d37846?w=900&q=72&auto=format&fit=crop",
+      "alt": "Dos mancuernas hexagonales sujetas en agarre neutro, con los pulgares hacia arriba",
+      "aspectRatio": "3/2"
+    }
+  }
 }

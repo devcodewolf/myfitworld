@@ -15,5 +15,13 @@
     "Perder la línea del cuerpo y sacar el glúteo"
   ],
   "defaultRestSeconds": 90,
-  "substitutions": ["flexiones"]
+  "substitutions": ["flexiones"],
+  "media": {
+    "thumbnail": {
+      "kind": "image",
+      "src": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=900&q=72&auto=format&fit=crop",
+      "alt": "Un hombre en posición de flexión con el cuerpo en tabla sobre el suelo del gimnasio",
+      "aspectRatio": "3/2"
+    }
+  }
 }

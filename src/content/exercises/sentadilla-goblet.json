@@ -15,5 +15,13 @@
     "Levantar los talones del suelo al bajar"
   ],
   "defaultRestSeconds": 120,
-  "substitutions": ["zancadas-mancuernas"]
+  "substitutions": ["zancadas-mancuernas"],
+  "media": {
+    "thumbnail": {
+      "kind": "image",
+      "src": "https://images.unsplash.com/photo-1603503363848-6952525df449?w=900&q=72&auto=format&fit=crop",
+      "alt": "Una mujer sostiene una pesa contra el pecho en el fondo de una sentadilla",
+      "aspectRatio": "3/2"
+    }
+  }
 }

@@ -15,5 +15,13 @@
     "Redondear la lumbar buscando tocar el suelo"
   ],
   "defaultRestSeconds": 120,
-  "substitutions": ["sentadilla-goblet"]
+  "substitutions": ["sentadilla-goblet"],
+  "media": {
+    "thumbnail": {
+      "kind": "image",
+      "src": "https://images.unsplash.com/photo-1556817411-31ae72fa3ea0?w=900&q=72&auto=format&fit=crop",
+      "alt": "Una persona levanta una barra desde el suelo con la cadera atrasada y la espalda plana",
+      "aspectRatio": "3/2"
+    }
+  }
 }
