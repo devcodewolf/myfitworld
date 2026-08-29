@@ -1,5 +1,10 @@
 # Procedencia de las fotografías
 
+> **Los cuatro archivos de esta carpeta ya no se usan.** Las fotos de portada y de
+> día pasaron a Unsplash (ver más abajo) para que las doce sesiones del mesociclo
+> tengan cada una la suya. Se conservan por si algún día quieres volver a servir
+> imágenes locales; para eso, `src/theme.ts` es el único archivo que hay que tocar.
+
 Todas son de **StockSnap.io** con licencia **CC0** (dominio público): uso libre,
 sin atribución obligatoria y sin restricción comercial. Se conservan aquí sus
 identificadores por si hace falta volver al original en alta resolución.
@@ -18,11 +23,12 @@ muestran. El original está disponible hasta 6000 px en `stocksnap.io/photo/<id>
 es sustituirlas por fotos del espacio real. Cambiar una foto es reemplazar el
 archivo manteniendo el nombre: no hay que tocar ningún componente.
 
-## Fotos de ejercicio (remotas)
+## Fotos remotas: portada, sesiones y ejercicios
 
-Las dieciséis fichas del catálogo llevan una foto de **Unsplash**, servida desde
-`images.unsplash.com` y declarada en `media.thumbnail` de cada
-`src/content/exercises/*.json`. No se descargan: la URL lleva ya los parámetros
+Todas las fotos que se ven hoy son de **Unsplash**, servidas desde
+`images.unsplash.com`. Las de los ejercicios se declaran en `media.thumbnail` de
+cada `src/content/exercises/*.json`; las de la portada y las doce sesiones, en
+`src/theme.ts` (`SESSION_PHOTOS` y `SCENE_PHOTOS`). No se descargan: la URL lleva ya los parámetros
 de tamaño y calidad (`w=900&q=72&auto=format`), así que Unsplash sirve AVIF o
 WebP según el navegador.
 

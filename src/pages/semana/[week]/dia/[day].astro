@@ -48,7 +48,7 @@ let position = 0;
     <WeekNav mesocycle={mesocycle} activeWeek={week.order} activeDay={day.order} />
 
     <div class="pt-8">
-      <PhotoCard photo={dayPhoto(day.order)} alt="" eager ratio="21/9" class="min-h-76">
+      <PhotoCard photo={dayPhoto(week.order, day.order)} alt="" eager ratio="21/9" class="min-h-76">
         <h1 class="text-display font-black tracking-[-0.03em] text-balance text-ink">
           {day.title}
         </h1>

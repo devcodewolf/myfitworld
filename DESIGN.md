@@ -7,6 +7,7 @@ colors:
   raised: "#1e2934"
   line: "#2c3947"
   line-strong: "#45576a"
+  shade: "#04080d"
   ink: "#f0f6fa"
   ink-dim: "#a9becd"
   ink-faint: "#869dae"
@@ -152,11 +153,61 @@ components:
     rounded: "{rounded.pill}"
     padding: "0 1rem"
     height: "2.75rem"
+  filter-chip:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink-dim}"
+    rounded: "{rounded.pill}"
+    padding: "0 1rem"
+    height: "2.75rem"
+  filter-chip-active:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.ground}"
+    rounded: "{rounded.pill}"
+    padding: "0 1rem"
+    height: "2.75rem"
+  switch:
+    backgroundColor: "{colors.surface}"
+    rounded: "{rounded.pill}"
+    width: "3rem"
+    height: "1.75rem"
+  switch-on:
+    backgroundColor: "{colors.ink}"
+    rounded: "{rounded.pill}"
+    width: "3rem"
+    height: "1.75rem"
+  field:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.pill}"
+    padding: "0 1rem"
+    height: "2.75rem"
+  bento-cell:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.card}"
+    padding: "1.25rem"
+  set-mark:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink-faint}"
+    rounded: "{rounded.pill}"
+    size: "2.25rem"
+  set-mark-now:
+    backgroundColor: "transparent"
+    textColor: "{colors.accent}"
+    rounded: "{rounded.pill}"
+    size: "2.25rem"
+  set-mark-done:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.ground}"
+    rounded: "{rounded.pill}"
+    size: "2.25rem"
 ---
 
-<!-- ESTADO: este documento describe el mundo tal y como está construido hoy, después
-     del rediseño. La revisión de acabado NO se ha ejecutado sobre esta versión: lo que
-     sigue es lo que el código hace, no un veredicto de calidad. -->
+<!-- ESTADO: este documento describe el mundo tal y como está construido hoy. Se escribió
+     tras el rediseño y se fusionó después, al rehacer catálogo, historial, ajustes y modo
+     entreno: se conservó lo que seguía siendo cierto y se reescribió lo que el código había
+     dejado falso. La revisión de acabado NO se ha ejecutado sobre esta versión: lo que sigue
+     es lo que el código hace, no un veredicto de calidad. -->
 
 # Design System: My Fitness World
 
@@ -171,8 +222,9 @@ sangre con una sola acción encima. La app se mira de pie, a dos o tres metros, 
 ocupadas y casi siempre de noche: de ahí el fondo negro azulado, el tamaño desmesurado de las
 cifras y el hecho de que solo haya un color encendido en toda la pantalla.
 
-El material es fotografía, **a plena luz y a plena saturación**. Bodegones de mancuernas y suelo
-de madera en las tarjetas de día, y una foto de ejecución por ejercicio en el catálogo. No son
+El material es fotografía, **a plena luz y a plena saturación**: gente entrenando y salas de pesas.
+Cada una de las doce sesiones del mesociclo tiene la suya, distinta de las otras once, y cada uno de
+los dieciséis ejercicios del catálogo la suya. No son
 ilustración de relleno: son lo que da temperatura y peso a una interfaz que, sin ellas, sería una
 lista, y una foto apagada al 70 % deja de leerse como foto para convertirse en textura sucia. El
 contraste del texto no se compra bajando la imagen entera, sino con un velo que solo existe donde
@@ -192,7 +244,8 @@ tarjetas es un degradado sutil, no una sombra.
 - Negro azulado con tres focos radiales fijos, nunca gris neutro
 - Un único cian saturado (`#34dafa`), reservado a la acción primaria y al AHORA
 - Cuatro pasteles de croma bajo que identifican las fases del mesociclo sin competir
-- Fotografía a sangre bajo degradado garantizado, con metadatos como chips de cristal
+- Fotografía a plena luz bajo un velo que solo existe donde hay texto; una por sesión y por ejercicio
+- Historial y ajustes en bento: celdas desiguales, la mayor para lo que más pesa en la decisión
 - Archivo variable 400–900, cifras tabulares en todo lo comparable
 - Filete de un píxel como única declaración de elevación: cero sombras
 - Raíl de semanas y días como columna vertebral de la navegación
@@ -311,9 +364,18 @@ repeticiones o segundos, así que la unidad se escribe siempre junto a ella, en 
 
 ## Layout
 
-Contenedor único de 80rem (`max-w-7xl`) centrado, con canal de 1rem que crece a 1,5rem en `sm` y a
-2rem en `lg`; el aire vertical es de 2rem, 2,5rem en `lg`. Los puntos de ruptura son los de
+Contenedor de 80rem (`max-w-7xl`) centrado para las pantallas que se recorren —portada, semana,
+día, catálogo, ficha—, con canal de 1rem que crece a 1,5rem en `sm` y a 2rem en `lg`; el aire
+vertical es de 2rem, 2,5rem en `lg`. Las dos pantallas de rejilla, historial y ajustes, bajan a
+72rem (`max-w-6xl`), que es el ancho en el que su bento de tres columnas mantiene celdas legibles
+sin estirarlas. El envoltorio del layout llega hasta 92rem. Los puntos de ruptura son los de
 Tailwind sin tocar: 640, 768, 1024 y 1280 px.
+
+**Historial y ajustes se componen en bento**: una rejilla de tres columnas en `lg` con celdas de
+tamaño desigual, no una columna de tarjetas iguales. La celda mayor es la que más pesa en la
+decisión —la primera sesión en historial, el material declarado en ajustes— y ocupa dos columnas;
+en ajustes ocupa además dos filas, y a su lado se apilan dos celdas de una. El orden del DOM es el
+orden de la rejilla: cambiarlo abre huecos, porque la colocación es automática.
 
 La página se ordena siempre igual: barra superior pegajosa → raíl de semanas y días → la pieza
 protagonista → las listas. En la portada, el primer viewport reparte doce columnas en `lg`: cinco
@@ -397,8 +459,12 @@ El foco visible es común a todo: contorno de 2px en acento, 3px de separación 
   duración estimada, reserva.
 - **Style (contorno, sobre superficie):** cápsula con filete `line`, sin fondo, texto `ink-dim` en
   600 y 0,75rem. Se usan para músculos y nivel en el catálogo, y para los ejercicios alternativos.
-- **State:** los chips son informativos, no filtros; no tienen estado seleccionado. El único
-  interactivo es el de ejercicio alternativo, que aclara filete y tinta en hover.
+- **Style (filtro, en el catálogo):** cápsula de 2,75rem con filete `line`, la etiqueta del músculo
+  y su recuento en `.figures` a la derecha. Los filtros salen del propio catálogo, no de una lista
+  escrita a mano.
+- **State:** los chips de cristal y de contorno son informativos y no tienen estado seleccionado.
+  Los de filtro sí: activo invierte a fondo `ink` sobre tinta `ground`, sin filete, y lo declara
+  con `aria-pressed`. Nunca en acento, que está reservado.
 
 ### Cards / Containers
 
@@ -439,13 +505,61 @@ protagonista, con 19rem de alto mínimo; 5:4 las tarjetas de día), recorta la f
 que va del suelo opaco en el pie, al suelo al 88 % en el 28 % de la altura, al 45 % en el 58 %, y
 llega a transparente en el 82 %. El velo existe donde hay texto y desaparece donde hay motivo.
 El contenido se ancla abajo con 1,25–1,5rem de padding. En hover la foto
-escala a 1,03 en medio segundo; el marco no se mueve. La imagen se sirve por `astro:assets` en dos
-anchos (480 y 960) y solo la protagonista carga en `eager`.
+escala a 1,03 en medio segundo; el marco no se mueve. Solo la protagonista carga en `eager`.
 
-Las fotografías son cuatro, viven en `src/assets/photos/`, se convierten a WebP en build y son
-**provisionales**: cambiar una es reemplazar el archivo con el mismo nombre, sin tocar ningún
-componente. Su procedencia (StockSnap, licencia CC0) y sus identificadores están en
+`PhotoCard` sirve **dos procedencias y quien la usa no tiene que saber cuál es cuál**: un archivo
+del proyecto pasa por `astro:assets` en dos anchos (480 y 960); una URL remota llega ya
+dimensionada desde su origen y se pinta con un `<img>` normal. `routes.asset()` distingue una de
+otra, porque prefijar una URL remota con el `base` del despliegue la rompería.
+
+Hoy todas las fotos son remotas, de Unsplash. **Cada una de las doce sesiones del mesociclo tiene
+la suya**, distinta de las otras once: la clave es la sesión completa, no el número de día, porque
+repetir foto por día hacía que el mesociclo entero pareciera la misma pantalla cuatro veces. El
+tema sigue al día —empuje, pierna y tracción, cuerpo entero— y cambia de imagen cada semana. El
+reparto vive en `src/theme.ts` (`SESSION_PHOTOS` para las sesiones, `SCENE_PHOTOS` para portada y
+pantallas sueltas); la procedencia y la consecuencia de servirlas remotas, en
 `src/assets/photos/PROCEDENCIA.md`.
+
+### Inputs / Fields
+
+- **Style:** todo campo comparte forma: cápsula de 2,75rem de alto, filete `line` sobre `surface`,
+  1rem de padding lateral y tinta `ink`. En hover el filete sube a `line-strong`. Los campos que
+  reciben una cifra llevan `.figures`; los grandes del modo entreno rompen a 4rem de alto, radio de
+  tarjeta y 1,875rem de peso 800, porque se rellenan de pie y a dos metros.
+- **Desplegables:** el cromo del sistema operativo dentro de un `<select>` es la pieza que delata
+  que una pantalla se ensambló en vez de diseñarse. `.desplegable` lo apaga (`appearance: none`) y
+  dibuja su propio galón en `ink-faint`, con 2,75rem de reserva a la derecha para que el texto
+  nunca lo pise. La URL del SVG vive en `global.css` porque no cabe en una clase de utilidad.
+- **Focus:** el contorno común de acento, 2px con 3px de separación.
+
+### Interruptores
+
+Un interruptor **es un `<input type="checkbox">` con otra piel**, nunca un `<div>` con
+`role="switch"` improvisado: así conserva el teclado, el lector de pantalla y el script que lee su
+`.checked` sin que ninguno se entere del cambio. `appearance: none`, cápsula de 3rem × 1,75rem con
+filete `line-strong` sobre `surface`, y un pulgar de 1,25rem que viaja 1,25rem al encenderse.
+
+- **Encendido va en tinta, no en acento**: fondo `ink` y pulgar `ground`. Cuatro interruptores
+  encendidos en acento gastarían el único croma alto del sistema en un estado que no es una acción
+  ni es lo que toca ahora.
+
+### Marcas de serie (componente firma)
+
+Bajo el reloj del modo entreno, una fila de círculos de 2,25rem dice cuántas series lleva el
+ejercicio y en cuál vas. **Cada estado cambia la forma de la marca además del color**, así que se
+lee sin depender de distinguir colores: la serie hecha va maciza (fondo `ink`, tinta `ground`), la
+de ahora va anillada (filete y tinta en acento, con `aria-current="step"`) y las que faltan van
+huecas (filete `line`, tinta `ink-faint`). Solo aparece cuando el ejercicio tiene más de una serie.
+
+### Celdas de bento
+
+- **Corner Style:** 14px, como toda superficie rectangular.
+- **Background:** el material `.panel`; la celda mayor puede abrir con una banda fotográfica de
+  9–11rem de alto separada por un filete inferior.
+- **Internal Padding:** 1,25rem, que crece a 1,5rem en `sm`.
+- **Comportamiento:** la celda no fija su tamaño; lo hace la rejilla con `col-span` y `row-span`.
+  Dentro, el contenido fluye desde arriba: empujarlo a los extremos con `justify-between` abre un
+  agujero en cuanto la celda vecina es más alta.
 
 ### Filas de datos
 
@@ -458,12 +572,18 @@ el centro y la prescripción alineada a la derecha en `sm`.
 ### Hueco de media
 
 `ExerciseMedia` es la única puerta a la media de un ejercicio y resuelve cuatro tipos (croquis,
-vídeo, embed e imagen) más el estado vacío. Reserva el hueco por `aspect-ratio` siempre —4:3 por
-defecto—, así que el layout no salta cuando el asset todavía no existe. El estado vacío es honesto
-y está diseñado: un foco radial tenue de acento al 7 %, el icono de mancuerna en `line-strong`, el
-rótulo «Croquis pendiente» y una línea que nombra el ejercicio que falta. El vídeo de terceros no
-carga nada hasta que se pulsa: el botón de reproducción es un círculo de 4rem en `ink` sobre
-`ground`, y el iframe se crea en el clic.
+vídeo, embed e imagen) más el estado vacío. Reserva el hueco por `aspect-ratio` siempre —16:9 por
+defecto, o el que declare el propio asset—, así que el layout no salta cuando el asset todavía no
+existe. El estado vacío es sobrio, no un aviso: el icono de mancuerna en `line` y una línea que
+nombra el ejercicio que falta. Ya no grita, porque desde que las dieciséis fichas tienen imagen es
+un caso de excepción y no la norma.
+
+El vídeo se comporta según dónde esté. En modo entreno se reproduce solo, en bucle y sin
+controles: es lo que miras entre serie y serie. **En una rejilla se despierta al pasar por encima
+y se rebobina al salir**, así que la tarjeta en reposo pesa lo que su primer fotograma en vez de
+sus megabytes, y nunca compite con las tarjetas de al lado. El vídeo de terceros no carga nada
+hasta que se pulsa: el botón de reproducción es un círculo de 4rem en `ink` sobre `ground`, y el
+iframe se crea en el clic.
 
 ## Do's and Don'ts
 
@@ -485,8 +605,15 @@ carga nada hasta que se pulsa: el botón de reproducción es un círculo de 4rem
   redondeadas.
 - **Do** dar al menos 2,75rem de alto a todo lo que se pulse (3,5rem a la acción primaria).
 - **Do** decir la verdad en los estados vacíos: nombrar lo que falta en lugar de simular contenido.
-- **Do** sustituir una fotografía reemplazando el archivo de `src/assets/photos/` con el mismo
-  nombre, y mantener actualizado `PROCEDENCIA.md` con su origen y su licencia.
+- **Do** cambiar una fotografía tocando solo datos: `SESSION_PHOTOS` y `SCENE_PHOTOS` en
+  `src/theme.ts` para el plan, `media.thumbnail` del JSON del ejercicio para el catálogo. Ningún
+  componente se entera, y `PROCEDENCIA.md` se mantiene al día con el origen y la licencia.
+- **Do** verificar que una URL de foto responde `200` antes de cablearla: en la última tanda dos de
+  cada diez eran `404`, y un hueco roto en una rejilla se ve más que una foto floja.
+- **Do** dar a cada sesión del mesociclo su propia fotografía. Repetirla por número de día hace que
+  cuatro semanas parezcan la misma pantalla.
+- **Do** apagar el cromo del sistema operativo en todo `<select>` con `.desplegable`.
+- **Do** construir un interruptor sobre un `<input type="checkbox">` real, y encenderlo en tinta.
 
 ### Don't:
 
@@ -506,4 +633,15 @@ carga nada hasta que se pulsa: el botón de reproducción es un círculo de 4rem
   título no tiene: la que existe sobre las fotos localiza la sesión (semana, fase, día) o declara el
   estado «Tu próxima sesión»; una etiqueta decorativa en ese sitio no está justificada.
 - **Don't** deshabilitar un control sin decir al lado por qué está apagado.
-- **Don't** cargar media de terceros antes de que el usuario la pida.
+- **Don't** cargar un vídeo de terceros antes de que el usuario lo pida, ni reproducir solo un
+  vídeo propio dentro de una rejilla: en una rejilla se despierta al pasar por encima.
+- **Don't** apagar una fotografía con opacidad o desaturación para ganar contraste. Una foto al
+  70 % deja de leerse como foto y pasa a ser textura sucia; el contraste lo pone el velo, que
+  existe donde hay texto y desaparece donde hay motivo.
+- **Don't** repetir la misma fotografía en dos sesiones distintas del mesociclo.
+- **Don't** prefijar una URL remota con el `base` del despliegue: `routes.asset()` ya distingue una
+  ruta propia de una remota, y saltárselo produce `/entreno/https://…`.
+- **Don't** estirar una celda de bento con `justify-between`: en cuanto la vecina crece, aparece un
+  agujero en medio.
+- **Don't** dejar que una utilidad de `display` conviva con el atributo `hidden` sin comprobarlo.
+  Aquí funciona porque el preflight declara `[hidden] { display: none !important }`, no por suerte.

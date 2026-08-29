@@ -3,6 +3,8 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getActiveMesocycle, getExerciseCatalog } from '@/data';
 import { trackedBlocksOf } from '@/core/history';
 import { PHASE_LABELS } from '@/core/labels';
+import { PHASE_PALETTE, dayPhoto } from '@/theme';
+import PhotoCard from '@/components/ui/PhotoCard.astro';
 import { daySetCount } from '@/core/training';
 import { routes } from '@/routes';
 
@@ -19,6 +21,7 @@ const plan = mesocycle.weeks.map((week) => ({
     title: day.title,
     sets: daySetCount(day),
     href: routes.day(week.order, day.order),
+    photo: dayPhoto(week.order, day.order),
   })),
 }));
 const firstDay = plan[0]?.days[0];
@@ -42,7 +45,7 @@ const payload = {
   title="Historial · My Fitness World"
   description="Sesiones completadas, volumen por semana y avisos de progresión."
 >
-  <div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
     <header>
       <h1 class="text-figure font-black tracking-[-0.02em] text-ink">Historial</h1>
       <p class="mt-1 text-sm text-ink-dim">Lo que has entrenado de verdad, sesión a sesión.</p>
@@ -56,55 +59,73 @@ const payload = {
     >
     </p>
 
-    <div id="vacio" hidden class="pt-10">
-      <p class="max-w-[58ch] text-lg leading-relaxed text-ink-dim">
-        Todavía no has registrado ninguna sesión. Estas son las doce que tienes por delante: según
-        las vayas terminando, cada hueco se llena con lo que hiciste de verdad, y aquí aparecen el
-        volumen por grupo muscular y el aviso de cuándo toca subir peso.
-      </p>
-
+    {
+      /* Bento: una celda grande con la foto de la primera sesión y la acción
+        encima, y las cuatro semanas alrededor en celdas menores. Enseña la forma
+        de lo que va a llegar en vez de decir que no hay nada. */
+    }
+    <div id="vacio" hidden class="grid gap-4 pt-8 lg:grid-cols-3">
       {
         firstDay && (
-          <a
+          <PhotoCard
+            photo={firstDay.photo}
+            alt=""
             href={firstDay.href}
-            class="accion-primaria mt-7 inline-flex min-h-14 items-center rounded-full px-7 text-base font-extrabold text-accent-ink transition-transform hover:scale-[1.02] active:scale-100"
+            eager
+            fill
+            class="min-h-88 lg:col-span-2 lg:row-span-2"
           >
-            Empezar por {firstDay.title}
-          </a>
+            <p class="figures text-sm font-bold text-ink-dim">Tu primera sesión</p>
+            <h2 class="mt-1 text-figure font-black tracking-[-0.02em] text-balance text-ink">
+              {firstDay.title}
+            </h2>
+            <span class="accion-primaria mt-5 inline-flex min-h-14 items-center rounded-full px-7 text-base font-extrabold text-accent-ink transition-transform group-hover:scale-[1.02]">
+              Empezar por aquí
+            </span>
+          </PhotoCard>
         )
       }
 
-      <ol class="mt-10 flex flex-col gap-7">
-        {
-          plan.map((week) => (
-            <li>
-              <h2 class="figures flex items-baseline gap-3 text-sm font-bold text-ink-dim">
-                Semana {String(week.order).padStart(2, '0')}
-                <span
-                  class="h-1.5 w-1.5 rounded-full"
-                  style={`background-color: var(--color-phase-${week.phase})`}
-                  aria-hidden="true"
-                />
-                <span class="font-semibold text-ink-faint">{PHASE_LABELS[week.phase]}</span>
-              </h2>
-              <ul class="mt-3 grid gap-3 sm:grid-cols-3">
-                {week.days.map((day) => (
-                  <li>
-                    <a
-                      href={day.href}
-                      class="flex min-h-24 flex-col justify-between rounded-card border border-dashed border-line px-4 py-3 transition-colors hover:border-line-strong hover:bg-surface"
-                    >
-                      <span class="figures text-xs font-bold text-ink-faint">Día {day.order}</span>
-                      <span class="text-sm font-bold text-ink-dim">{day.title}</span>
-                      <span class="figures text-xs text-ink-faint">{day.sets} series</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))
-        }
-      </ol>
+      {
+        plan.map((week) => (
+          <section
+            class:list={[
+              'panel rounded-card border border-line p-5',
+              PHASE_PALETTE[week.phase].wash,
+            ]}
+          >
+            <h2 class="figures flex items-center gap-2.5 text-sm font-bold text-ink">
+              <span
+                class:list={['h-4 w-1 rounded-full', PHASE_PALETTE[week.phase].mark]}
+                aria-hidden="true"
+              />
+              Semana {String(week.order).padStart(2, '0')}
+              <span class:list={['font-semibold', PHASE_PALETTE[week.phase].text]}>
+                {PHASE_LABELS[week.phase]}
+              </span>
+            </h2>
+            <ul class="mt-3 flex flex-col divide-y divide-line border-t border-line">
+              {week.days.map((day) => (
+                <li>
+                  <a
+                    href={day.href}
+                    class="flex items-baseline justify-between gap-4 py-2.5 text-sm transition-colors hover:text-ink"
+                  >
+                    <span class="font-bold text-ink-dim">{day.title}</span>
+                    <span class="figures shrink-0 text-xs text-ink-faint">{day.sets} series</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+
+      <p class="panel rounded-card border border-line p-5 text-sm leading-relaxed text-ink-dim">
+        Son doce sesiones. Según las vayas terminando, cada una se llena con lo que hiciste de
+        verdad, y este sitio pasa a enseñar el volumen por grupo muscular, tus sesiones una a una y
+        el aviso de cuándo toca subir peso.
+      </p>
     </div>
 
     <div id="panel-historial" hidden class="flex flex-col gap-12 pt-10">

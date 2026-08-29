@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-22T21:33:30Z",
+  "generatedAt": "2026-08-29T14:28:07Z",
   "title": "Design System: My Fitness World",
   "extensions": {
     "status": {
@@ -12,135 +12,375 @@
         "role": "neutral",
         "displayName": "Suelo Negro Azulado",
         "canonical": "#091017",
-        "tonalRamp": ["oklch(15.0% 0.018 248.9)", "oklch(26.4% 0.018 248.9)", "oklch(37.9% 0.018 248.9)", "oklch(49.3% 0.018 248.9)", "oklch(60.7% 0.018 248.9)", "oklch(72.1% 0.018 248.9)", "oklch(83.6% 0.018 248.9)", "oklch(95.0% 0.018 248.9)"]
+        "tonalRamp": [
+          "oklch(15.0% 0.018 248.9)",
+          "oklch(26.4% 0.018 248.9)",
+          "oklch(37.9% 0.018 248.9)",
+          "oklch(49.3% 0.018 248.9)",
+          "oklch(60.7% 0.018 248.9)",
+          "oklch(72.1% 0.018 248.9)",
+          "oklch(83.6% 0.018 248.9)",
+          "oklch(95.0% 0.018 248.9)"
+        ]
       },
       "surface": {
         "role": "neutral",
         "displayName": "Superficie",
         "canonical": "#141d26",
-        "tonalRamp": ["oklch(15.0% 0.022 248.8)", "oklch(26.4% 0.022 248.8)", "oklch(37.9% 0.022 248.8)", "oklch(49.3% 0.022 248.8)", "oklch(60.7% 0.022 248.8)", "oklch(72.1% 0.022 248.8)", "oklch(83.6% 0.022 248.8)", "oklch(95.0% 0.022 248.8)"]
+        "tonalRamp": [
+          "oklch(15.0% 0.022 248.8)",
+          "oklch(26.4% 0.022 248.8)",
+          "oklch(37.9% 0.022 248.8)",
+          "oklch(49.3% 0.022 248.8)",
+          "oklch(60.7% 0.022 248.8)",
+          "oklch(72.1% 0.022 248.8)",
+          "oklch(83.6% 0.022 248.8)",
+          "oklch(95.0% 0.022 248.8)"
+        ]
       },
       "raised": {
         "role": "neutral",
         "displayName": "Superficie Elevada",
         "canonical": "#1e2934",
-        "tonalRamp": ["oklch(15.0% 0.026 248.8)", "oklch(26.4% 0.026 248.8)", "oklch(37.9% 0.026 248.8)", "oklch(49.3% 0.026 248.8)", "oklch(60.7% 0.026 248.8)", "oklch(72.1% 0.026 248.8)", "oklch(83.6% 0.026 248.8)", "oklch(95.0% 0.026 248.8)"]
+        "tonalRamp": [
+          "oklch(15.0% 0.026 248.8)",
+          "oklch(26.4% 0.026 248.8)",
+          "oklch(37.9% 0.026 248.8)",
+          "oklch(49.3% 0.026 248.8)",
+          "oklch(60.7% 0.026 248.8)",
+          "oklch(72.1% 0.026 248.8)",
+          "oklch(83.6% 0.026 248.8)",
+          "oklch(95.0% 0.026 248.8)"
+        ]
       },
       "line": {
         "role": "neutral",
         "displayName": "Filete",
         "canonical": "#2c3947",
-        "tonalRamp": ["oklch(15.0% 0.030 250.6)", "oklch(26.4% 0.030 250.6)", "oklch(37.9% 0.030 250.6)", "oklch(49.3% 0.030 250.6)", "oklch(60.7% 0.030 250.6)", "oklch(72.1% 0.030 250.6)", "oklch(83.6% 0.030 250.6)", "oklch(95.0% 0.030 250.6)"]
+        "tonalRamp": [
+          "oklch(15.0% 0.030 250.6)",
+          "oklch(26.4% 0.030 250.6)",
+          "oklch(37.9% 0.030 250.6)",
+          "oklch(49.3% 0.030 250.6)",
+          "oklch(60.7% 0.030 250.6)",
+          "oklch(72.1% 0.030 250.6)",
+          "oklch(83.6% 0.030 250.6)",
+          "oklch(95.0% 0.030 250.6)"
+        ]
       },
       "line-strong": {
         "role": "neutral",
         "displayName": "Filete Marcado",
         "canonical": "#45576a",
-        "tonalRamp": ["oklch(15.0% 0.038 250.1)", "oklch(26.4% 0.038 250.1)", "oklch(37.9% 0.038 250.1)", "oklch(49.3% 0.038 250.1)", "oklch(60.7% 0.038 250.1)", "oklch(72.1% 0.038 250.1)", "oklch(83.6% 0.038 250.1)", "oklch(95.0% 0.038 250.1)"]
+        "tonalRamp": [
+          "oklch(15.0% 0.038 250.1)",
+          "oklch(26.4% 0.038 250.1)",
+          "oklch(37.9% 0.038 250.1)",
+          "oklch(49.3% 0.038 250.1)",
+          "oklch(60.7% 0.038 250.1)",
+          "oklch(72.1% 0.038 250.1)",
+          "oklch(83.6% 0.038 250.1)",
+          "oklch(95.0% 0.038 250.1)"
+        ]
       },
       "ink": {
         "role": "neutral",
         "displayName": "Tinta",
         "canonical": "#f0f6fa",
-        "tonalRamp": ["oklch(15.0% 0.008 236.6)", "oklch(26.4% 0.008 236.6)", "oklch(37.9% 0.008 236.6)", "oklch(49.3% 0.008 236.6)", "oklch(60.7% 0.008 236.6)", "oklch(72.1% 0.008 236.6)", "oklch(83.6% 0.008 236.6)", "oklch(95.0% 0.008 236.6)"]
+        "tonalRamp": [
+          "oklch(15.0% 0.008 236.6)",
+          "oklch(26.4% 0.008 236.6)",
+          "oklch(37.9% 0.008 236.6)",
+          "oklch(49.3% 0.008 236.6)",
+          "oklch(60.7% 0.008 236.6)",
+          "oklch(72.1% 0.008 236.6)",
+          "oklch(83.6% 0.008 236.6)",
+          "oklch(95.0% 0.008 236.6)"
+        ]
       },
       "ink-dim": {
         "role": "neutral",
         "displayName": "Tinta Atenuada",
         "canonical": "#a9becd",
-        "contrast": { "ground": 9.96, "surface": 8.86, "raised": 7.69 },
-        "tonalRamp": ["oklch(15.0% 0.031 239.0)", "oklch(26.4% 0.031 239.0)", "oklch(37.9% 0.031 239.0)", "oklch(49.3% 0.031 239.0)", "oklch(60.7% 0.031 239.0)", "oklch(72.1% 0.031 239.0)", "oklch(83.6% 0.031 239.0)", "oklch(95.0% 0.031 239.0)"]
+        "contrast": {
+          "ground": 9.96,
+          "surface": 8.86,
+          "raised": 7.69
+        },
+        "tonalRamp": [
+          "oklch(15.0% 0.031 239.0)",
+          "oklch(26.4% 0.031 239.0)",
+          "oklch(37.9% 0.031 239.0)",
+          "oklch(49.3% 0.031 239.0)",
+          "oklch(60.7% 0.031 239.0)",
+          "oklch(72.1% 0.031 239.0)",
+          "oklch(83.6% 0.031 239.0)",
+          "oklch(95.0% 0.031 239.0)"
+        ]
       },
       "ink-faint": {
         "role": "neutral",
         "displayName": "Tinta Tenue",
         "canonical": "#869dae",
-        "contrast": { "ground": 6.78, "surface": 6.04, "raised": 5.24 },
-        "tonalRamp": ["oklch(15.0% 0.036 240.1)", "oklch(26.4% 0.036 240.1)", "oklch(37.9% 0.036 240.1)", "oklch(49.3% 0.036 240.1)", "oklch(60.7% 0.036 240.1)", "oklch(72.1% 0.036 240.1)", "oklch(83.6% 0.036 240.1)", "oklch(95.0% 0.036 240.1)"]
+        "contrast": {
+          "ground": 6.78,
+          "surface": 6.04,
+          "raised": 5.24
+        },
+        "tonalRamp": [
+          "oklch(15.0% 0.036 240.1)",
+          "oklch(26.4% 0.036 240.1)",
+          "oklch(37.9% 0.036 240.1)",
+          "oklch(49.3% 0.036 240.1)",
+          "oklch(60.7% 0.036 240.1)",
+          "oklch(72.1% 0.036 240.1)",
+          "oklch(83.6% 0.036 240.1)",
+          "oklch(95.0% 0.036 240.1)"
+        ]
       },
       "accent": {
         "role": "primary",
         "displayName": "Cian Encendido",
         "canonical": "#34dafa",
-        "contrast": { "ground": 11.43, "surface": 10.18, "raised": 8.83 },
-        "tonalRamp": ["oklch(15.0% 0.135 214.5)", "oklch(26.4% 0.135 214.5)", "oklch(37.9% 0.135 214.5)", "oklch(49.3% 0.135 214.5)", "oklch(60.7% 0.135 214.5)", "oklch(72.1% 0.135 214.5)", "oklch(83.6% 0.135 214.5)", "oklch(95.0% 0.135 214.5)"]
+        "contrast": {
+          "ground": 11.43,
+          "surface": 10.18,
+          "raised": 8.83
+        },
+        "tonalRamp": [
+          "oklch(15.0% 0.135 214.5)",
+          "oklch(26.4% 0.135 214.5)",
+          "oklch(37.9% 0.135 214.5)",
+          "oklch(49.3% 0.135 214.5)",
+          "oklch(60.7% 0.135 214.5)",
+          "oklch(72.1% 0.135 214.5)",
+          "oklch(83.6% 0.135 214.5)",
+          "oklch(95.0% 0.135 214.5)"
+        ]
       },
       "accent-strong": {
         "role": "primary",
         "displayName": "Cian Profundo",
         "canonical": "#00b6eb",
-        "tonalRamp": ["oklch(15.0% 0.141 227.9)", "oklch(26.4% 0.141 227.9)", "oklch(37.9% 0.141 227.9)", "oklch(49.3% 0.141 227.9)", "oklch(60.7% 0.141 227.9)", "oklch(72.1% 0.141 227.9)", "oklch(83.6% 0.141 227.9)", "oklch(95.0% 0.141 227.9)"]
+        "tonalRamp": [
+          "oklch(15.0% 0.141 227.9)",
+          "oklch(26.4% 0.141 227.9)",
+          "oklch(37.9% 0.141 227.9)",
+          "oklch(49.3% 0.141 227.9)",
+          "oklch(60.7% 0.141 227.9)",
+          "oklch(72.1% 0.141 227.9)",
+          "oklch(83.6% 0.141 227.9)",
+          "oklch(95.0% 0.141 227.9)"
+        ]
       },
       "accent-ink": {
         "role": "primary",
         "displayName": "Tinta sobre Cian",
         "canonical": "#031c30",
-        "contrast": { "accent": 10.35 },
-        "tonalRamp": ["oklch(15.0% 0.050 245.7)", "oklch(26.4% 0.050 245.7)", "oklch(37.9% 0.050 245.7)", "oklch(49.3% 0.050 245.7)", "oklch(60.7% 0.050 245.7)", "oklch(72.1% 0.050 245.7)", "oklch(83.6% 0.050 245.7)", "oklch(95.0% 0.050 245.7)"]
+        "contrast": {
+          "accent": 10.35
+        },
+        "tonalRamp": [
+          "oklch(15.0% 0.050 245.7)",
+          "oklch(26.4% 0.050 245.7)",
+          "oklch(37.9% 0.050 245.7)",
+          "oklch(49.3% 0.050 245.7)",
+          "oklch(60.7% 0.050 245.7)",
+          "oklch(72.1% 0.050 245.7)",
+          "oklch(83.6% 0.050 245.7)",
+          "oklch(95.0% 0.050 245.7)"
+        ]
       },
       "phase-accumulation": {
         "role": "secondary",
         "displayName": "Azul Acumulación",
         "canonical": "#88c0e1",
-        "tonalRamp": ["oklch(15.0% 0.075 234.9)", "oklch(26.4% 0.075 234.9)", "oklch(37.9% 0.075 234.9)", "oklch(49.3% 0.075 234.9)", "oklch(60.7% 0.075 234.9)", "oklch(72.1% 0.075 234.9)", "oklch(83.6% 0.075 234.9)", "oklch(95.0% 0.075 234.9)"]
+        "tonalRamp": [
+          "oklch(15.0% 0.075 234.9)",
+          "oklch(26.4% 0.075 234.9)",
+          "oklch(37.9% 0.075 234.9)",
+          "oklch(49.3% 0.075 234.9)",
+          "oklch(60.7% 0.075 234.9)",
+          "oklch(72.1% 0.075 234.9)",
+          "oklch(83.6% 0.075 234.9)",
+          "oklch(95.0% 0.075 234.9)"
+        ]
       },
       "phase-progression": {
         "role": "secondary",
         "displayName": "Verdeazulado Progresión",
         "canonical": "#7dcece",
-        "tonalRamp": ["oklch(15.0% 0.079 195.7)", "oklch(26.4% 0.079 195.7)", "oklch(37.9% 0.079 195.7)", "oklch(49.3% 0.079 195.7)", "oklch(60.7% 0.079 195.7)", "oklch(72.1% 0.079 195.7)", "oklch(83.6% 0.079 195.7)", "oklch(95.0% 0.079 195.7)"]
+        "tonalRamp": [
+          "oklch(15.0% 0.079 195.7)",
+          "oklch(26.4% 0.079 195.7)",
+          "oklch(37.9% 0.079 195.7)",
+          "oklch(49.3% 0.079 195.7)",
+          "oklch(60.7% 0.079 195.7)",
+          "oklch(72.1% 0.079 195.7)",
+          "oklch(83.6% 0.079 195.7)",
+          "oklch(95.0% 0.079 195.7)"
+        ]
       },
       "phase-intensification": {
         "role": "secondary",
         "displayName": "Lavanda Intensificación",
         "canonical": "#99a6e7",
-        "tonalRamp": ["oklch(15.0% 0.095 275.1)", "oklch(26.4% 0.095 275.1)", "oklch(37.9% 0.095 275.1)", "oklch(49.3% 0.095 275.1)", "oklch(60.7% 0.095 275.1)", "oklch(72.1% 0.095 275.1)", "oklch(83.6% 0.095 275.1)", "oklch(95.0% 0.095 275.1)"]
+        "tonalRamp": [
+          "oklch(15.0% 0.095 275.1)",
+          "oklch(26.4% 0.095 275.1)",
+          "oklch(37.9% 0.095 275.1)",
+          "oklch(49.3% 0.095 275.1)",
+          "oklch(60.7% 0.095 275.1)",
+          "oklch(72.1% 0.095 275.1)",
+          "oklch(83.6% 0.095 275.1)",
+          "oklch(95.0% 0.095 275.1)"
+        ]
       },
       "phase-deload": {
         "role": "secondary",
         "displayName": "Verde Descarga",
         "canonical": "#9dceb7",
-        "tonalRamp": ["oklch(15.0% 0.061 164.5)", "oklch(26.4% 0.061 164.5)", "oklch(37.9% 0.061 164.5)", "oklch(49.3% 0.061 164.5)", "oklch(60.7% 0.061 164.5)", "oklch(72.1% 0.061 164.5)", "oklch(83.6% 0.061 164.5)", "oklch(95.0% 0.061 164.5)"]
+        "tonalRamp": [
+          "oklch(15.0% 0.061 164.5)",
+          "oklch(26.4% 0.061 164.5)",
+          "oklch(37.9% 0.061 164.5)",
+          "oklch(49.3% 0.061 164.5)",
+          "oklch(60.7% 0.061 164.5)",
+          "oklch(72.1% 0.061 164.5)",
+          "oklch(83.6% 0.061 164.5)",
+          "oklch(95.0% 0.061 164.5)"
+        ]
+      },
+      "shade": {
+        "role": "neutral",
+        "displayName": "Sombra de sala",
+        "canonical": "#04080d",
+        "tonalRamp": [
+          "#02050a",
+          "#04080d",
+          "#091017",
+          "#141d26",
+          "#1e2934",
+          "#2c3947",
+          "#45576a",
+          "#869dae"
+        ]
       }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "El nombre de la sesión sobre la foto, la fase en la página de semana, el ejercicio en su ficha. Uno por pantalla." },
-      "figure": { "displayName": "Figure", "purpose": "La cifra grande: prescripción de un bloque, ordinal de semana, y en peso 900 los títulos de índice. Siempre tabular." },
-      "title": { "displayName": "Title", "purpose": "El título del día en las tarjetas fotográficas." },
-      "headline": { "displayName": "Headline", "purpose": "Nombre del ejercicio en la lista del día y nombre de la fase en la fila de semana." },
-      "body": { "displayName": "Body", "purpose": "Prosa larga y descripciones, con la medida entre 55 y 65 caracteres." },
-      "meta": { "displayName": "Meta", "purpose": "La segunda línea de todo: contadores, duraciones, músculos. Cifra en 700 sobre ink, palabra en ink-dim." },
-      "label": { "displayName": "Label", "purpose": "Rótulos de sección en versalitas y +0.2em. Variantes a +0.18em sobre las fotos y a 0.7rem/+0.16em en los dt." }
+      "display": {
+        "displayName": "Display",
+        "purpose": "El nombre de la sesión sobre la foto, la fase en la página de semana, el ejercicio en su ficha. Uno por pantalla."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "La cifra grande: prescripción de un bloque, ordinal de semana, y en peso 900 los títulos de índice. Siempre tabular."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "El título del día en las tarjetas fotográficas."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Nombre del ejercicio en la lista del día y nombre de la fase en la fila de semana."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Prosa larga y descripciones, con la medida entre 55 y 65 caracteres."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "La segunda línea de todo: contadores, duraciones, músculos. Cifra en 700 sobre ink, palabra en ink-dim."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Rótulos de sección en versalitas y +0.2em. Variantes a +0.18em sobre las fotos y a 0.7rem/+0.16em en los dt."
+      }
     },
     "fonts": [
       {
         "family": "Archivo",
         "variable": true,
         "weightRange": "400 900",
-        "files": ["src/assets/fonts/archivo-latin.woff2", "src/assets/fonts/archivo-latin-ext.woff2"],
+        "files": [
+          "src/assets/fonts/archivo-latin.woff2",
+          "src/assets/fonts/archivo-latin-ext.woff2"
+        ],
         "note": "Auto-alojada y subseteada. Se referencia desde CSS para que Vite reescriba las rutas con el base del despliegue."
       }
     ],
     "shadows": [],
     "elevation": [
-      { "name": "hairline", "value": "1px solid var(--color-line)", "purpose": "La única declaración de elevación del sistema. En reposo." },
-      { "name": "hairline-strong", "value": "1px solid var(--color-line-strong)", "purpose": "El mismo filete cuando el elemento está activo, en hover, o agrupa una superserie." },
-      { "name": "panel-material", "value": "linear-gradient(to bottom, color-mix(in oklab, var(--color-raised) 85%, var(--color-accent) 4%), var(--color-surface) 62%)", "purpose": "Material de tarjeta: la superficie se aclara por el borde superior. Sustituye a la sombra." },
-      { "name": "glass", "value": "background: color-mix(in oklab, var(--color-ground) 65%, transparent); backdrop-filter: blur(4px)", "purpose": "Chips sobre fotografía. La barra superior usa la misma receta al 82% con blur medio." },
-      { "name": "photo-scrim", "value": "linear-gradient(to top, var(--color-ground) 4%, color-mix(in oklab, var(--color-ground) 72%, transparent) 46%, color-mix(in oklab, var(--color-accent) 14%, transparent))", "purpose": "El degradado que PhotoCard tiende siempre bajo el contenido: es lo que garantiza el contraste sobre cualquier foto." },
-      { "name": "room-light", "value": "radial-gradient(72rem 42rem at 10% -10%, color-mix(in oklab, var(--color-accent) 15%, transparent), transparent 60%), radial-gradient(58rem 36rem at 94% 4%, color-mix(in oklab, var(--color-phase-intensification) 13%, transparent), transparent 58%), radial-gradient(64rem 40rem at 50% 108%, color-mix(in oklab, var(--color-phase-progression) 10%, transparent), transparent 62%)", "purpose": "Los tres focos fijos del suelo de la página, con background-attachment: fixed." }
+      {
+        "name": "hairline",
+        "value": "1px solid var(--color-line)",
+        "purpose": "La única declaración de elevación del sistema. En reposo."
+      },
+      {
+        "name": "hairline-strong",
+        "value": "1px solid var(--color-line-strong)",
+        "purpose": "El mismo filete cuando el elemento está activo, en hover, o agrupa una superserie."
+      },
+      {
+        "name": "panel-material",
+        "value": "linear-gradient(to bottom, color-mix(in oklab, var(--color-raised) 85%, var(--color-accent) 4%), var(--color-surface) 62%)",
+        "purpose": "Material de tarjeta: la superficie se aclara por el borde superior. Sustituye a la sombra."
+      },
+      {
+        "name": "glass",
+        "value": "background: color-mix(in oklab, var(--color-ground) 65%, transparent); backdrop-filter: blur(4px)",
+        "purpose": "Chips sobre fotografía. La barra superior usa la misma receta al 82% con blur medio."
+      },
+      {
+        "name": "photo-scrim",
+        "value": "linear-gradient(to top, var(--color-ground) 4%, color-mix(in oklab, var(--color-ground) 72%, transparent) 46%, color-mix(in oklab, var(--color-accent) 14%, transparent))",
+        "purpose": "El degradado que PhotoCard tiende siempre bajo el contenido: es lo que garantiza el contraste sobre cualquier foto."
+      },
+      {
+        "name": "room-light",
+        "value": "radial-gradient(72rem 42rem at 10% -10%, color-mix(in oklab, var(--color-accent) 15%, transparent), transparent 60%), radial-gradient(58rem 36rem at 94% 4%, color-mix(in oklab, var(--color-phase-intensification) 13%, transparent), transparent 58%), radial-gradient(64rem 40rem at 50% 108%, color-mix(in oklab, var(--color-phase-progression) 10%, transparent), transparent 62%)",
+        "purpose": "Los tres focos fijos del suelo de la página, con background-attachment: fixed."
+      }
     ],
     "motion": [
-      { "name": "state", "value": "transition: color .15s cubic-bezier(0.4,0,0.2,1), background-color .15s, border-color .15s", "purpose": "Cambios de estado en enlaces, píldoras, raíles y filas." },
-      { "name": "photo-zoom", "value": "transform .5s cubic-bezier(0.4,0,0.2,1)", "purpose": "La foto de PhotoCard escala a 1.03 en hover; el marco no se mueve." },
-      { "name": "press", "value": "transform .15s cubic-bezier(0.4,0,0.2,1)", "purpose": "La acción primaria sube a 1.02 en hover y vuelve a 1 al pulsar." },
-      { "name": "advance", "value": "transform .15s cubic-bezier(0.4,0,0.2,1)", "purpose": "La flecha de la fila de semana avanza 0.25rem en hover." }
+      {
+        "name": "state",
+        "value": "transition: color .15s cubic-bezier(0.4,0,0.2,1), background-color .15s, border-color .15s",
+        "purpose": "Cambios de estado en enlaces, píldoras, raíles y filas."
+      },
+      {
+        "name": "photo-zoom",
+        "value": "transform .5s cubic-bezier(0.4,0,0.2,1)",
+        "purpose": "La foto de PhotoCard escala a 1.03 en hover; el marco no se mueve."
+      },
+      {
+        "name": "press",
+        "value": "transform .15s cubic-bezier(0.4,0,0.2,1)",
+        "purpose": "La acción primaria sube a 1.02 en hover y vuelve a 1 al pulsar."
+      },
+      {
+        "name": "advance",
+        "value": "transform .15s cubic-bezier(0.4,0,0.2,1)",
+        "purpose": "La flecha de la fila de semana avanza 0.25rem en hover."
+      }
     ],
     "breakpoints": [
-      { "name": "sm", "value": "640px" },
-      { "name": "md", "value": "768px" },
-      { "name": "lg", "value": "1024px" },
-      { "name": "xl", "value": "1280px" }
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
     ],
     "focus": {
       "value": "outline: 2px solid var(--color-accent); outline-offset: 3px; border-radius: 4px",
@@ -148,10 +388,30 @@
     },
     "assets": {
       "rasters": [
-        { "file": "src/assets/photos/hoy-mancuernas-zapatillas.jpg", "source": "StockSnap", "id": "DAVLOF8C3R", "license": "CC0" },
-        { "file": "src/assets/photos/dia-1-mancuernas-suelo.jpg", "source": "StockSnap", "id": "CYK8OIFEIE", "license": "CC0" },
-        { "file": "src/assets/photos/dia-2-discos-cenital.jpg", "source": "StockSnap", "id": "TDRGG50ZRR", "license": "CC0" },
-        { "file": "src/assets/photos/dia-3-suelo-madera.jpg", "source": "StockSnap", "id": "9FOM4OTWR9", "license": "CC0" }
+        {
+          "file": "src/assets/photos/hoy-mancuernas-zapatillas.jpg",
+          "source": "StockSnap",
+          "id": "DAVLOF8C3R",
+          "license": "CC0"
+        },
+        {
+          "file": "src/assets/photos/dia-1-mancuernas-suelo.jpg",
+          "source": "StockSnap",
+          "id": "CYK8OIFEIE",
+          "license": "CC0"
+        },
+        {
+          "file": "src/assets/photos/dia-2-discos-cenital.jpg",
+          "source": "StockSnap",
+          "id": "TDRGG50ZRR",
+          "license": "CC0"
+        },
+        {
+          "file": "src/assets/photos/dia-3-suelo-madera.jpg",
+          "source": "StockSnap",
+          "id": "9FOM4OTWR9",
+          "license": "CC0"
+        }
       ],
       "note": "Provisionales. Se optimizan a WebP en build con sharp a través de astro:assets. Sustituir una foto es reemplazar el archivo con el mismo nombre, sin tocar componentes. Procedencia completa en src/assets/photos/PROCEDENCIA.md. No hay más rasters; los únicos otros binarios son las dos fuentes."
     }
@@ -233,9 +493,49 @@
       "name": "Hueco de media vacío",
       "kind": "custom",
       "refersTo": "card-panel",
-      "description": "El estado vacío está diseñado, no improvisado: reserva el hueco por aspect-ratio y nombra lo que falta en lugar de simular contenido.",
+      "description": "Reserva el hueco por aspect-ratio antes de saber si el asset existe. Sobrio, no un aviso: desde que las dieciséis fichas tienen imagen es una excepción, no la norma.",
       "html": "<figure class=\"ds-media\"><div class=\"ds-media-empty\"><svg width=\"44\" height=\"44\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10\"/></svg><p class=\"ds-media-label\">Croquis pendiente</p><p class=\"ds-media-note\">Aún no hay animación de sentadilla búlgara.</p></div></figure>",
       "css": ".ds-media { position: relative; aspect-ratio: 4/3; margin: 0; overflow: hidden; border: 1px solid var(--color-line, #2c3947); border-radius: 14px; background: var(--color-surface, #141d26); font-family: 'Archivo', system-ui, sans-serif; } .ds-media-empty { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: .75rem; text-align: center; background: radial-gradient(60% 60% at 50% 35%, color-mix(in oklab, var(--color-accent, #34dafa) 7%, transparent), transparent); color: var(--color-line-strong, #45576a); } .ds-media-label { margin: 0; font-size: .72rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--color-ink-faint, #869dae); } .ds-media-note { max-width: 26ch; margin: 0; padding: 0 1rem; font-size: .875rem; color: var(--color-ink-faint, #869dae); }"
+    },
+    {
+      "name": "Interruptor",
+      "kind": "input",
+      "refersTo": "switch",
+      "description": "Un checkbox real con otra piel: conserva teclado, lector de pantalla y el script que lee su .checked. Encendido va en tinta, nunca en acento.",
+      "html": "<input type=\"checkbox\" role=\"switch\" class=\"ds-switch\" checked>",
+      "css": ".ds-switch { position: relative; width: 3rem; height: 1.75rem; flex-shrink: 0; cursor: pointer; appearance: none; border-radius: 999px; border: 1px solid var(--color-line-strong); background: var(--color-surface); transition: background-color .2s, border-color .2s; }\n.ds-switch::before { content: \"\"; position: absolute; top: .125rem; left: .125rem; width: 1.25rem; height: 1.25rem; border-radius: 999px; background: var(--color-ink-faint); transition: transform .2s, background-color .2s; }\n.ds-switch:checked { background: var(--color-ink); border-color: var(--color-ink); }\n.ds-switch:checked::before { transform: translateX(1.25rem); background: var(--color-ground); }\n.ds-switch:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }"
+    },
+    {
+      "name": "Chip de filtro",
+      "kind": "chip",
+      "refersTo": "filter-chip",
+      "description": "Filtra el catálogo por músculo. Activo invierte a tinta sobre suelo y lo declara con aria-pressed; nunca en acento, que está reservado.",
+      "html": "<button type=\"button\" class=\"ds-filter-chip\" aria-pressed=\"false\">Cuádriceps <span class=\"ds-filter-count\">3</span></button>\n<button type=\"button\" class=\"ds-filter-chip\" aria-pressed=\"true\">Glúteo <span class=\"ds-filter-count\">4</span></button>",
+      "css": ".ds-filter-chip { display: inline-flex; align-items: center; gap: .5rem; min-height: 2.75rem; padding: 0 1rem; border-radius: 999px; border: 1px solid var(--color-line); background: transparent; color: var(--color-ink-dim); font: 700 .875rem/1 inherit; white-space: nowrap; cursor: pointer; transition: color .2s, border-color .2s, background-color .2s; }\n.ds-filter-chip:hover { border-color: var(--color-line-strong); color: var(--color-ink); }\n.ds-filter-chip[aria-pressed=\"true\"] { background: var(--color-ink); color: var(--color-ground); border-color: transparent; }\n.ds-filter-chip:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }\n.ds-filter-count { font-size: .75rem; font-variant-numeric: tabular-nums; color: var(--color-ink-faint); }\n.ds-filter-chip[aria-pressed=\"true\"] .ds-filter-count { color: var(--color-ground); opacity: .7; }"
+    },
+    {
+      "name": "Campo y desplegable",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Misma cápsula para todo campo. El select apaga el cromo del sistema operativo y dibuja su propio galón, que es la pieza que delata una pantalla ensamblada.",
+      "html": "<input class=\"ds-field\" type=\"number\" value=\"9\" style=\"width:7rem\">\n<select class=\"ds-field ds-select\"><option>Mancuerna</option><option>Kettlebell</option></select>",
+      "css": ".ds-field { min-height: 2.75rem; padding: 0 1rem; border-radius: 999px; border: 1px solid var(--color-line); background: var(--color-surface); color: var(--color-ink); font: 400 1rem/1 inherit; font-variant-numeric: tabular-nums; transition: border-color .2s; }\n.ds-field:hover { border-color: var(--color-line-strong); }\n.ds-field:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }\n.ds-select { appearance: none; padding-right: 2.75rem; background-image: url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23869dae' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>\"); background-repeat: no-repeat; background-position: right .9rem center; background-size: 18px; }"
+    },
+    {
+      "name": "Marcas de serie",
+      "kind": "custom",
+      "refersTo": "set-mark",
+      "description": "Bajo el reloj del modo entreno: cuántas series lleva el ejercicio y en cuál vas. Cada estado cambia la forma además del color, así que se lee sin distinguir colores.",
+      "html": "<ol class=\"ds-marks\"><li class=\"ds-mark ds-mark-done\">1</li><li class=\"ds-mark ds-mark-now\" aria-current=\"step\">2</li><li class=\"ds-mark\">3</li><li class=\"ds-mark\">4</li></ol>",
+      "css": ".ds-marks { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .5rem; margin: 0; padding: 0; list-style: none; }\n.ds-mark { display: grid; place-content: center; width: 2.25rem; height: 2.25rem; border-radius: 999px; border: 1px solid var(--color-line); color: var(--color-ink-faint); font: 800 .75rem/1 inherit; font-variant-numeric: tabular-nums; }\n.ds-mark-done { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-ground); }\n.ds-mark-now { border-color: var(--color-accent); color: var(--color-accent); }"
+    },
+    {
+      "name": "Celda de bento",
+      "kind": "card",
+      "refersTo": "bento-cell",
+      "description": "La pieza de historial y ajustes. No fija su tamaño: lo hace la rejilla con col-span y row-span. Dentro, el contenido fluye desde arriba.",
+      "html": "<section class=\"ds-bento\"><h2 class=\"ds-bento-title\">Descanso entre series</h2><p class=\"ds-bento-body\">El mismo para todos los ejercicios.</p><output class=\"ds-bento-figure\">60 s</output></section>",
+      "css": ".ds-bento { display: flex; flex-direction: column; border-radius: 14px; border: 1px solid var(--color-line); padding: 1.25rem; background-image: linear-gradient(to bottom, color-mix(in oklab, var(--color-raised) 85%, var(--color-accent) 4%), var(--color-surface) 62%); }\n.ds-bento-title { margin: 0; font: 800 1rem/1.3 inherit; color: var(--color-ink); }\n.ds-bento-body { margin: .5rem 0 0; font: 400 .875rem/1.5 inherit; color: var(--color-ink-dim); }\n.ds-bento-figure { display: block; margin-top: 1.5rem; font: 800 1.875rem/1 inherit; font-variant-numeric: tabular-nums; color: var(--color-ink); }"
     }
   ],
   "narrative": {
@@ -243,48 +543,86 @@
     "overview": "Es un plan por el que se avanza por fecha, no un panel que se lee. El eje de la interfaz es el raíl de semanas y días: siempre sabes en qué punto del mesociclo estás antes de saber ninguna otra cosa. Sobre ese raíl, la sesión que toca ocupa la pantalla como una tarjeta fotográfica a sangre con una sola acción encima. La app se mira de pie, a dos o tres metros, con las manos ocupadas y casi siempre de noche: de ahí el fondo negro azulado, el tamaño desmesurado de las cifras y el hecho de que solo haya un color encendido en toda la pantalla.\n\nEl material es fotografía. Bodegones reales de mancuernas, discos y suelo de madera, apagados al 70 % de opacidad y desaturados al 65 %, que llenan el ancho de las tarjetas de día y de la sesión protagonista. No son ilustración de relleno: son lo que da temperatura y peso a una interfaz que, sin ellas, sería una lista. Debajo del texto siempre cae un degradado que arranca del propio fondo de la app, así que el contraste no depende nunca de qué foto haya puesta. El suelo de la página lo iluminan tres focos radiales fijos —cian, lavanda y verdeazulado, todos por debajo del 15 % de mezcla— que no se mueven con el scroll y no tiñen el contenido.\n\nLo que este mundo rechaza está tan decidido como lo que abraza: no hay barra lateral, no hay sombras en ninguna parte, no hay iconos de librería ni emoji haciendo de icono, no hay tarjetas de solo texto en las superficies principales y no hay ningún segundo color saturado compitiendo con el cian. La profundidad se declara una vez, con un filete de un píxel; el material de las tarjetas es un degradado sutil, no una sombra.",
     "keyCharacteristics": [
       "Negro azulado con tres focos radiales fijos, nunca gris neutro",
-      "Un único cian saturado (#34dafa), reservado a la acción primaria y al AHORA",
+      "Un único cian saturado (`#34dafa`), reservado a la acción primaria y al AHORA",
       "Cuatro pasteles de croma bajo que identifican las fases del mesociclo sin competir",
-      "Fotografía a sangre bajo degradado garantizado, con metadatos como chips de cristal",
+      "Fotografía a plena luz bajo un velo que solo existe donde hay texto; una por sesión y por ejercicio",
+      "Historial y ajustes en bento: celdas desiguales, la mayor para lo que más pesa en la decisión",
       "Archivo variable 400–900, cifras tabulares en todo lo comparable",
       "Filete de un píxel como única declaración de elevación: cero sombras",
       "Raíl de semanas y días como columna vertebral de la navegación"
     ],
     "rules": [
-      { "name": "La regla del único cian", "body": "El cian saturado está reservado a la acción primaria y a lo que está pasando AHORA. Nada decorativo lo usa, y los pasteles de fase nunca compiten con él. El anillo de foco, ::selection y el estado de foco del enlace de salto son superficies del navegador tematizadas, y quedan fuera de la cuenta.", "section": "colors" },
-      { "name": "La regla del gris", "body": "Ningún estado se distingue solo por color. La navegación activa y los elementos activos del raíl se leen por superficie (raised), por peso (700 → 800) y por luminosidad de la tinta, además de por aria-current: en escala de grises siguen siendo legibles.", "section": "colors" },
-      { "name": "La regla de la etiqueta", "body": "Un color de fase nunca viaja solo: siempre lleva al lado el nombre de la fase escrito.", "section": "colors" },
-      { "name": "La regla de las cifras tabulares", "body": "Toda cantidad comparable se compone con la utilidad .figures (tabular-nums + 'tnum' 1): series, semanas, días, duraciones, prescripciones y ordinales. Si dos números pueden acabar uno debajo del otro, van en cifras tabulares.", "section": "typography" },
-      { "name": "La regla de la unidad al lado", "body": "Una cifra grande nunca viaja sola: 4 × 10-20 no dice si son repeticiones o segundos, así que la unidad se escribe siempre junto a ella, en 0,875rem, +0,14em y ink-faint.", "section": "typography" },
-      { "name": "La regla del ordinal de dos dígitos", "body": "Semanas y posiciones se rellenan a dos dígitos (01, 02) para que la columna cuadre.", "section": "typography" },
-      { "name": "La regla del filete único", "body": "La elevación se declara una vez: filete de un píxel, nunca borde más sombra. Si algo tiene que destacar, sube de tono, no de altura.", "section": "elevation" }
+      {
+        "name": "La regla del único cian",
+        "body": "El cian saturado está reservado a la acción primaria y a lo que está pasando AHORA. Nada decorativo lo usa, y los pasteles de fase nunca compiten con él. El anillo de foco, ::selection y el estado de foco del enlace de salto son superficies del navegador tematizadas, y quedan fuera de la cuenta.",
+        "section": "colors"
+      },
+      {
+        "name": "La regla del gris",
+        "body": "Ningún estado se distingue solo por color. La navegación activa y los elementos activos del raíl se leen por superficie (raised), por peso (700 → 800) y por luminosidad de la tinta, además de por aria-current: en escala de grises siguen siendo legibles.",
+        "section": "colors"
+      },
+      {
+        "name": "La regla de la etiqueta",
+        "body": "Un color de fase nunca viaja solo: siempre lleva al lado el nombre de la fase escrito.",
+        "section": "colors"
+      },
+      {
+        "name": "La regla de las cifras tabulares",
+        "body": "Toda cantidad comparable se compone con la utilidad .figures (tabular-nums + 'tnum' 1): series, semanas, días, duraciones, prescripciones y ordinales. Si dos números pueden acabar uno debajo del otro, van en cifras tabulares.",
+        "section": "typography"
+      },
+      {
+        "name": "La regla de la unidad al lado",
+        "body": "Una cifra grande nunca viaja sola: 4 × 10-20 no dice si son repeticiones o segundos, así que la unidad se escribe siempre junto a ella, en 0,875rem, +0,14em y ink-faint.",
+        "section": "typography"
+      },
+      {
+        "name": "La regla del ordinal de dos dígitos",
+        "body": "Semanas y posiciones se rellenan a dos dígitos (01, 02) para que la columna cuadre.",
+        "section": "typography"
+      },
+      {
+        "name": "La regla del filete único",
+        "body": "La elevación se declara una vez: filete de un píxel, nunca borde más sombra. Si algo tiene que destacar, sube de tono, no de altura.",
+        "section": "elevation"
+      }
     ],
     "dos": [
-      "Do reservar accent (#34dafa) para la acción primaria y para lo que pasa ahora; como mucho una acción primaria por pantalla.",
-      "Do acompañar todo color de fase con el nombre de la fase escrito al lado.",
-      "Do duplicar la señal de cualquier estado activo: superficie raised + peso 800 + aria-current, para que sobreviva en escala de grises.",
-      "Do componer con .figures cualquier cantidad comparable, y escribir siempre la unidad junto a la cifra grande.",
-      "Do meter el contenido de una tarjeta fotográfica dentro de PhotoCard, que es quien garantiza el degradado de contraste bajo el texto.",
-      "Do reservar el hueco de toda media con aspect-ratio antes de saber si el asset existe.",
-      "Do declarar la elevación con un filete de un píxel en line, y subirlo a line-strong para el estado activo o el hover.",
-      "Do dibujar los iconos nuevos en Icon.astro con lienzo 24, trazo 1,75 y terminaciones redondeadas.",
-      "Do dar al menos 2,75rem de alto a todo lo que se pulse (3,5rem a la acción primaria).",
-      "Do decir la verdad en los estados vacíos: nombrar lo que falta en lugar de simular contenido.",
-      "Do sustituir una fotografía reemplazando el archivo de src/assets/photos/ con el mismo nombre, y mantener actualizado PROCEDENCIA.md con su origen y su licencia."
+      "**Do** reservar `accent` (`#34dafa`) para la acción primaria y para lo que pasa ahora; como mucho una acción primaria por pantalla.",
+      "**Do** acompañar todo color de fase con el nombre de la fase escrito al lado.",
+      "**Do** duplicar la señal de cualquier estado activo: superficie `raised` + peso 800 + `aria-current`, para que sobreviva en escala de grises.",
+      "**Do** componer con `.figures` cualquier cantidad comparable, y escribir siempre la unidad junto a la cifra grande.",
+      "**Do** meter el contenido de una tarjeta fotográfica dentro de `PhotoCard`, que es quien garantiza el degradado de contraste bajo el texto.",
+      "**Do** reservar el hueco de toda media con `aspect-ratio` antes de saber si el asset existe.",
+      "**Do** declarar la elevación con un filete de un píxel en `line`, y subirlo a `line-strong` para el estado activo o el hover.",
+      "**Do** dibujar los iconos nuevos en `Icon.astro` con lienzo 24, trazo 1,75 y terminaciones redondeadas.",
+      "**Do** dar al menos 2,75rem de alto a todo lo que se pulse (3,5rem a la acción primaria).",
+      "**Do** decir la verdad en los estados vacíos: nombrar lo que falta en lugar de simular contenido.",
+      "**Do** cambiar una fotografía tocando solo datos: `SESSION_PHOTOS` y `SCENE_PHOTOS` en `src/theme.ts` para el plan, `media.thumbnail` del JSON del ejercicio para el catálogo. Ningún componente se entera, y `PROCEDENCIA.md` se mantiene al día con el origen y la licencia.",
+      "**Do** verificar que una URL de foto responde `200` antes de cablearla: en la última tanda dos de cada diez eran `404`, y un hueco roto en una rejilla se ve más que una foto floja.",
+      "**Do** dar a cada sesión del mesociclo su propia fotografía. Repetirla por número de día hace que cuatro semanas parezcan la misma pantalla.",
+      "**Do** apagar el cromo del sistema operativo en todo `<select>` con `.desplegable`.",
+      "**Do** construir un interruptor sobre un `<input type=\"checkbox\">` real, y encenderlo en tinta."
     ],
     "donts": [
-      "Don't usar sombras. No hay ninguna en el proyecto y no se añade la primera; si algo tiene que destacar, sube de tono.",
-      "Don't poner borde y sombra a la vez, ni dos filetes concéntricos.",
-      "Don't distinguir un estado solo por color, ni usar un pastel de fase como color de acción.",
-      "Don't introducir un segundo color saturado: los pasteles existen precisamente para no competir con el cian.",
-      "Don't escribir accent-ink sobre una superficie; solo vive encima del acento.",
-      "Don't dejar texto sobre una fotografía sin el degradado de PhotoCard debajo, ni confiar en que la foto concreta ya tenga contraste suficiente.",
-      "Don't usar iconos de librería, fuentes de iconos ni emoji haciendo de icono.",
-      "Don't meter una segunda familia tipográfica: la jerarquía se hace con peso y tamaño.",
-      "Don't poner cifras comparables en tipografía proporcional.",
-      "Don't añadir una línea pequeña en versalitas encima de un título si no aporta un dato que el título no tiene: la que existe sobre las fotos localiza la sesión (semana, fase, día) o declara el estado «Tu próxima sesión»; una etiqueta decorativa en ese sitio no está justificada.",
-      "Don't deshabilitar un control sin decir al lado por qué está apagado.",
-      "Don't cargar media de terceros antes de que el usuario la pida."
+      "**Don't** usar sombras. No hay ninguna en el proyecto y no se añade la primera; si algo tiene que destacar, sube de tono.",
+      "**Don't** poner borde y sombra a la vez, ni dos filetes concéntricos.",
+      "**Don't** distinguir un estado solo por color, ni usar un pastel de fase como color de acción.",
+      "**Don't** introducir un segundo color saturado: los pasteles existen precisamente para no competir con el cian.",
+      "**Don't** escribir `accent-ink` sobre una superficie; solo vive encima del acento.",
+      "**Don't** dejar texto sobre una fotografía sin el degradado de `PhotoCard` debajo, ni confiar en que la foto concreta ya tenga contraste suficiente.",
+      "**Don't** usar iconos de librería, fuentes de iconos ni emoji haciendo de icono.",
+      "**Don't** meter una segunda familia tipográfica: la jerarquía se hace con peso y tamaño.",
+      "**Don't** poner cifras comparables en tipografía proporcional.",
+      "**Don't** añadir una línea pequeña en versalitas encima de un título si no aporta un dato que el título no tiene: la que existe sobre las fotos localiza la sesión (semana, fase, día) o declara el estado «Tu próxima sesión»; una etiqueta decorativa en ese sitio no está justificada.",
+      "**Don't** deshabilitar un control sin decir al lado por qué está apagado.",
+      "**Don't** cargar un vídeo de terceros antes de que el usuario lo pida, ni reproducir solo un vídeo propio dentro de una rejilla: en una rejilla se despierta al pasar por encima.",
+      "**Don't** apagar una fotografía con opacidad o desaturación para ganar contraste. Una foto al 70 % deja de leerse como foto y pasa a ser textura sucia; el contraste lo pone el velo, que existe donde hay texto y desaparece donde hay motivo.",
+      "**Don't** repetir la misma fotografía en dos sesiones distintas del mesociclo.",
+      "**Don't** prefijar una URL remota con el `base` del despliegue: `routes.asset()` ya distingue una ruta propia de una remota, y saltárselo produce `/entreno/https://…`.",
+      "**Don't** estirar una celda de bento con `justify-between`: en cuanto la vecina crece, aparece un agujero en medio.",
+      "**Don't** dejar que una utilidad de `display` conviva con el atributo `hidden` sin comprobarlo. Aquí funciona porque el preflight declara `[hidden] { display: none !important }`, no por suerte."
     ]
   }
 }
