@@ -1,0 +1,48 @@
+---
+/**
+ * Los días de una semana, en fila.
+ *
+ * Vive aparte de `WeekNav` para poder quitarlo: hay pantallas donde el raíl de
+ * semanas orienta y el de días solo repite lo que ya se ve debajo. Se usa suelto
+ * o a través de `WeekNav`, que lo incluye salvo que se le diga que no.
+ *
+ * Se desborda en horizontal en lugar de replegarse: en móvil se arrastra, en
+ * escritorio cabe entero.
+ */
+import type { Week } from '@/core/model';
+import { routes } from '@/routes';
+
+interface Props {
+  week: Week;
+  /** Día abierto, si estamos dentro de uno. */
+  activeDay?: number;
+  class?: string;
+}
+
+const { week, activeDay, class: className } = Astro.props;
+---
+
+<ol class:list={['flex gap-2 overflow-x-auto pb-1', className]}>
+  {
+    week.days.map((day) => {
+      const active = day.order === activeDay;
+      return (
+        <li class="shrink-0">
+          <a
+            href={routes.day(week.order, day.order)}
+            aria-current={active ? 'page' : undefined}
+            class:list={[
+              'flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm transition-colors',
+              active
+                ? 'border-line-strong bg-raised font-bold text-ink'
+                : 'border-line text-ink-dim hover:border-line-strong hover:text-ink',
+            ]}
+          >
+            <span class="figures font-bold">Día {day.order}</span>
+            <span class="hidden text-ink-faint sm:inline">{day.title}</span>
+          </a>
+        </li>
+      );
+    })
+  }
+</ol>

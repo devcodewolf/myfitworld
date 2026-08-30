@@ -315,6 +315,16 @@ luminosidad de la tinta, además de por `aria-current`: en escala de grises sigu
 **La regla de la etiqueta.** Un color de fase nunca viaja solo: siempre lleva al lado el nombre de
 la fase escrito.
 
+**La regla del dato sin color.** Los cuatro pasteles de fase **no valen para distinguir series en
+una gráfica**, y no es una opinión: medidos como paleta categórica sobre `surface` fallan las
+cuatro comprobaciones. La peor pareja, progresión contra acumulación, se separa ΔE 5,5 en visión
+normal —el suelo es 15— y 4,4 en deuteranopía. Sirven para identificar una semana cuando su
+nombre está escrito al lado; no para que el ojo distinga cuatro barras vecinas.
+
+La salida no es subirles el croma, que los pondría a competir con el cian reservado: es reconocer
+que **las semanas están ordenadas y no son categorías**. Una magnitud se codifica con longitud, y
+el orden, con la posición. En el historial la matriz lo hace así y no gasta ni un color.
+
 ## Typography
 
 **Display Font:** Archivo variable (con `Segoe UI Variable Display`, `Segoe UI`, `system-ui`)
@@ -432,9 +442,14 @@ filete horizontal de 1,5rem × 2px sobre las fotos y una barra vertical de 4px �
 fila de semana.
 
 Los iconos están dibujados a mano en `Icon.astro`: lienzo de 24, trazo de 1,75 sin relleno,
-terminaciones y uniones redondeadas, `currentColor` y siempre `aria-hidden`. Seis nombres
-(`mesocycle`, `catalog`, `history`, `settings`, `arrow-right`, `check`) y ninguna dependencia
-externa.
+terminaciones y uniones redondeadas, `currentColor` y siempre `aria-hidden`. Diez nombres
+(`mesocycle`, `catalog`, `history`, `settings`, `arrow-right`, `check`, `trend-up`, `calendar`,
+`bars`, `spark`) y ninguna dependencia externa. Los cuatro últimos encabezan las celdas del
+historial y de consejos, en `ink-faint` a 20px: acompañan al título, nunca lo sustituyen.
+
+Un icono que no se lee a 20px no vale, por bonito que sea el trazado. El primer intento de
+`bars` era un bíceps y se veía como una nube deforme; lo que funciona a ese tamaño es geometría
+simple, y tres barras de distinto largo describen la tabla que encabezan mejor que un músculo.
 
 El foco visible es común a todo: contorno de 2px en acento, 3px de separación y 4px de radio.
 
@@ -496,6 +511,47 @@ de separación:
 - **Días:** píldoras de 2,75rem con «Día N» en negrita tabular y el título del día en `ink-faint` a
   partir de `sm`. Activa: filete marcado, fondo `raised`, peso 800 y `aria-current`.
 - Ambas filas se desbordan en horizontal con scroll.
+
+La fila de días es un componente aparte (`DayRail`) y `WeekNav` la incluye salvo que se le diga
+`days={false}`. La razón es de contenido, no de código: hay pantallas donde el raíl de días solo
+repite lo que ya está justo debajo, y un raíl que repite el contenido inmediato deja de orientar y
+pasa a estorbar. `DayRail` también se usa suelto donde haga falta solo esa fila.
+
+### Calendario de sesiones (componente firma)
+
+Las sesiones del historial no son una lista: son **la rejilla del propio mesociclo**, cuatro
+semanas por tres días. Un calendario de mes para tres sesiones semanales sería casi todo huecos
+vacíos; esta rejilla solo tiene celdas que existen en el plan, así que se ve el ritmo y los huecos
+sin contar días que nunca tuvieron entreno.
+
+- **Fila:** el ordinal de la semana y su fase a la izquierda en una columna de 5,5rem; los días a
+  la derecha, en tres columnas desde `sm` y apilados por debajo, porque a 390px tres columnas
+  truncan el título a «Tors…».
+- **Celda hecha:** filete sólido en `ink` al 70 % sobre `surface`, con el título del día, la fecha
+  corta y las series registradas.
+- **Celda pendiente:** filete **discontinuo** en `line` y la palabra «Pendiente». El estado cambia
+  la forma del filete, no solo su color.
+
+### Celda de matriz (componente firma)
+
+El reparto por músculo es una tabla de verdad —un lector de pantalla la recorre por filas— donde
+cada celda lleva **la cifra exacta arriba y su barra debajo**, con la barra medida contra el
+máximo de toda la tabla.
+
+La escala común es el punto entero. Normalizar cada semana contra su propio máximo hacía que una
+semana de descarga con 8 series dibujara una barra tan larga como una de acumulación con 18, y el
+ojo leía que eran iguales. La longitud lleva la magnitud porque es más precisa que el color para
+comparar cantidades, y la cifra se queda para el valor exacto. Una barra nunca baja del 4 %: una
+serie no puede desaparecer del todo.
+
+### Compositor apagado (pantalla de consejos)
+
+Cuando una función está decidida pero sin construir, la pantalla existe y sus controles se
+enseñan **apagados con el motivo escrito al lado**, nunca escondidos ni simulando una respuesta.
+El compositor de `/consejos` es el caso de referencia: campo y botón deshabilitados al 60 % de
+opacidad con cursor bloqueado, y una línea que dice por qué («la clave del modelo no puede vivir
+en el navegador»). Las preguntas de ejemplo van en cápsulas de contorno en `ink-faint`: describen
+el alcance sin fingir que se pueden pulsar.
 
 ### Tarjeta fotográfica (componente firma)
 
@@ -643,5 +699,16 @@ iframe se crea en el clic.
   ruta propia de una remota, y saltárselo produce `/entreno/https://…`.
 - **Don't** estirar una celda de bento con `justify-between`: en cuanto la vecina crece, aparece un
   agujero en medio.
+- **Don't** meter algo ancho —una tabla, un raíl— en una celda de rejilla sin `min-w-0`. Todo
+  elemento de rejilla nace con `min-width: auto`, así que se niega a encoger, **ensancha la columna
+  entera** y arrastra a sus vecinas; el `overflow-x-auto` de dentro nunca llega a recortar. Se ve
+  midiendo `scrollWidth` contra `clientWidth`, no mirando la pantalla.
+- **Don't** usar los pasteles de fase para separar series en una gráfica. Ver *la regla del dato
+  sin color*: la longitud lleva la magnitud y la posición lleva el orden.
+- **Don't** comparar dos periodos de distinta duración. Una semana a medias siempre tiene menos
+  series que una entera; decir «−65 %» ahí es inventarse una caída. Se compara entre semanas
+  completas, o se dice por dónde vas.
+- **Don't** repetir en un raíl lo que ya está justo debajo. Para eso `WeekNav` acepta
+  `days={false}`.
 - **Don't** dejar que una utilidad de `display` conviva con el atributo `hidden` sin comprobarlo.
   Aquí funciona porque el preflight declara `[hidden] { display: none !important }`, no por suerte.

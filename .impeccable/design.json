@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-29T14:28:07Z",
+  "generatedAt": "2026-08-30T11:25:14Z",
   "title": "Design System: My Fitness World",
   "extensions": {
     "status": {
@@ -536,6 +536,22 @@
       "description": "La pieza de historial y ajustes. No fija su tamaño: lo hace la rejilla con col-span y row-span. Dentro, el contenido fluye desde arriba.",
       "html": "<section class=\"ds-bento\"><h2 class=\"ds-bento-title\">Descanso entre series</h2><p class=\"ds-bento-body\">El mismo para todos los ejercicios.</p><output class=\"ds-bento-figure\">60 s</output></section>",
       "css": ".ds-bento { display: flex; flex-direction: column; border-radius: 14px; border: 1px solid var(--color-line); padding: 1.25rem; background-image: linear-gradient(to bottom, color-mix(in oklab, var(--color-raised) 85%, var(--color-accent) 4%), var(--color-surface) 62%); }\n.ds-bento-title { margin: 0; font: 800 1rem/1.3 inherit; color: var(--color-ink); }\n.ds-bento-body { margin: .5rem 0 0; font: 400 .875rem/1.5 inherit; color: var(--color-ink-dim); }\n.ds-bento-figure { display: block; margin-top: 1.5rem; font: 800 1.875rem/1 inherit; font-variant-numeric: tabular-nums; color: var(--color-ink); }"
+    },
+    {
+      "name": "Celda de matriz",
+      "kind": "custom",
+      "refersTo": "bento-cell",
+      "description": "Una celda del reparto por músculo: la cifra exacta arriba y su barra debajo, medida contra el máximo de toda la tabla.",
+      "html": "<div class=\"ds-mcell\"><span class=\"ds-mcell-n\">16.5</span><span class=\"ds-mcell-track\"><span class=\"ds-mcell-fill\" style=\"width:89%\"></span></span></div>",
+      "css": ".ds-mcell { display: flex; flex-direction: column; align-items: center; gap: .375rem; }\n.ds-mcell-n { font: 700 .875rem/1 inherit; font-variant-numeric: tabular-nums; color: var(--color-ink); }\n.ds-mcell-track { display: block; width: 100%; height: .375rem; overflow: hidden; border-radius: 999px; background: var(--color-line); }\n.ds-mcell-fill { display: block; height: 100%; border-radius: 999px; background: var(--color-ink-dim); }"
+    },
+    {
+      "name": "Celda de calendario",
+      "kind": "custom",
+      "refersTo": "bento-cell",
+      "description": "Una sesión del mesociclo: hecha con filete solido, pendiente con filete discontinuo. El estado cambia la forma del filete, no solo su color.",
+      "html": "<a class=\"ds-scell ds-scell-done\"><span class=\"ds-scell-t\">Torso / Empuje</span><span class=\"ds-scell-m\">28 ago · 19 series</span></a><a class=\"ds-scell\"><span class=\"ds-scell-t\">Pierna / Tracción</span><span class=\"ds-scell-m ds-scell-p\">Pendiente</span></a>",
+      "css": ".ds-scell { display: flex; min-height: 4rem; flex-direction: column; justify-content: center; gap: .125rem; border-radius: 14px; border: 1px dashed var(--color-line); padding: .5rem .75rem; text-decoration: none; transition: border-color .2s; }\n.ds-scell-done { border-style: solid; border-color: color-mix(in oklab, var(--color-ink) 70%, transparent); background: var(--color-surface); }\n.ds-scell:hover { border-color: var(--color-line-strong); }\n.ds-scell-t { font: 700 .75rem/1.3 inherit; color: var(--color-ink-dim); }\n.ds-scell-m { font: 400 .75rem/1.3 inherit; font-variant-numeric: tabular-nums; color: var(--color-ink); }\n.ds-scell-p { color: var(--color-ink-faint); }"
     }
   ],
   "narrative": {
@@ -622,6 +638,10 @@
       "**Don't** repetir la misma fotografía en dos sesiones distintas del mesociclo.",
       "**Don't** prefijar una URL remota con el `base` del despliegue: `routes.asset()` ya distingue una ruta propia de una remota, y saltárselo produce `/entreno/https://…`.",
       "**Don't** estirar una celda de bento con `justify-between`: en cuanto la vecina crece, aparece un agujero en medio.",
+      "**Don't** meter algo ancho —una tabla, un raíl— en una celda de rejilla sin `min-w-0`. Todo elemento de rejilla nace con `min-width: auto`, así que se niega a encoger, **ensancha la columna entera** y arrastra a sus vecinas; el `overflow-x-auto` de dentro nunca llega a recortar. Se ve midiendo `scrollWidth` contra `clientWidth`, no mirando la pantalla.",
+      "**Don't** usar los pasteles de fase para separar series en una gráfica. Ver *la regla del dato sin color*: la longitud lleva la magnitud y la posición lleva el orden.",
+      "**Don't** comparar dos periodos de distinta duración. Una semana a medias siempre tiene menos series que una entera; decir «−65 %» ahí es inventarse una caída. Se compara entre semanas completas, o se dice por dónde vas.",
+      "**Don't** repetir en un raíl lo que ya está justo debajo. Para eso `WeekNav` acepta `days={false}`.",
       "**Don't** dejar que una utilidad de `display` conviva con el atributo `hidden` sin comprobarlo. Aquí funciona porque el preflight declara `[hidden] { display: none !important }`, no por suerte."
     ]
   }

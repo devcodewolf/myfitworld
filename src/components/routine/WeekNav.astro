@@ -2,11 +2,15 @@
 /**
  * Columna vertebral de la app: dónde estás dentro del mesociclo.
  * Una fila de semanas y, debajo, los días de la semana abierta.
+ *
+ * El raíl de días es `DayRail` y se puede apagar con `days={false}`: hay
+ * pantallas donde solo repite lo que ya está justo debajo.
  */
 import type { Mesocycle } from '@/core/model';
 import { PHASE_LABELS } from '@/core/labels';
 import { routes } from '@/routes';
 import { PHASE_PALETTE } from '@/theme';
+import DayRail from '@/components/routine/DayRail.astro';
 
 interface Props {
   mesocycle: Mesocycle;
@@ -14,9 +18,11 @@ interface Props {
   activeWeek: number;
   /** Día abierto, si estamos dentro de uno. */
   activeDay?: number;
+  /** El raíl de días. Se apaga donde no aporta. */
+  days?: boolean;
 }
 
-const { mesocycle, activeWeek, activeDay } = Astro.props;
+const { mesocycle, activeWeek, activeDay, days = true } = Astro.props;
 const week = mesocycle.weeks.find((item) => item.order === activeWeek) ?? mesocycle.weeks[0]!;
 ---
 
@@ -52,28 +58,5 @@ const week = mesocycle.weeks.find((item) => item.order === activeWeek) ?? mesocy
     }
   </ol>
 
-  <ol class="flex gap-2 overflow-x-auto pb-1">
-    {
-      week.days.map((day) => {
-        const active = day.order === activeDay;
-        return (
-          <li class="shrink-0">
-            <a
-              href={routes.day(week.order, day.order)}
-              aria-current={active ? 'page' : undefined}
-              class:list={[
-                'flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm transition-colors',
-                active
-                  ? 'border-line-strong bg-raised font-bold text-ink'
-                  : 'border-line text-ink-dim hover:border-line-strong hover:text-ink',
-              ]}
-            >
-              <span class="figures font-bold">Día {day.order}</span>
-              <span class="hidden text-ink-faint sm:inline">{day.title}</span>
-            </a>
-          </li>
-        );
-      })
-    }
-  </ol>
+  {days && <DayRail week={week} activeDay={activeDay} />}
 </div>
