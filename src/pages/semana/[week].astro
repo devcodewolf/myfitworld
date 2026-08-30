@@ -27,13 +27,13 @@ const reserve = week.days[0]?.blocks[0]?.repsInReserve;
 
 <BaseLayout title={`Semana ${week.order} · ${PHASE_LABELS[week.phase]}`} description={week.focus}>
   <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-6 lg:py-6">
-    <header class="flex flex-wrap justify-between gap-4 border-b border-line pt-8 pb-9">
+    <header class="flex flex-wrap justify-between gap-4 border-b border-line py-6">
       <div>
         <h1 class:list={['text-display font-black', PHASE_PALETTE[week.phase].text]}>
           {PHASE_LABELS[week.phase]}
         </h1>
         <p class="mt-4 max-w-[60ch] text-lg leading-relaxed text-ink-dim">{week.focus}</p>
-        <p class="figures mt-8 flex flex-wrap gap-x-8 gap-y-2 text-sm text-ink-dim">
+        <p class="figures mt-2 flex flex-wrap gap-x-8 gap-y-2 text-sm text-ink-dim">
           <span>
             Semana <span class="font-bold text-ink">{String(week.order).padStart(2, '0')}</span> de 4
           </span>
@@ -43,12 +43,12 @@ const reserve = week.days[0]?.blocks[0]?.repsInReserve;
           {reserve !== undefined && <span class="text-ink-faint">{formatReserve(reserve)}</span>}
         </p>
       </div>
-      <WeekNav mesocycle={mesocycle} activeWeek={week.order} />
+      <WeekNav mesocycle={mesocycle} activeWeek={week.order} days={false} />
     </header>
 
     {
       week.notes && (
-        <p class="max-w-[65ch] pt-10 text-base leading-relaxed text-ink-dim">{week.notes}</p>
+        <p class="max-w-[65ch] pt-5 text-base leading-relaxed text-ink-dim">{week.notes}</p>
       )
     }
 

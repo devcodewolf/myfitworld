@@ -43,3 +43,38 @@ el cambio es de datos, no de componentes.
 
 Las dos que llevan vídeo propio (`flexiones` y `remo-mancuerna-una-mano`) usan su
 vídeo y no tienen foto remota.
+
+## Láminas anatómicas (locales)
+
+Los doce GIF de `public/croquis/` salen de **ExerciseDB**, del endpoint libre
+`oss.exercisedb.dev`, y se sirven **desde este proyecto**, no enlazados. Se
+descargaron una vez y pesan 0,99 MB entre los doce (180×180 cada uno).
+
+| Ejercicio | Nombre en origen |
+| --- | --- |
+| `flexiones-declinadas` | decline push-up |
+| `fondos-entre-bancos` | bench dip on floor |
+| `press-militar-mancuernas` | dumbbell one arm shoulder press |
+| `elevaciones-laterales` | dumbbell lateral raise |
+| `pajaros-vuelos-posteriores` | dumbbell reverse fly |
+| `curl-biceps-supino` | dumbbell biceps curl |
+| `curl-martillo` | dumbbell seated hammer curl |
+| `extension-triceps-tras-nuca` | dumbbells seated triceps extension |
+| `sentadilla-goblet` | dumbbell goblet squat |
+| `sentadilla-bulgara` | dumbbell single leg split squat |
+| `zancadas-mancuernas` | dumbbell lunge |
+| `peso-muerto-rumano` | dumbbell romanian deadlift |
+
+**Por qué locales y no enlazados.** Su propio repositorio dice que el endpoint
+libre «es solo para exploración y no se recomienda para integración en
+producción». Además tiene límite de ráfaga: con noventa llamadas seguidas a
+120 ms deja de responder y devuelve HTML, aunque se recupera en menos de medio
+minuto. Un megabyte en el repositorio elimina de golpe esa dependencia.
+
+El código del API es AGPL-3.0. La licencia de los medios del servidor libre no
+está escrita en ninguna parte, que es un cabo suelto conocido: si algún día esto
+deja de ser una app personal, hay que preguntarles antes de seguir.
+
+**Cuatro ejercicios se quedan sin lámina.** `flexiones` y `remo-mancuerna-una-mano`
+tienen vídeo propio, que manda. `floor-press` y `renegade-row` no tienen ninguna
+coincidencia decente en el catálogo de origen y se quedan con su fotografía.

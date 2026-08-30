@@ -22,6 +22,12 @@
       "src": "https://images.unsplash.com/photo-1704223523321-7b0b44a1a0b9?w=900&q=72&auto=format&fit=crop",
       "alt": "Un hombre flexiona el codo con una mancuerna en supinación en una sala en penumbra",
       "aspectRatio": "3/2"
+    },
+    "croquis": {
+      "kind": "plate",
+      "src": "croquis/curl-biceps-supino.gif",
+      "alt": "Lámina anatómica de un curl de bíceps, con el bíceps marcado",
+      "aspectRatio": "1/1"
     }
   }
 }

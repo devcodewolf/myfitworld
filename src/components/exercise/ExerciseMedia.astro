@@ -59,6 +59,22 @@ const ratio = ratioProp ?? '4/3';
   }
 
   {
+    /* La lámina llena el hueco con su propio fondo claro y de borde a borde: es
+      material, no una imagen pegada encima del oscuro. */
+    asset?.kind === 'plate' && (
+      <div class="grid size-full place-items-center bg-plate p-4">
+        <img
+          src={routes.asset(asset.src)}
+          alt={asset.alt}
+          loading={eager ? 'eager' : 'lazy'}
+          decoding="async"
+          class="max-h-full w-full max-w-88 object-contain"
+        />
+      </div>
+    )
+  }
+
+  {
     asset?.kind === 'croquis' && (
       <img
         src={routes.asset(asset.src)}

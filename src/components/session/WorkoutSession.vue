@@ -88,7 +88,17 @@ const video = computed(() => {
   };
 });
 
-/** Sin vídeo, la foto del ejercicio. Un hueco vacío no ayuda a nadie a las 23:00. */
+/**
+ * Sin vídeo, la lámina anatómica; sin lámina, la foto. En ese orden porque es
+ * el de utilidad mientras entrenas: el movimiento animado manda sobre el
+ * músculo señalado, y este sobre una foto que solo ambienta.
+ */
+const plate = computed(() => {
+  const asset = exercise.value?.media?.croquis;
+  if (asset?.kind !== 'plate') return null;
+  return { src: routes.asset(asset.src), alt: asset.alt };
+});
+
 const photo = computed(() => {
   const asset = exercise.value?.media?.thumbnail;
   if (asset?.kind !== 'image') return null;
@@ -420,6 +430,17 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
         >
           <source :src="video.src" :type="video.type" />
         </video>
+        <div
+          v-else-if="plate"
+          class="grid aspect-square max-h-104 w-full place-items-center rounded-card border border-line bg-plate p-6"
+        >
+          <img
+            :key="plate.src"
+            :src="plate.src"
+            :alt="plate.alt"
+            class="max-h-full w-full max-w-96 object-contain"
+          />
+        </div>
         <img
           v-else-if="photo"
           :key="photo.src"

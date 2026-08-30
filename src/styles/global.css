@@ -37,6 +37,9 @@
   --color-line-strong: #45576a;
   /* Más oscuro que el fondo, para la viñeta que hunde los bordes de la sala. */
   --color-shade: #04080d;
+  /* El campo de la lámina anatómica. Blanco puro y no `ink`, porque el dibujo
+     trae el suyo propio: cualquier otro valor dibuja una costura visible. */
+  --color-plate: #ffffff;
 
   /* Tintas: tomadas de la temperatura del fondo, nunca gris neutro.
      Las tres pasan 4.5:1 sobre las tres superficies. */

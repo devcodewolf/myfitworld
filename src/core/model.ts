@@ -102,6 +102,18 @@ export const MediaAssetSchema = z.discriminatedUnion('kind', [
     src: z.string().min(1),
     loopSeconds: z.number().min(0.5).max(10).default(3),
   }),
+  /**
+   * Lámina anatómica: dibujo sobre fondo claro con el músculo trabajado en rojo.
+   *
+   * Es un tipo aparte y no una `image` porque **se pinta distinto**: la lámina
+   * trae su propio fondo claro y hay que darle el hueco entero, no recortarla.
+   * Tratarla como una foto la deja como un cuadrado blanco flotando dentro de
+   * una tarjeta oscura, que parece un error en vez de una decisión.
+   */
+  MediaCommonSchema.extend({
+    kind: z.literal('plate'),
+    src: z.string().min(1),
+  }),
   MediaCommonSchema.extend({
     kind: z.literal('video'),
     sources: z.array(z.object({ src: z.string().min(1), type: z.string().min(1) })).min(1),

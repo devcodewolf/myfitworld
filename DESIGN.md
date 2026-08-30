@@ -8,6 +8,7 @@ colors:
   line: "#2c3947"
   line-strong: "#45576a"
   shade: "#04080d"
+  plate: "#ffffff"
   ink: "#f0f6fa"
   ink-dim: "#a9becd"
   ink-faint: "#869dae"
@@ -517,6 +518,29 @@ La fila de días es un componente aparte (`DayRail`) y `WeekNav` la incluye salv
 repite lo que ya está justo debajo, y un raíl que repite el contenido inmediato deja de orientar y
 pasa a estorbar. `DayRail` también se usa suelto donde haga falta solo esa fila.
 
+### Lámina anatómica
+
+El único campo claro de toda la app, y es **deliberado**: un dibujo de anatomía
+sobre `plate` (`#ffffff`) con el músculo trabajado en rojo, ocupando el hueco de media de borde a
+borde. Se lee como una lámina de referencia colgada en la pared, no como un agujero en la interfaz.
+
+Tres reglas la sostienen, y las tres salieron de verla fallar:
+
+1. **El campo es blanco puro, no `ink`.** El dibujo trae su propio fondo blanco; con `#f0f6fa`
+   debajo aparece una costura rectangular visible.
+2. **Llena el hueco, no flota dentro.** Un cuadrado claro pequeño centrado sobre material oscuro
+   parece un error de carga. La lámina *es* el material de ese hueco.
+3. **El dibujo se contiene, no se estira.** El original mide 180×180: por encima de unas 22rem
+   empieza a verse blando, así que se centra con `object-contain` y un tope de ancho.
+
+Dónde aparece: en la **ficha del ejercicio** y en **modo entreno**, que es donde quieres ver el
+movimiento y qué músculo trabaja. Nunca en la rejilla del catálogo, que se queda fotográfica y
+oscura: mezclar los dos materiales en la misma rejilla rompe las dos.
+
+El orden de media es siempre el mismo, y es el orden de utilidad mientras entrenas: **vídeo, luego
+lámina, luego fotografía**. El movimiento animado manda sobre el músculo señalado, y este sobre una
+foto que solo ambienta.
+
 ### Calendario de sesiones (componente firma)
 
 Las sesiones del historial no son una lista: son **la rejilla del propio mesociclo**, cuatro
@@ -710,5 +734,9 @@ iframe se crea en el clic.
   completas, o se dice por dónde vas.
 - **Don't** repetir en un raíl lo que ya está justo debajo. Para eso `WeekNav` acepta
   `days={false}`.
+- **Don't** meter una lámina anatómica en la rejilla del catálogo, ni una fotografía dentro de una
+  lámina: son dos materiales y mezclarlos en la misma rejilla rompe los dos.
+- **Don't** poner un campo claro pequeño flotando sobre material oscuro. O llena su hueco de borde a
+  borde y es material, o no está.
 - **Don't** dejar que una utilidad de `display` conviva con el atributo `hidden` sin comprobarlo.
   Aquí funciona porque el preflight declara `[hidden] { display: none !important }`, no por suerte.
