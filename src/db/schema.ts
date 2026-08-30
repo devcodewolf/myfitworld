@@ -10,13 +10,14 @@
  * mesociclo, semana, día, estado y usuario. Nada más. Todo lo demás —las
  * series, los pesos, las repeticiones— vive dentro del JSON.
  *
- * `userId` es `text` porque Better Auth genera ids de texto, no UUID. La clave
- * foránea contra su tabla `user` llega en el paso siguiente, cuando esa tabla
- * exista; hoy la columna ya está para que ese paso sea solo añadir la
- * restricción.
+ * `userId` es `text` porque Better Auth genera ids de texto, no UUID, y apunta
+ * a su tabla `user` con borrado en cascada: si un día se borra una cuenta, sus
+ * perfiles, ajustes y sesiones se van con ella y no queda basura huérfana.
  */
 import { sql } from 'drizzle-orm';
 import { index, integer, jsonb, pgTable, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
+
+import { user } from '@/db/auth-schema';
 
 /**
  * Un perfil de entrenamiento. Hoy hay uno por usuario, pero la tabla ya admite
@@ -26,7 +27,9 @@ export const profiles = pgTable(
   'profiles',
   {
     id: text('id').primaryKey(),
-    userId: text('user_id').notNull(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
     name: text('name').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
   },
@@ -45,7 +48,9 @@ export const settings = pgTable(
     profileId: text('profile_id')
       .primaryKey()
       .references(() => profiles.id, { onDelete: 'cascade' }),
-    userId: text('user_id').notNull(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
     data: jsonb('data').notNull(),
     schemaVersion: integer('schema_version').notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
@@ -61,15 +66,21 @@ export const settings = pgTable(
  * un documento guardado con un esquema viejo se migra al leerlo, igual que
  * hacía en `localStorage`.
  *
+ * Se llama `workout_sessions` y no `sessions` porque Better Auth ya tiene una
+ * tabla `session` —las sesiones de quien ha entrado— y dos nombres que se
+ * diferencian en una "s" son una trampa esperando a que alguien la pise.
+ *
  * El índice único sobre usuario y sesión activa es la regla de negocio que hoy
  * garantiza la clave `mfw:active-session`: **no puede haber dos sesiones en
  * curso a la vez**. Vale más tenerlo en la base que confiar en el cliente.
  */
-export const sessions = pgTable(
-  'sessions',
+export const workoutSessions = pgTable(
+  'workout_sessions',
   {
     id: text('id').primaryKey(),
-    userId: text('user_id').notNull(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
     profileId: text('profile_id')
       .notNull()
       .references(() => profiles.id, { onDelete: 'cascade' }),
@@ -86,10 +97,10 @@ export const sessions = pgTable(
   },
   (table) => [
     // El historial se lee siempre del más reciente hacia atrás.
-    index('sessions_user_started_idx').on(table.userId, table.startedAt),
-    index('sessions_user_week_day_idx').on(table.userId, table.weekOrder, table.dayOrder),
+    index('workout_sessions_user_started_idx').on(table.userId, table.startedAt),
+    index('workout_sessions_user_week_day_idx').on(table.userId, table.weekOrder, table.dayOrder),
     // Una sola sesión en curso por usuario, garantizado por la base.
-    uniqueIndex('sessions_one_active_idx')
+    uniqueIndex('workout_sessions_one_active_idx')
       .on(table.userId)
       .where(sql`status = 'in_progress'`),
   ],

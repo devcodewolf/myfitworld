@@ -45,6 +45,9 @@ src/core/      dominio puro. Sin DOM, sin almacenamiento, sin Astro.
                Cada módulo tiene su *.test.ts al lado. Es lo único con tests.
 src/storage/   persistencia detrás de AppRepository. Nada de fuera sabe que
                debajo hay localStorage.
+src/auth.ts    configuración de Better Auth. El único sitio donde se decide
+               cómo se entra. Better Auth NO envía correos: te llama a ti con
+               el enlace o el código ya generados.
 src/db/        Postgres: esquema Drizzle, conexión y mapeo fila ↔ tipos de core.
                Solo lo importan las acciones. Ni core/, ni components/, ni
                pages/ pueden tocarlo. Las migraciones van en drizzle/ y se

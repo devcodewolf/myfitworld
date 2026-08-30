@@ -12,7 +12,11 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 
-import * as schema from '@/db/schema';
+import * as authSchema from '@/db/auth-schema';
+import * as appSchema from '@/db/schema';
+
+/** Las tablas de Better Auth y las nuestras viven en la misma base. */
+const schema = { ...authSchema, ...appSchema };
 
 /**
  * Falla en el arranque y no en la primera consulta.
