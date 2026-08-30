@@ -3,6 +3,13 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import { SCENE_PHOTOS } from '@/theme';
 
 /**
+ * Fuera del prerender: pide sesión, y la cookie solo se puede mirar cuando la
+ * petición llega al servidor. Una página generada en el build es el mismo
+ * archivo para todo el mundo, sin sitio donde comprobar quién la pide.
+ */
+export const prerender = false;
+
+/**
  * Interruptor construido sobre el propio checkbox: sigue siendo un checkbox
  * para el teclado, para el lector de pantalla y para el script que lo lee, y
  * solo cambia de piel. Encendido va en tinta, no en acento: el cian está

@@ -1,4 +1,20 @@
 // @ts-check
+/**
+ * `dotenv` antes que nada: Astro expone el `.env` en `import.meta.env`, pero
+ * **no** lo vuelca en `process.env`, y `src/db/` y `src/auth.ts` leen de ahí
+ * porque en producción las variables las inyecta el contenedor, no un archivo.
+ *
+ * Hasta el middleware daba igual: ninguna página evaluaba `src/db/`, así que
+ * nadie preguntaba. Desde que el middleware lee la sesión en cada petición,
+ * sin esta línea `pnpm dev` arranca y revienta con «Falta DATABASE_URL».
+ *
+ * Es la misma línea que ya tenía `drizzle.config.ts`. No pisa lo que ya esté
+ * definido en el entorno, así que en Dokploy manda Dokploy. El servidor
+ * construido no pasa por aquí: ahí se usa `node --env-file=.env` en local, y
+ * las variables reales en producción.
+ */
+import 'dotenv/config';
+
 import { defineConfig } from 'astro/config';
 
 import tailwindcss from '@tailwindcss/vite';

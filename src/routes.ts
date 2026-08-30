@@ -26,6 +26,14 @@ export const routes = {
   advice: () => '/consejos',
   settings: () => '/configuracion',
   /**
+   * La pantalla de entrada. `volver` es a dónde se vuelve después: sin él, un
+   * login siempre te deja en la portada aunque hubieras pulsado «Entrenar».
+   */
+  login: (returnTo?: string) =>
+    '/login' + (returnTo ? `?volver=${encodeURIComponent(returnTo)}` : ''),
+  /** El prefijo bajo el que Better Auth atiende todo lo suyo. */
+  authApi: () => '/api/auth',
+  /**
    * Un asset propio se sirve desde la raíz; uno remoto se devuelve tal cual.
    * Sin esta distinción, una foto de Unsplash acabaría pedida como
    * `/https://images.unsplash.com/...`.
@@ -35,6 +43,19 @@ export const routes = {
 
 function isRemote(path: string): boolean {
   return /^(https?:)?\/\//.test(path) || path.startsWith('data:');
+}
+
+/**
+ * Valida el `volver` que trae el login. Viene de la URL, o sea de cualquiera:
+ * aceptarlo tal cual convertiría nuestra pantalla de entrada en un trampolín a
+ * otro sitio («entra aquí» y acabas en otro dominio con la misma pinta). Solo
+ * se admite una ruta propia, y `//` o `/\` no lo son: el navegador los lee
+ * como el principio de una URL absoluta.
+ */
+export function safeReturnTo(raw: string | null | undefined): string | null {
+  if (!raw || !raw.startsWith('/')) return null;
+  if (raw.startsWith('//') || raw.startsWith('/\\')) return null;
+  return raw;
 }
 
 /**

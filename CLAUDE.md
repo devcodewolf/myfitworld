@@ -16,7 +16,7 @@ pnpm test src/core/timer.test.ts -t "..." # un solo caso, por nombre
 pnpm format                               # Prettier sobre todo
 pnpm format:check                         # el que hay que dejar limpio
 pnpm build                                # dist/client + dist/server
-node dist/server/entry.mjs                # servir lo construido
+node --env-file=.env dist/server/entry.mjs   # servir lo construido
 
 pnpm db:up                                # Postgres local en Docker
 pnpm db:down                              # pararlo (los datos se quedan)

@@ -1,23 +1,31 @@
 ---
-import type { GetStaticPaths } from 'astro';
-
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import WorkoutSession from '@/components/session/WorkoutSession.vue';
-import { getActiveMesocycle, getExerciseCatalog } from '@/data';
+import { findDay, findWeek, getActiveMesocycle, getExerciseCatalog } from '@/data';
 import { PHASE_LABELS } from '@/core/labels';
 import { routes } from '@/routes';
 
-export const getStaticPaths = (async () => {
-  const mesocycle = await getActiveMesocycle();
-  return mesocycle.weeks.flatMap((week) =>
-    week.days.map((day) => ({
-      params: { week: String(week.order), day: String(day.order) },
-      props: { week, day, mesocycleId: mesocycle.id },
-    })),
-  );
-}) satisfies GetStaticPaths;
+/**
+ * La única página del mesociclo que no se genera en el build: es lo que
+ * escribe tu entreno, así que pide sesión, y la cookie solo se puede mirar
+ * cuando la petición llega al servidor.
+ *
+ * Al salir del prerender desaparece `getStaticPaths`: la semana y el día ya no
+ * los reparte el build, llegan en la URL y hay que resolverlos aquí.
+ */
+export const prerender = false;
 
-const { week, day, mesocycleId } = Astro.props;
+const mesocycle = await getActiveMesocycle();
+const weekOrder = Number(Astro.params.week);
+const dayOrder = Number(Astro.params.day);
+const week = Number.isInteger(weekOrder) ? findWeek(mesocycle, weekOrder) : undefined;
+const day = week && Number.isInteger(dayOrder) ? findDay(week, dayOrder) : undefined;
+
+// Antes, una semana inventada no tenía archivo y el 404 salía solo. Ahora la
+// ruta responde siempre, así que el «no existe» hay que darlo a mano.
+if (!week || !day) return new Response(null, { status: 404 });
+
+const mesocycleId = mesocycle.id;
 const catalog = await getExerciseCatalog();
 
 // Solo viajan al cliente los ejercicios que aparecen en este día.

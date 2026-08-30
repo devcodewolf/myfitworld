@@ -35,7 +35,7 @@ El build produce dos carpetas: `dist/client/` con las páginas ya generadas y lo
 
 ```bash
 pnpm build
-node dist/server/entry.mjs        # escucha en el puerto 4321
+node --env-file=.env dist/server/entry.mjs   # escucha en el puerto 4321
 ```
 
 El sitio se sirve desde la raíz del dominio. El despliegue en subcarpeta se descartó al montar

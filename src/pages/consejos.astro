@@ -12,6 +12,13 @@ import { getActiveMesocycle, getExerciseCatalog } from '@/data';
 import { trackedBlocksOf } from '@/core/history';
 import { routes } from '@/routes';
 
+/**
+ * Fuera del prerender: pide sesión, y la cookie solo se puede mirar cuando la
+ * petición llega al servidor. Una página generada en el build es el mismo
+ * archivo para todo el mundo, sin sitio donde comprobar quién la pide.
+ */
+export const prerender = false;
+
 const mesocycle = await getActiveMesocycle();
 const catalog = await getExerciseCatalog();
 
