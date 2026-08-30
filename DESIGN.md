@@ -235,7 +235,7 @@ página lo iluminan tres focos radiales fijos —cian, lavanda y verdeazulado, t
 15 % de mezcla— que no se mueven con el scroll y no tiñen el contenido.
 
 Lo que este mundo rechaza está tan decidido como lo que abraza: no hay barra lateral, no hay
-sombras en ninguna parte, no hay iconos de librería ni emoji haciendo de icono, no hay tarjetas
+sombras en ninguna parte, no hay emoji haciendo de icono, no hay tarjetas
 de solo texto en las superficies principales y no hay ningún segundo color saturado compitiendo
 con el cian. La profundidad se declara una vez, con un filete de un píxel; el material de las
 tarjetas es un degradado sutil, no una sombra.
@@ -451,6 +451,26 @@ historial y de consejos, en `ink-faint` a 20px: acompañan al título, nunca lo 
 Un icono que no se lee a 20px no vale, por bonito que sea el trazado. El primer intento de
 `bars` era un bíceps y se veía como una nube deforme; lo que funciona a ese tamaño es geometría
 simple, y tres barras de distinto largo describen la tabla que encabezan mejor que un músculo.
+
+**Los iconos de fase son la excepción, y viene de fuera.** Las cuatro fases del mesociclo las
+marcan iconos de `reicon-vue` —capas para acumulación, barras que suben para progresión, llama
+para intensificación, luna para descarga— porque cuentan **qué es** la fase, y el punto de color
+que había antes solo repetía lo que el color ya decía.
+
+Tres condiciones los sujetan:
+
+1. **Detrás de un envoltorio propio.** Solo `PhaseIcon.astro` importa la librería; el resto del
+   proyecto no la conoce. Cambiarlos por trazo a mano es tocar un archivo.
+2. **Sin coste de JavaScript.** Son componentes de Vue renderizados **sin directiva `client:*`**,
+   así que Astro los resuelve a SVG en el build. Comprobado: la portada no carga ningún módulo.
+3. **Heredan el color de fase** por `currentColor`, y siguen acompañados del nombre de la fase
+   escrito al lado.
+
+Son geometría rellena, no trazo de 1,75: **conviven dos dibujos distintos en la misma pantalla**.
+Se aceptó a cambio de que digan algo; si algún día chirría, se redibujan en `Icon.astro` y el
+envoltorio absorbe el cambio. Y una regla que salió de probarlos: **el icono no puede traer marco
+propio**. `TrendUp` venía dentro de un cuadrado redondeado y a 16px se leía como una caja, no como
+una tendencia, rompiendo la silueta de los otros tres.
 
 El foco visible es común a todo: contorno de 2px en acento, 3px de separación y 4px de radio.
 
@@ -714,7 +734,8 @@ iframe se crea en el clic.
 - **Don't** escribir `accent-ink` sobre una superficie; solo vive encima del acento.
 - **Don't** dejar texto sobre una fotografía sin el degradado de `PhotoCard` debajo, ni confiar en
   que la foto concreta ya tenga contraste suficiente.
-- **Don't** usar iconos de librería, fuentes de iconos ni emoji haciendo de icono.
+- **Don't** usar fuentes de iconos ni emoji haciendo de icono. Una librería de iconos sí, pero
+  detrás de un envoltorio propio y solo donde su dibujo aporte algo que el trazo a mano no da.
 - **Don't** meter una segunda familia tipográfica: la jerarquía se hace con peso y tamaño.
 - **Don't** poner cifras comparables en tipografía proporcional.
 - **Don't** añadir una línea pequeña en versalitas encima de un título si no aporta un dato que el

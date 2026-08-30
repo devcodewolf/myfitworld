@@ -10,6 +10,7 @@ import type { Mesocycle } from '@/core/model';
 import { PHASE_LABELS } from '@/core/labels';
 import { routes } from '@/routes';
 import { PHASE_PALETTE } from '@/theme';
+import PhaseIcon from '@/components/routine/PhaseIcon.astro';
 import DayRail from '@/components/routine/DayRail.astro';
 
 interface Props {
@@ -45,10 +46,10 @@ const week = mesocycle.weeks.find((item) => item.order === activeWeek) ?? mesocy
               ]}
             >
               <span class="flex items-center gap-2 text-sm font-bold text-ink">
-                <span class:list={['size-2 rounded-full', palette.mark]} aria-hidden="true" />
+                <PhaseIcon phase={item.phase} class:list={[palette.text]} />
                 Semana {String(item.order).padStart(2, '0')}
               </span>
-              <span class:list={['pl-4 text-xs font-semibold', palette.text]}>
+              <span class:list={['pl-6 text-xs font-semibold', palette.text]}>
                 {PHASE_LABELS[item.phase]}
               </span>
             </a>

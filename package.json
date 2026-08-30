@@ -20,6 +20,7 @@
     "@astrojs/vue": "^7.0.2",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.2.4",
+    "reicon-vue": "^1.1.102",
     "tailwindcss": "^4.3.3",
     "vue": "^3.5.41",
     "zod": "^4.4.3"

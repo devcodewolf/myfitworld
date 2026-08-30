@@ -17,6 +17,9 @@ importers:
       astro:
         specifier: ^7.2.4
         version: 7.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.2.0)(jiti@2.7.0)(yaml@2.9.0)
+      reicon-vue:
+        specifier: ^1.1.102
+        version: 1.1.102(vue@3.5.41(typescript@6.0.3))
       tailwindcss:
         specifier: ^4.3.3
         version: 4.3.3
@@ -2002,6 +2005,11 @@ packages:
 
   regex@6.1.0:
     resolution: {integrity: sha512-6VwtthbV4o/7+OaAF9I5L5V3llLEsoPyq9P1JVXkedTP33c7MfCG0/5NOPcSJn0TzXcG9YUrR0gQSWioew3LDg==}
+
+  reicon-vue@1.1.102:
+    resolution: {integrity: sha512-8ZgumDYLJNiJKOH3oBT7xQz9zbsStFQxhSKJ3PT0T3KEuqnN8tFeT2lvuFxX1WSbppdBnYWpiPYjF+sTrlV5jg==}
+    peerDependencies:
+      vue: ^3.0.0
 
   request-light@0.5.8:
     resolution: {integrity: sha512-3Zjgh+8b5fhRJBQZoy+zbVKpAQGLyka0MPgW3zruTF4dFFJ8Fqcfu9YsAvi/rvdcaTeWG3MkbZv4WKxAn/84Lg==}
@@ -4423,6 +4431,10 @@ snapshots:
   regex@6.1.0:
     dependencies:
       regex-utilities: 2.3.0
+
+  reicon-vue@1.1.102(vue@3.5.41(typescript@6.0.3)):
+    dependencies:
+      vue: 3.5.41(typescript@6.0.3)
 
   request-light@0.5.8: {}
 

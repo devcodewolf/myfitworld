@@ -1,0 +1,39 @@
+---
+/**
+ * El icono de una fase del mesociclo.
+ *
+ * Los iconos vienen de `reicon-vue`, que son componentes de Vue. Se renderizan
+ * **sin directiva `client:*`**, así que Astro los resuelve a SVG en el build y
+ * la página no se lleva ni un byte de JavaScript por esto.
+ *
+ * Este envoltorio existe para que el resto del proyecto no importe la librería
+ * directamente: si algún día los cuatro iconos pasan a dibujarse a mano en
+ * `Icon.astro`, se cambia aquí y en ningún otro sitio.
+ */
+import { Chart4, Flame, Layers, Moon } from 'reicon-vue';
+
+import type { WeekPhase } from '@/core/model';
+
+interface Props {
+  phase: WeekPhase;
+  size?: number;
+  class?: string;
+}
+
+const { phase, size = 16, class: className } = Astro.props;
+
+const ICONS = {
+  // Series que se acumulan semana a semana.
+  accumulation: Layers,
+  // Las mismas series, más repeticiones: barras que suben.
+  progression: Chart4,
+  // Cerca del fallo: la semana más dura.
+  intensification: Flame,
+  // Descarga: la semana de recuperar.
+  deload: Moon,
+} as const;
+
+const Icon = ICONS[phase];
+---
+
+<Icon size={size} class={className} aria-hidden="true" />
