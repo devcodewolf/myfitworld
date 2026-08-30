@@ -13,7 +13,7 @@ Para la visión de producto está `PRODUCT.md`. Para el sistema visual, `DESIGN.
 
 | Pieza | Elección | Por qué |
 |---|---|---|
-| Framework | Astro 7, `output: 'static'` | 36 páginas prerenderizadas; no hay servidor que mantener |
+| Framework | Astro 7, `output: 'static'` + adaptador de Node | ~35 páginas prerenderizadas; el servidor solo atiende las rutas con datos personales |
 | Lenguaje | TypeScript `strict`, sin `any` | Los tipos se infieren de los esquemas Zod |
 | Validación | Zod 4 | Fuente de verdad compartida entre contenido, persistencia y futuro servidor |
 | Estilos | Tailwind v4, CSS-first | Tokens en `@theme` dentro de `src/styles/global.css`; no hay `tailwind.config.js` |
@@ -190,16 +190,33 @@ Si el trabajo se hace bien, **el único directorio que cambia es `src/storage/`*
 `components/` y `pages/` no se enteran. Cualquier plan que requiera tocarlos es señal de que se está
 saltando la interfaz.
 
-### 6.2 Recomendación: Supabase
+### 6.2 Decisión tomada: Postgres, Drizzle y Better Auth sobre servidor propio
 
-Para el caso real (un usuario, quizá un segundo perfil, sincronizar entre móvil y ordenador,
-eventualmente un panel para editar rutinas) la opción de menor coste es **Supabase**: Postgres
-gestionado, autenticación y Row Level Security, con cliente JavaScript. La app sigue siendo estática:
-el navegador habla directamente con Supabase y no hace falta adaptador de servidor.
+**Postgres** gestionado por Dokploy en el VPS, **Drizzle** como ORM y **Better Auth** para las
+cuentas. Astro sirve con el adaptador de Node.
 
-Alternativa si se prefiere control total y no depender de terceros: **Astro con adaptador de servidor
-+ Postgres o SQLite (Turso) + Drizzle**. Cuesta más porque hay que escribir la autenticación y los
-endpoints a mano.
+Se descartó Supabase, que era la recomendación anterior de este documento: implicaba depender de un
+tercero para algo que va a vivir en un VPS que ya existe.
+
+Y se descartó SQLite, que era la primera idea, por un motivo operativo concreto: **con SQLite la
+persistencia entre despliegues la configuras tú** —un volumen Docker mal declarado y los datos se
+van con el contenedor—, mientras que Dokploy trata Postgres como recurso de primera clase y
+configura él el volumen, las credenciales y las copias programadas. El riesgo se mueve de tu
+configuración a la suya, que está probada. El coste es un contenedor más en el VPS.
+
+Efecto lateral favorable: `jsonb` de Postgres se indexa y se consulta de verdad, así que el diseño
+de 6.3 —columnas para lo que se filtra, el registro completo en JSON— no se queda sin salida si
+algún día hacen falta consultas analíticas.
+
+**Modo de render.** El sitio sigue en `output: 'static'` con adaptador. El adaptador no lo convierte
+en dinámico: permite que rutas concretas se salgan del prerender con `export const prerender = false`.
+Solo lo hacen las que tienen datos personales —`/historial`, `/configuracion`, `/consejos` y
+`entrenar`— más las de autenticación. Las ~35 páginas de contenido del mesociclo siguen generándose
+en el build.
+
+**Transporte.** Astro Actions, no una API escrita a mano: valida la entrada con los mismos esquemas
+Zod que ya usa el modelo y se llama igual desde la isla de Vue y desde los módulos de `src/browser/`.
+El único endpoint manual es el que exige Better Auth, `/api/auth/[...all]`.
 
 ### 6.3 Esquema de tablas
 
@@ -209,14 +226,14 @@ son ISO 8601.
 ```sql
 create table profiles (
   id uuid primary key,
-  user_id uuid not null references auth.users(id),
+  user_id text not null references "user"(id),
   name text not null,
   created_at timestamptz not null
 );
 
 create table settings (
   profile_id uuid primary key references profiles(id) on delete cascade,
-  user_id uuid not null references auth.users(id),
+  user_id text not null references "user"(id),
   data jsonb not null,          -- valida con SettingsSchema al leer
   updated_at timestamptz not null
 );
@@ -224,7 +241,7 @@ create table settings (
 create table sessions (
   id uuid primary key,
   profile_id uuid not null references profiles(id) on delete cascade,
-  user_id uuid not null references auth.users(id),
+  user_id text not null references "user"(id),
   mesocycle_id text not null,
   week_order int not null,
   day_order int not null,
@@ -244,7 +261,9 @@ mismo esquema Zod que usa el cliente. Eso mantiene una sola fuente de verdad par
 datos. Si más adelante hacen falta consultas analíticas por serie, se normaliza `sets` a su propia
 tabla; hoy no compensa.
 
-RLS en las tres tablas: `using (auth.uid() = user_id)`.
+Sin RLS: no hay cliente hablando directamente con la base. **El filtro por usuario lo pone el
+servidor**, en cada acción, a partir de la sesión de Better Auth. Una acción que no filtre por
+`user_id` es un fallo de seguridad, no un descuido de estilo.
 
 ### 6.4 Pasos, en orden
 

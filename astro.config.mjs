@@ -3,21 +3,24 @@ import { defineConfig } from 'astro/config';
 
 import tailwindcss from '@tailwindcss/vite';
 
+import node from '@astrojs/node';
 import vue from '@astrojs/vue';
 
 /**
- * `base` se decide en tiempo de build, no en el código.
- * Astro no sabe emitir rutas relativas (`base: './'` produce `/./`), así que la
- * portabilidad entre subcarpetas se resuelve reconstruyendo con otra variable:
+ * `output: 'static'` con adaptador: la combinación deliberada.
  *
- *   BASE_PATH=/entreno pnpm build
+ * El adaptador **no** convierte el sitio en dinámico. Sigue generándose entero
+ * en el build; lo que aporta es la posibilidad de que rutas concretas se salgan
+ * del prerender con `export const prerender = false`. Es lo que hará falta para
+ * las cuatro pantallas con datos personales y para la autenticación, y lo que
+ * mantiene estáticas las treinta y cinco páginas de contenido del mesociclo.
  *
- * Todos los enlaces internos se construyen en src/routes.ts, que es lo que
- * mantiene esta decisión en un solo sitio.
+ * Ya no hay `base`: el despliegue en subcarpeta se descartó al montar servidor
+ * propio, y con él se va toda la aritmética de prefijos de `src/routes.ts`.
  */
 export default defineConfig({
   output: 'static',
-  base: process.env.BASE_PATH ?? '/',
+  adapter: node({ mode: 'standalone' }),
 
   vite: {
     plugins: [tailwindcss()],

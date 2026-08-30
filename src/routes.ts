@@ -1,16 +1,12 @@
 /**
  * Todas las URLs internas se construyen aquí, y solo aquí.
  *
- * Astro entrega `BASE_URL` sin barra final cuando se despliega en subcarpeta
- * (`/entreno`, no `/entreno/`), así que concatenar a mano produce `/entrenoX`.
- * Este módulo es lo que evita ese bug en cada enlace de la app.
+ * Antes este módulo existía para sobrevivir al despliegue en subcarpeta: Astro
+ * entrega `BASE_URL` sin barra final, así que concatenar a mano producía
+ * `/entrenoX`. Esa complejidad desapareció al descartar la subcarpeta, pero el
+ * módulo se queda: tener un único sitio donde se decide cómo es una URL es lo
+ * que permite renombrar una ruta sin buscar cadenas por todo el proyecto.
  */
-const BASE = import.meta.env.BASE_URL.replace(/\/+$/, '');
-
-function url(path: string): string {
-  const clean = path.replace(/^\/+/, '');
-  return clean === '' ? `${BASE}/` : `${BASE}/${clean}`;
-}
 
 /** De qué día vienes, para poder volver ahí en vez de al catálogo entero. */
 export interface DayContext {
@@ -19,22 +15,22 @@ export interface DayContext {
 }
 
 export const routes = {
-  home: () => url('/'),
-  week: (week: number) => url(`semana/${week}`),
-  day: (week: number, day: number) => url(`semana/${week}/dia/${day}`),
-  train: (week: number, day: number) => url(`semana/${week}/dia/${day}/entrenar`),
-  exercises: () => url('ejercicios'),
+  home: () => '/',
+  week: (week: number) => `/semana/${week}`,
+  day: (week: number, day: number) => `/semana/${week}/dia/${day}`,
+  train: (week: number, day: number) => `/semana/${week}/dia/${day}/entrenar`,
+  exercises: () => '/ejercicios',
   exercise: (slug: string, from?: DayContext) =>
-    url(`ejercicios/${slug}`) + (from ? `?desde=${from.week}-${from.day}` : ''),
-  history: () => url('historial'),
-  advice: () => url('consejos'),
-  settings: () => url('configuracion'),
+    `/ejercicios/${slug}` + (from ? `?desde=${from.week}-${from.day}` : ''),
+  history: () => '/historial',
+  advice: () => '/consejos',
+  settings: () => '/configuracion',
   /**
-   * Un asset propio se reconstruye con el `base` del despliegue; uno remoto se
-   * devuelve tal cual. Sin esta distinción, una foto de Unsplash acabaría
-   * pedida como `/entreno/https://images.unsplash.com/...`.
+   * Un asset propio se sirve desde la raíz; uno remoto se devuelve tal cual.
+   * Sin esta distinción, una foto de Unsplash acabaría pedida como
+   * `/https://images.unsplash.com/...`.
    */
-  asset: (path: string) => (isRemote(path) ? path : url(path)),
+  asset: (path: string) => (isRemote(path) ? path : `/${path.replace(/^\/+/, '')}`),
 } as const;
 
 function isRemote(path: string): boolean {
@@ -57,6 +53,6 @@ export function isActiveRoute(current: string, target: string): boolean {
   const normalize = (value: string) => value.replace(/\/+$/, '') || '/';
   const currentPath = normalize(current);
   const targetPath = normalize(target);
-  if (targetPath === normalize(BASE || '/')) return currentPath === targetPath;
+  if (targetPath === '/') return currentPath === '/';
   return currentPath === targetPath || currentPath.startsWith(`${targetPath}/`);
 }

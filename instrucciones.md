@@ -175,13 +175,8 @@ pnpm check      # comprobación de tipos
 pnpm build      # generar el sitio en dist/
 ```
 
-Para desplegarlo en una subcarpeta de tu servidor:
-
-```bash
-BASE_PATH=/entreno pnpm build    # vivirá en https://tu-servidor/entreno/
-```
-
-Y luego se copia el contenido de `dist/` dentro de esa carpeta.
+Eso deja el sitio en `dist/`: las páginas en `dist/client/` y el servidor que las sirve en
+`dist/server/`. Para levantarlo, `node dist/server/entry.mjs`.
 
 ---
 

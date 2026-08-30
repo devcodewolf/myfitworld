@@ -15,8 +15,8 @@ pnpm test src/core/timer.test.ts          # un solo archivo
 pnpm test src/core/timer.test.ts -t "..." # un solo caso, por nombre
 pnpm format                               # Prettier sobre todo
 pnpm format:check                         # el que hay que dejar limpio
-pnpm build                                # dist/
-BASE_PATH=/entreno pnpm build             # desplegar en una subcarpeta
+pnpm build                                # dist/client + dist/server
+node dist/server/entry.mjs                # servir lo construido
 ```
 
 `pnpm`, siempre. Antes de dar algo por terminado: `check`, `test`, `format:check`
@@ -53,11 +53,16 @@ ni una firma fuera de su carpeta. `specs.md` tiene los pasos concretos.
 
 ### Piezas que hay que conocer antes de tocar nada
 
-- **`src/routes.ts` construye todas las URLs, y solo él.** Astro entrega
-  `BASE_URL` _sin_ barra final en subcarpeta, así que concatenar a mano produce
-  `/entrenoX`. Los assets de `public/` también pasan por `routes.asset()`. Astro
-  **no** sabe emitir rutas relativas: `base: './'` escribe `/./` y rompe el sitio.
-  Por eso la portabilidad se resuelve reconstruyendo con `BASE_PATH`.
+- **`src/routes.ts` construye todas las URLs, y solo él.** El sitio se sirve
+  desde la raíz: el despliegue en subcarpeta se descartó al montar servidor
+  propio. Los assets de `public/` también pasan por `routes.asset()`, que
+  distingue una ruta propia de una URL remota; sin eso, una foto de Unsplash
+  acabaría pedida como `/https://images.unsplash.com/...`.
+- **`output: 'static'` con adaptador de Node, y es a propósito.** El adaptador
+  no vuelve dinámico el sitio: permite que rutas concretas se salgan del
+  prerender con `export const prerender = false`. Hoy no lo hace ninguna; lo
+  harán las que tengan datos personales. Las páginas de contenido del mesociclo
+  siguen generándose en el build y así deben seguir.
 - **`assertRoutineIntegrity()` en `src/data.ts` rompe el build** si un día
   referencia un `exerciseId` inexistente, si dos bloques comparten clave o si una
   superserie se queda con un solo ejercicio. Se hace ahí y no con `reference()`

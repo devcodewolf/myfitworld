@@ -28,19 +28,21 @@ astro dev logs
 astro dev stop
 ```
 
-## Desplegar en una subcarpeta
+## Desplegar
 
-Astro no sabe emitir rutas relativas: con `base: './'` escribe `/./` y el sitio se rompe fuera de
-la raíz. La portabilidad se resuelve en tiempo de build con una variable:
+El build produce dos carpetas: `dist/client/` con las páginas ya generadas y los assets, y
+`dist/server/` con el servidor de Node que las sirve.
 
 ```bash
-BASE_PATH=/entreno pnpm build     # el sitio vivirá en https://tu-servidor/entreno/
-pnpm build                        # sin variable, se despliega en la raíz
+pnpm build
+node dist/server/entry.mjs        # escucha en el puerto 4321
 ```
 
-Luego se copia el contenido de `dist/` dentro de esa carpeta del servidor. Cambiar de carpeta obliga
-a reconstruir, nada más. Todos los enlaces internos salen de `src/routes.ts`, que es lo único que
-hay que tocar si aparece una ruta nueva.
+El sitio se sirve desde la raíz del dominio. El despliegue en subcarpeta se descartó al montar
+servidor propio: no aportaba nada y complicaba las cookies de sesión.
+
+Todos los enlaces internos salen de `src/routes.ts`, que es lo único que hay que tocar si aparece
+una ruta nueva.
 
 ## Cómo está organizado
 
