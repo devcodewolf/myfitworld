@@ -78,6 +78,74 @@ export function muscleBars(byMuscle: ReadonlyMap<MuscleGroup, number>, limit = 8
   }));
 }
 
+export interface MuscleCell {
+  readonly weekOrder: number;
+  readonly sets: number;
+  /** Proporción contra el máximo de **toda** la tabla, entre 0 y 1. */
+  readonly ratio: number;
+}
+
+export interface MuscleRow {
+  readonly muscle: MuscleGroup;
+  readonly total: number;
+  readonly cells: readonly MuscleCell[];
+}
+
+export interface MuscleMatrix {
+  readonly weeks: readonly number[];
+  readonly rows: readonly MuscleRow[];
+  /** El valor más alto de la tabla: el que define la escala común. */
+  readonly max: number;
+}
+
+/**
+ * Series por músculo y semana, en una sola tabla con **escala común**.
+ *
+ * Es lo que `muscleBars` no puede dar: allí cada semana se normaliza contra su
+ * propio máximo, así que una semana de descarga con 8 series dibuja una barra
+ * tan larga como una de acumulación con 18 y el ojo lee que son iguales. Aquí
+ * el denominador es el máximo de toda la tabla, que es lo que hace comparables
+ * dos semanas cualesquiera.
+ *
+ * Las filas van de más a menos trabajo total, que es el orden en el que se
+ * busca: primero lo que más pesa en el mesociclo.
+ */
+export function muscleMatrix(
+  weeks: readonly WeekVolume[],
+  { limit = 10 }: { limit?: number } = {},
+): MuscleMatrix {
+  const order = weeks.map((week) => week.weekOrder);
+  const totals = new Map<MuscleGroup, number>();
+  for (const week of weeks) {
+    for (const [muscle, sets] of week.byMuscle) {
+      totals.set(muscle, (totals.get(muscle) ?? 0) + sets);
+    }
+  }
+
+  let max = 0;
+  for (const week of weeks) {
+    for (const sets of week.byMuscle.values()) max = Math.max(max, sets);
+  }
+
+  const rows = [...totals.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, limit)
+    .map(([muscle, total]) => ({
+      muscle,
+      total: Math.round(total * 10) / 10,
+      cells: weeks.map((week) => {
+        const sets = week.byMuscle.get(muscle) ?? 0;
+        return {
+          weekOrder: week.weekOrder,
+          sets: Math.round(sets * 10) / 10,
+          ratio: max === 0 ? 0 : sets / max,
+        };
+      }),
+    }));
+
+  return { weeks: order, rows, max: Math.round(max * 10) / 10 };
+}
+
 export interface SessionRow {
   readonly session: SessionLog;
   readonly volume: VolumeTotals;

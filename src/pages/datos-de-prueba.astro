@@ -1,0 +1,292 @@
+---
+/**
+ * ─────────────────────────────────────────────────────────────────────────────
+ * PÁGINA TEMPORAL. Se borra al terminar el rediseño del historial.
+ * ─────────────────────────────────────────────────────────────────────────────
+ *
+ * Existe por un motivo concreto: el historial con datos no lo había visto nadie,
+ * porque para verlo hay que entrenar siete veces. Sin verlo no se puede
+ * rediseñar. Esto siembra un historial verosímil para poder mirarlo.
+ *
+ * Los datos salen del mesociclo real y se escriben por el repositorio, que los
+ * valida con los mismos esquemas Zod que la app: si algo no encaja, se entera
+ * aquí y no acaba en cuarentena.
+ *
+ * Para borrar la página: `rm src/pages/datos-de-prueba.astro`. No la enlaza
+ * nadie y no importa nada que no exista ya.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getActiveMesocycle, getExerciseCatalog } from '@/data';
+import { blockKeyOf } from '@/core/training';
+import { routes } from '@/routes';
+
+const mesocycle = await getActiveMesocycle();
+const catalog = await getExerciseCatalog();
+
+/** Las sesiones que se siembran: dos semanas enteras y el arranque de la tercera. */
+const TO_SEED: ReadonlyArray<[number, number]> = [
+  [1, 1],
+  [1, 2],
+  [1, 3],
+  [2, 1],
+  [2, 2],
+  [2, 3],
+  [3, 1],
+];
+
+// El plan viaja al cliente ya resuelto; allí solo se le ponen fechas y sellos.
+const plan = TO_SEED.flatMap(([weekOrder, dayOrder]) => {
+  const week = mesocycle.weeks.find((w) => w.order === weekOrder);
+  const day = week?.days.find((d) => d.order === dayOrder);
+  if (!week || !day) return [];
+  return [
+    {
+      weekOrder,
+      dayOrder,
+      title: day.title,
+      blocks: day.blocks.map((block) => ({
+        blockKey: blockKeyOf(block),
+        exerciseId: block.exerciseId,
+        sets: block.sets,
+        repMin: block.repRange?.min,
+        repMax: block.repRange?.max,
+        workSeconds: block.workSeconds,
+        perSide: block.perSideLogging,
+        loadType: catalog.get(block.exerciseId)?.loadType ?? 'external',
+      })),
+    },
+  ];
+});
+
+const payload = { mesocycleId: mesocycle.id, plan };
+const totalSets = plan.reduce(
+  (n, s) => n + s.blocks.reduce((m, b) => m + b.sets * (b.perSide ? 2 : 1), 0),
+  0,
+);
+
+const BUTTON =
+  'inline-flex min-h-14 items-center rounded-full border border-line px-7 text-base font-bold text-ink-dim transition-colors hover:border-line-strong hover:text-ink';
+---
+
+<BaseLayout
+  title="Datos de prueba · My Fitness World"
+  description="Siembra un historial de prueba."
+>
+  <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    <header>
+      <h1 class="text-figure font-black tracking-[-0.02em] text-ink">Datos de prueba</h1>
+      <p class="mt-2 max-w-[60ch] text-base text-ink-dim">
+        Página temporal para poder mirar el historial con contenido. Se borra al terminar su
+        rediseño.
+      </p>
+    </header>
+
+    <section class="panel mt-8 rounded-card border border-line p-5 sm:p-6">
+      <h2 class="text-base font-extrabold text-ink">Qué escribe</h2>
+      <ul class="mt-3 flex flex-col gap-1.5 text-sm text-ink-dim">
+        <li>
+          <span class="figures font-bold text-ink">{plan.length} sesiones</span> completadas: las semanas
+          01 y 02 enteras, y el día 1 de la 03.
+        </li>
+        <li>
+          <span class="figures font-bold text-ink">{totalSets} series</span> con pesos y repeticiones
+          verosímiles, sacadas del mesociclo real.
+        </li>
+        <li>
+          Las repeticiones suben de una semana a la siguiente, para que haya progresión que ver.
+        </li>
+        <li>
+          Peso de trabajo 9 kg, que es el material declarado; los de peso corporal, sin carga.
+        </li>
+        <li>La semana 04 se queda vacía a propósito, para ver cómo se comporta.</li>
+      </ul>
+      <p class="mt-4 text-sm text-ink-faint">
+        Sustituye por completo lo que haya guardado en este navegador. Si tienes entrenos de verdad,
+        expórtalos antes desde Ajustes.
+      </p>
+    </section>
+
+    <p
+      id="aviso"
+      hidden
+      role="status"
+      class="mt-6 rounded-card border border-line px-4 py-3 text-sm text-ink data-[tone=error]:border-line-strong data-[tone=error]:text-ink-dim"
+    >
+    </p>
+
+    <div class="mt-8 flex flex-wrap gap-3">
+      <button
+        id="sembrar"
+        type="button"
+        class="accion-primaria inline-flex min-h-14 items-center rounded-full px-7 text-base font-extrabold text-accent-ink transition-transform hover:scale-[1.02] active:scale-100"
+      >
+        Sembrar historial
+      </button>
+      <button id="borrar" type="button" class={BUTTON}>Borrar todo</button>
+      <a href={routes.history()} class={BUTTON}>Ir al historial</a>
+    </div>
+  </div>
+</BaseLayout>
+
+<script id="datos-siembra" type="application/json" is:inline set:html={JSON.stringify(payload)} />
+
+<script>
+  import { getRepository } from '@/browser/repository';
+  import { STORAGE_SCHEMA_VERSION, type SessionLog, type StoredState } from '@/core/model';
+  import { routes } from '@/routes';
+
+  interface SeedBlock {
+    blockKey: string;
+    exerciseId: string;
+    sets: number;
+    repMin?: number;
+    repMax?: number;
+    workSeconds?: number;
+    perSide: boolean;
+    loadType: string;
+  }
+  interface SeedSession {
+    weekOrder: number;
+    dayOrder: number;
+    title: string;
+    blocks: SeedBlock[];
+  }
+
+  const WORK_KG = 9;
+  const DAY_MS = 86_400_000;
+
+  const aviso = document.getElementById('aviso');
+  const say = (text: string, tone?: 'error') => {
+    if (!aviso) return;
+    aviso.hidden = false;
+    aviso.textContent = text;
+    if (tone) aviso.dataset.tone = tone;
+    else delete aviso.dataset.tone;
+  };
+
+  const iso = (ms: number) => new Date(ms).toISOString();
+
+  /**
+   * Repeticiones de la semana: se parte del mínimo del rango y se sube una por
+   * semana. Así el aviso de subir peso se dispara por el motivo real —topar el
+   * rango dos sesiones seguidas— en vez de por un número inventado.
+   */
+  function repsFor(block: SeedBlock, weekOrder: number): number | undefined {
+    if (block.workSeconds !== undefined) return undefined;
+    const min = block.repMin ?? 8;
+    const max = block.repMax ?? min + 4;
+    return Math.min(max + (weekOrder >= 3 ? 1 : 0), min + weekOrder + 1);
+  }
+
+  function buildSessions(
+    plan: SeedSession[],
+    profileId: string,
+    mesocycleId: string,
+  ): SessionLog[] {
+    const uuid = () => crypto.randomUUID();
+    // La última sesión cae anteayer y hacia atrás cada dos o tres días.
+    let offsetDays = 2 + (plan.length - 1) * 2.5;
+
+    return plan.map((session) => {
+      const startedAt = Date.now() - Math.round(offsetDays * DAY_MS);
+      offsetDays -= 2.5;
+      const minutes = 44 + session.weekOrder * 4;
+
+      const exercises = session.blocks.map((block, blockIndex) => {
+        const sets = [];
+        const sides = block.perSide ? (['left', 'right'] as const) : [undefined];
+        for (let index = 1; index <= block.sets; index += 1) {
+          for (const side of sides) {
+            // Una serie saltada en la primera sesión: el historial real las tiene.
+            const skipped = session.weekOrder === 1 && blockIndex === 2 && index === block.sets;
+            const reps = repsFor(block, session.weekOrder);
+            sets.push({
+              id: uuid(),
+              setIndex: index,
+              ...(side ? { side } : {}),
+              ...(reps !== undefined ? { reps } : {}),
+              ...(block.workSeconds !== undefined ? { seconds: block.workSeconds } : {}),
+              ...(block.loadType === 'bodyweight' ? {} : { weightKg: WORK_KG }),
+              skipped,
+              completedAt: iso(startedAt + index * 4 * 60_000),
+            });
+          }
+        }
+        return { blockKey: block.blockKey, exerciseId: block.exerciseId, sets };
+      });
+
+      return {
+        id: uuid(),
+        profileId,
+        mesocycleId,
+        weekOrder: session.weekOrder,
+        dayOrder: session.dayOrder,
+        status: 'completed',
+        startedAt: iso(startedAt),
+        finishedAt: iso(startedAt + minutes * 60_000),
+        activeSeconds: minutes * 60,
+        restMultiplier: 1,
+        exercises,
+        createdAt: iso(startedAt),
+        updatedAt: iso(startedAt + minutes * 60_000),
+      } as SessionLog;
+    });
+  }
+
+  async function seed(): Promise<void> {
+    const raw = document.getElementById('datos-siembra')?.textContent ?? '{}';
+    const { plan, mesocycleId } = JSON.parse(raw) as { plan: SeedSession[]; mesocycleId: string };
+
+    const repo = getRepository();
+    const profile = await repo.profiles.getActive();
+    const settings = await repo.settings.get();
+
+    const state: StoredState = {
+      schemaVersion: STORAGE_SCHEMA_VERSION,
+      profiles: [profile],
+      sessions: buildSessions(plan, profile.id, mesocycleId),
+      settings: [
+        {
+          ...settings,
+          bodyweightKg: settings.bodyweightKg ?? 78,
+          availableLoads:
+            settings.availableLoads.length > 0
+              ? settings.availableLoads
+              : [{ id: crypto.randomUUID(), kind: 'dumbbell', weightKg: WORK_KG, count: 2 }],
+          updatedAt: new Date().toISOString(),
+        },
+      ],
+    };
+
+    // restore() valida con Zod antes de escribir: si el sembrado fuera inválido,
+    // se entera aquí en vez de acabar en cuarentena sin explicación.
+    await repo.restore(state);
+    say(`Sembradas ${state.sessions.length} sesiones. Abre el historial para verlo.`);
+  }
+
+  document.getElementById('sembrar')?.addEventListener('click', () => {
+    seed()
+      .then(() => setTimeout(() => location.assign(routes.history()), 900))
+      .catch((error: unknown) => {
+        say(
+          `No se pudo sembrar: ${error instanceof Error ? error.message : String(error)}`,
+          'error',
+        );
+      });
+  });
+
+  document.getElementById('borrar')?.addEventListener('click', () => {
+    void (async () => {
+      const repo = getRepository();
+      const profile = await repo.profiles.getActive();
+      const settings = await repo.settings.get();
+      await repo.restore({
+        schemaVersion: 1,
+        profiles: [profile],
+        sessions: [],
+        settings: [settings],
+      });
+      say('Historial borrado. Vuelve a estar vacío.');
+    })();
+  });
+</script>

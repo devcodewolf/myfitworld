@@ -2,7 +2,14 @@ import { describe, expect, it } from 'vitest';
 
 import type { Exercise, LoadItem, Mesocycle, SessionLog, SetLog, Slug } from '@/core/model';
 import type { ExerciseCatalog } from '@/core/training';
-import { loadAlerts, muscleBars, sessionRows, trackedBlocksOf, volumeByWeek } from '@/core/history';
+import {
+  loadAlerts,
+  muscleBars,
+  muscleMatrix,
+  sessionRows,
+  trackedBlocksOf,
+  volumeByWeek,
+} from '@/core/history';
 
 const ejercicio = (id: Slug, extra: Partial<Exercise> = {}): Exercise => ({
   id,
@@ -237,5 +244,74 @@ describe('avisos de subir peso', () => {
       AMPLIADO,
     );
     expect(avisos).toHaveLength(1);
+  });
+});
+
+describe('muscleMatrix', () => {
+  const semanas = () =>
+    volumeByWeek(
+      [
+        // Semana 1: tres series de press. Semana 2: una sola.
+        sesion(1, '2026-08-01T10:00:00.000Z', [
+          {
+            blockKey: 'press',
+            exerciseId: 'press',
+            sets: [
+              serie({ reps: 10, weightKg: 9 }),
+              serie({ reps: 10, weightKg: 9 }),
+              serie({ reps: 10, weightKg: 9 }),
+            ],
+          },
+        ]),
+        sesion(2, '2026-08-08T10:00:00.000Z', [
+          { blockKey: 'press', exerciseId: 'press', sets: [serie({ reps: 10, weightKg: 9 })] },
+        ]),
+      ],
+      catalogo,
+    );
+
+  it('normaliza contra el máximo de toda la tabla, no contra el de cada semana', () => {
+    const { rows, max } = muscleMatrix(semanas());
+    const delts = rows.find((row) => row.muscle === 'front_delts');
+
+    expect(max).toBe(3);
+    // La semana con una serie mide un tercio, no el ancho completo: es justo lo
+    // que `muscleBars` no puede decir porque normaliza semana a semana.
+    expect(delts?.cells.map((cell) => cell.ratio)).toEqual([1, 1 / 3]);
+  });
+
+  it('deja una celda a cero cuando el músculo no se trabajó esa semana', () => {
+    const semanasConHueco = volumeByWeek(
+      [
+        sesion(1, '2026-08-01T10:00:00.000Z', [
+          {
+            blockKey: 'flexiones',
+            exerciseId: 'flexiones',
+            sets: [serie({ reps: 10, weightKg: 9 })],
+          },
+        ]),
+        sesion(2, '2026-08-08T10:00:00.000Z', [
+          { blockKey: 'press', exerciseId: 'press', sets: [serie({ reps: 10, weightKg: 9 })] },
+        ]),
+      ],
+      catalogo,
+    );
+    const pecho = muscleMatrix(semanasConHueco).rows.find((row) => row.muscle === 'chest');
+
+    expect(pecho?.cells).toHaveLength(2);
+    expect(pecho?.cells[1]).toMatchObject({ weekOrder: 2, sets: 0, ratio: 0 });
+  });
+
+  it('ordena las filas por trabajo total y respeta el límite', () => {
+    const { rows, weeks } = muscleMatrix(semanas(), { limit: 1 });
+
+    expect(weeks).toEqual([1, 2]);
+    expect(rows).toHaveLength(1);
+    expect(rows[0]?.muscle).toBe('front_delts');
+    expect(rows[0]?.total).toBe(4);
+  });
+
+  it('no divide por cero cuando todavía no hay nada registrado', () => {
+    expect(muscleMatrix([])).toEqual({ weeks: [], rows: [], max: 0 });
   });
 });

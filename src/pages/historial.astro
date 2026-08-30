@@ -1,18 +1,18 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/ui/Icon.astro';
+import PhotoCard from '@/components/ui/PhotoCard.astro';
 import { getActiveMesocycle, getExerciseCatalog } from '@/data';
 import { trackedBlocksOf } from '@/core/history';
 import { PHASE_LABELS } from '@/core/labels';
-import { PHASE_PALETTE, dayPhoto } from '@/theme';
-import PhotoCard from '@/components/ui/PhotoCard.astro';
 import { daySetCount } from '@/core/training';
+import { PHASE_PALETTE, dayPhoto } from '@/theme';
 import { routes } from '@/routes';
 
 const mesocycle = await getActiveMesocycle();
 const catalog = await getExerciseCatalog();
 
-// El estado vacío enseña la forma de lo que va a llegar, así que necesita el
-// plan entero: doce huecos con nombre, no un párrafo diciendo que no hay nada.
+// El plan entero: lo usan el estado vacío y el calendario de sesiones.
 const plan = mesocycle.weeks.map((week) => ({
   order: week.order,
   phase: week.phase,
@@ -27,7 +27,7 @@ const plan = mesocycle.weeks.map((week) => ({
 const firstDay = plan[0]?.days[0];
 
 // Solo viaja al cliente lo que la pantalla necesita: los músculos y el nombre
-// de cada ejercicio, y los bloques con rango. Ni claves de técnica ni errores.
+// de cada ejercicio, los bloques con rango y la forma del plan.
 const payload = {
   muscles: Object.fromEntries(
     [...catalog.entries()].map(([id, exercise]) => [
@@ -38,7 +38,14 @@ const payload = {
   names: Object.fromEntries([...catalog.entries()].map(([id, exercise]) => [id, exercise.name])),
   blocks: trackedBlocksOf(mesocycle),
   phases: Object.fromEntries(mesocycle.weeks.map((week) => [week.order, week.phase])),
+  plan: plan.map((week) => ({
+    order: week.order,
+    days: week.days.map((day) => ({ order: day.order, title: day.title, href: day.href })),
+  })),
 };
+
+const CELL = 'panel flex min-w-0 flex-col rounded-card border border-line p-5 sm:p-6';
+const CELL_TITLE = 'flex items-center gap-2.5 text-base font-extrabold text-ink';
 ---
 
 <BaseLayout
@@ -60,9 +67,8 @@ const payload = {
     </p>
 
     {
-      /* Bento: una celda grande con la foto de la primera sesión y la acción
-        encima, y las cuatro semanas alrededor en celdas menores. Enseña la forma
-        de lo que va a llegar en vez de decir que no hay nada. */
+      /* Estado vacío: enseña la forma de lo que va a llegar en vez de decir que
+        no hay nada. Las doce sesiones del mesociclo, esperando. */
     }
     <div id="vacio" hidden class="grid gap-4 pt-8 lg:grid-cols-3">
       {
@@ -128,38 +134,57 @@ const payload = {
       </p>
     </div>
 
-    <div id="panel-historial" hidden class="flex flex-col gap-12 pt-10">
-      <section id="avisos" hidden aria-labelledby="titulo-avisos">
-        <h2
-          id="titulo-avisos"
-          class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase"
+    {
+      /* Con datos. Bento de tres bandas: primero la respuesta que traes —¿voy a
+        más o a menos?—, luego dónde has entrenado, y al final el reparto por
+        músculo, que es lo que se consulta cuando ya sabes lo demás. */
+    }
+    <div id="panel-historial" hidden class="grid gap-4 pt-8 lg:grid-cols-3">
+      <PhotoCard
+        photo={plan[0]?.days[0]?.photo ?? ''}
+        alt=""
+        eager
+        fill
+        class="min-h-72 min-w-0 lg:col-span-2"
+      >
+        <p class="figures text-sm font-bold text-ink" id="resumen-encabezado"></p>
+        <p
+          id="resumen-titular"
+          class="mt-1 text-figure font-black tracking-[-0.02em] text-balance text-ink"
         >
+        </p>
+        <dl id="resumen-cifras" class="mt-5 flex flex-wrap gap-x-8 gap-y-3"></dl>
+      </PhotoCard>
+
+      <section class:list={[CELL]} aria-labelledby="titulo-avisos">
+        <h2 id="titulo-avisos" class={CELL_TITLE}>
+          <Icon name="trend-up" size={20} class="text-ink-faint" />
           Toca subir peso
         </h2>
+        <div id="avisos" class="mt-4 flex flex-1 flex-col"></div>
       </section>
 
-      <section aria-labelledby="titulo-volumen">
-        <h2
-          id="titulo-volumen"
-          class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase"
-        >
+      <section class:list={[CELL, 'lg:col-span-3']} aria-labelledby="titulo-sesiones">
+        <h2 id="titulo-sesiones" class={CELL_TITLE}>
+          <Icon name="calendar" size={20} class="text-ink-faint" />
+          Tus sesiones
+        </h2>
+        <p class="mt-2 text-sm text-ink-faint">
+          Las doce del mesociclo. Las hechas llevan lo que registraste; las que faltan, su enlace.
+        </p>
+        <div id="calendario" class="mt-5"></div>
+      </section>
+
+      <section class:list={[CELL, 'lg:col-span-3']} aria-labelledby="titulo-volumen">
+        <h2 id="titulo-volumen" class={CELL_TITLE}>
+          <Icon name="bars" size={20} class="text-ink-faint" />
           Series por grupo muscular
         </h2>
-        <p class="mt-2 max-w-[60ch] text-sm text-ink-faint">
-          Las secundarias cuentan media serie. La barra más larga de cada semana es su músculo más
-          trabajado.
+        <p class="mt-2 max-w-[70ch] text-sm text-ink-faint">
+          Las secundarias cuentan media serie. Todas las semanas se miden con la misma escala, así
+          que dos barras del mismo largo son la misma cantidad de trabajo.
         </p>
-        <div id="semanas" class="mt-5 flex flex-col gap-4"></div>
-      </section>
-
-      <section aria-labelledby="titulo-sesiones">
-        <h2
-          id="titulo-sesiones"
-          class="text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase"
-        >
-          Sesiones
-        </h2>
-        <div id="sesiones" class="mt-2"></div>
+        <div id="matriz" class="mt-5 overflow-x-auto"></div>
       </section>
     </div>
   </div>
