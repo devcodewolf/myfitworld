@@ -14,13 +14,20 @@
     "test:watch": "vitest",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "astro": "astro"
+    "astro": "astro",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "db:up": "docker compose -f compose.dev.yml up -d",
+    "db:down": "docker compose -f compose.dev.yml down"
   },
   "dependencies": {
     "@astrojs/node": "^11.1.4",
     "@astrojs/vue": "^7.0.2",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.2.4",
+    "drizzle-orm": "^0.45.2",
+    "pg": "^8.23.0",
     "reicon-vue": "^1.1.102",
     "tailwindcss": "^4.3.3",
     "vue": "^3.5.41",
@@ -29,6 +36,9 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@types/node": "^26.2.0",
+    "@types/pg": "^8.23.1",
+    "dotenv": "^17.4.2",
+    "drizzle-kit": "^0.31.10",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.1",

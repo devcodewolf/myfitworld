@@ -17,6 +17,12 @@ pnpm format                               # Prettier sobre todo
 pnpm format:check                         # el que hay que dejar limpio
 pnpm build                                # dist/client + dist/server
 node dist/server/entry.mjs                # servir lo construido
+
+pnpm db:up                                # Postgres local en Docker
+pnpm db:down                              # pararlo (los datos se quedan)
+pnpm db:generate                          # esquema → SQL en drizzle/, sin conectar
+pnpm db:migrate                           # aplicar las migraciones (necesita DATABASE_URL)
+pnpm db:studio                            # ver la base en el navegador
 ```
 
 `pnpm`, siempre. Antes de dar algo por terminado: `check`, `test`, `format:check`
@@ -39,6 +45,10 @@ src/core/      dominio puro. Sin DOM, sin almacenamiento, sin Astro.
                Cada módulo tiene su *.test.ts al lado. Es lo único con tests.
 src/storage/   persistencia detrás de AppRepository. Nada de fuera sabe que
                debajo hay localStorage.
+src/db/        Postgres: esquema Drizzle, conexión y mapeo fila ↔ tipos de core.
+               Solo lo importan las acciones. Ni core/, ni components/, ni
+               pages/ pueden tocarlo. Las migraciones van en drizzle/ y se
+               versionan: son el historial de la forma de la base.
 src/browser/   APIs del navegador (audio, vibración, wake lock) y el punto único
                de composición del repositorio.
 src/content/   los datos. Un JSON por ejercicio, uno por mesociclo.

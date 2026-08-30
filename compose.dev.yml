@@ -1,0 +1,44 @@
+# Postgres para desarrollar en local. NO es el de producción.
+#
+# En producción la base la crea Dokploy como recurso propio, con su volumen y
+# sus copias; este fichero solo existe para tener contra qué programar sin
+# depender del VPS.
+#
+#   docker compose -f compose.dev.yml up -d     levantar
+#   docker compose -f compose.dev.yml down      parar (los datos se quedan)
+#   docker compose -f compose.dev.yml down -v   parar y BORRAR los datos
+#
+# Fíjate en el volumen con nombre `mfw-dev-data`: es exactamente el mecanismo
+# que hace que los datos sobrevivan a que el contenedor se tire y se levante
+# otro. Es el mismo concepto que en producción, en pequeño.
+#
+# Si `pnpm db:migrate` se queda colgado en «applying migrations...» y sale sin
+# decir nada, mira el mapeo del puerto:
+#
+#   docker ps --filter name=mfw-dev-db --format "{{.Ports}}"
+#
+# Tiene que decir `0.0.0.0:5432->5432/tcp`. Si dice solo `5432/tcp`, el puerto
+# está expuesto pero no publicado y el host no llega: el contenedor se creó sin
+# el mapeo. Se arregla con `docker compose -f compose.dev.yml up -d
+# --force-recreate`, que conserva el volumen y por tanto los datos.
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: mfw-dev-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: mfw
+      POSTGRES_PASSWORD: mfw
+      POSTGRES_DB: mfw
+    ports:
+      - '5432:5432'
+    volumes:
+      - mfw-dev-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U mfw -d mfw']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  mfw-dev-data:
