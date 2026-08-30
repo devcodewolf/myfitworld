@@ -27,6 +27,7 @@ export const routes = {
   exercise: (slug: string, from?: DayContext) =>
     url(`ejercicios/${slug}`) + (from ? `?desde=${from.week}-${from.day}` : ''),
   history: () => url('historial'),
+  advice: () => url('consejos'),
   settings: () => url('configuracion'),
   /**
    * Un asset propio se reconstruye con el `base` del despliegue; uno remoto se

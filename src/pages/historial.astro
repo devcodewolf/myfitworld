@@ -175,6 +175,30 @@ const CELL_TITLE = 'flex items-center gap-2.5 text-base font-extrabold text-ink'
         <div id="calendario" class="mt-5"></div>
       </section>
 
+      {
+        /* La puerta al análisis. Va aquí y no en la navegación porque se pide
+          mirando estos datos, que son los que el modelo leería. */
+      }
+      <a
+        href={routes.advice()}
+        class:list={[CELL, 'group transition-colors hover:border-line-strong lg:col-span-3']}
+      >
+        <h2 class={CELL_TITLE}>
+          <Icon name="spark" size={20} class="text-ink-faint" />
+          Pedir consejo sobre tu entreno
+        </h2>
+        <p class="mt-2 max-w-[70ch] text-sm text-ink-dim">
+          Un modelo lee lo que llevas registrado y sugiere qué ajustar o qué ejercicios incorporar.
+          Todavía no funciona: entra para ver qué datos saldrían de tu dispositivo cuando lo haga.
+        </p>
+        <span
+          class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-ink-dim transition-colors group-hover:text-ink"
+        >
+          Ver la propuesta
+          <Icon name="arrow-right" size={16} />
+        </span>
+      </a>
+
       <section class:list={[CELL, 'lg:col-span-3']} aria-labelledby="titulo-volumen">
         <h2 id="titulo-volumen" class={CELL_TITLE}>
           <Icon name="bars" size={20} class="text-ink-faint" />

@@ -1,0 +1,165 @@
+---
+/**
+ * Consejos sobre tu entreno.
+ *
+ * La conversación con el modelo **no está construida**: esta pantalla existe
+ * para fijar su forma y, sobre todo, para enseñar qué datos saldrían del
+ * dispositivo antes de que salgan. Nada de lo que hay aquí simula una respuesta.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { getActiveMesocycle, getExerciseCatalog } from '@/data';
+import { trackedBlocksOf } from '@/core/history';
+import { routes } from '@/routes';
+
+const mesocycle = await getActiveMesocycle();
+const catalog = await getExerciseCatalog();
+
+const payload = {
+  muscles: Object.fromEntries(
+    [...catalog.entries()].map(([id, exercise]) => [
+      id,
+      { primaryMuscles: exercise.primaryMuscles, secondaryMuscles: exercise.secondaryMuscles },
+    ]),
+  ),
+  names: Object.fromEntries([...catalog.entries()].map(([id, exercise]) => [id, exercise.name])),
+  blocks: trackedBlocksOf(mesocycle),
+  phases: Object.fromEntries(mesocycle.weeks.map((week) => [week.order, week.phase])),
+  plannedSessions: mesocycle.weeks.reduce((total, week) => total + week.days.length, 0),
+};
+
+/** Lo que se le podrá preguntar. Se enseñan apagadas: describen el alcance. */
+const questions = [
+  '¿Estoy repartiendo bien el volumen entre empuje y tracción?',
+  '¿Qué ejercicio me falta para lo que quiero trabajar?',
+  '¿Cómo sigo progresando si no puedo subir de peso?',
+  '¿Tiene sentido cómo he distribuido las cuatro semanas?',
+];
+
+const CELL = 'panel flex min-w-0 flex-col rounded-card border border-line p-5 sm:p-6';
+const CELL_TITLE = 'flex items-center gap-2.5 text-base font-extrabold text-ink';
+---
+
+<BaseLayout
+  title="Consejos · My Fitness World"
+  description="Análisis de tu entreno con un modelo de lenguaje. Todavía sin construir."
+>
+  <div class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    <header>
+      <a
+        href={routes.history()}
+        class="inline-flex items-center gap-2 text-sm font-bold text-ink-dim transition-colors hover:text-ink"
+      >
+        <span aria-hidden="true">←</span> Historial
+      </a>
+      <h1 class="mt-4 text-figure font-black tracking-[-0.02em] text-ink">Consejos</h1>
+      <p class="mt-2 max-w-[62ch] text-base text-ink-dim">
+        La idea: que un modelo lea lo que llevas entrenado y te diga qué ajustar y qué ejercicios
+        merece la pena incorporar. Todavía no funciona; esto es la forma que tendrá.
+      </p>
+    </header>
+
+    <div class="mt-8 grid gap-4 lg:grid-cols-3">
+      <section class:list={[CELL, 'lg:col-span-2']} aria-labelledby="preguntar">
+        <h2 id="preguntar" class={CELL_TITLE}>
+          <Icon name="spark" size={20} class="text-ink-faint" />
+          Preguntar
+        </h2>
+
+        <ul class="mt-4 flex flex-wrap gap-2">
+          {
+            questions.map((question) => (
+              <li class="rounded-full border border-line px-3.5 py-2 text-sm text-ink-faint">
+                {question}
+              </li>
+            ))
+          }
+        </ul>
+
+        <label for="pregunta" class="mt-6 block text-sm font-bold text-ink-dim">
+          Tu pregunta
+        </label>
+        <textarea
+          id="pregunta"
+          rows="3"
+          disabled
+          placeholder="Disponible cuando exista el servidor que habla con el modelo."
+          class="mt-2 w-full resize-none rounded-card border border-line bg-surface px-4 py-3 text-base text-ink placeholder:text-ink-faint disabled:cursor-not-allowed disabled:opacity-60"
+        ></textarea>
+
+        <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+          <button
+            type="button"
+            disabled
+            class="inline-flex min-h-14 cursor-not-allowed items-center rounded-full border border-line-strong bg-raised px-7 text-base font-extrabold text-ink-faint"
+          >
+            Analizar mi entreno
+          </button>
+          <p class="text-sm text-ink-faint">
+            Apagado porque no hay servidor todavía: la clave del modelo no puede vivir en el
+            navegador.
+          </p>
+        </div>
+      </section>
+
+      <section class={CELL} aria-labelledby="cuando">
+        <h2 id="cuando" class={CELL_TITLE}>
+          <Icon name="mesocycle" size={20} class="text-ink-faint" />
+          Qué falta
+        </h2>
+        <ol class="mt-4 flex flex-col divide-y divide-line border-t border-line">
+          <li class="py-3">
+            <p class="text-sm font-bold text-ink">Una base de datos con tu cuenta</p>
+            <p class="mt-1 text-sm leading-relaxed text-ink-faint">
+              SQLite con Better Auth y Drizzle. Hoy el historial vive solo en este navegador.
+            </p>
+          </li>
+          <li class="py-3">
+            <p class="text-sm font-bold text-ink">Un punto de servidor que llame al modelo</p>
+            <p class="mt-1 text-sm leading-relaxed text-ink-faint">
+              Recibe el resumen de al lado, pregunta y devuelve el texto. La clave se queda ahí.
+            </p>
+          </li>
+          <li class="py-3">
+            <p class="text-sm font-bold text-ink">Esta pantalla, conectada</p>
+            <p class="mt-1 text-sm leading-relaxed text-ink-faint">
+              El compositor y la respuesta. La forma ya está decidida; falta el cable.
+            </p>
+          </li>
+        </ol>
+      </section>
+
+      <section class:list={[CELL, 'lg:col-span-3']} aria-labelledby="envio">
+        <h2 id="envio" class={CELL_TITLE}>
+          <Icon name="history" size={20} class="text-ink-faint" />
+          Qué saldría de tu dispositivo
+        </h2>
+        <p class="mt-2 max-w-[70ch] text-sm text-ink-dim">
+          Hasta hoy no ha salido nada. Esto es exactamente lo que se enviaría, calculado ahora mismo
+          con tus sesiones: agregados, nunca el registro serie a serie.
+        </p>
+        <div id="resumen-envio" class="mt-5">
+          <p class="text-sm text-ink-faint">Leyendo tu historial…</p>
+        </div>
+        <p id="resumen-peso" class="figures mt-4 text-xs text-ink-faint"></p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<script id="datos-consejos" type="application/json" is:inline set:html={JSON.stringify(payload)} />
+
+<script>
+  import { mountAdvicePage, type AdvicePayload } from '@/browser/advice-page';
+
+  const box = document.getElementById('resumen-envio');
+  try {
+    const raw = document.getElementById('datos-consejos')?.textContent ?? '{}';
+    await mountAdvicePage(JSON.parse(raw) as AdvicePayload);
+  } catch (error) {
+    if (box) {
+      box.textContent = `No se pudo calcular el resumen: ${error instanceof Error ? error.message : String(error)}`;
+      box.className = 'mt-5 text-sm text-ink-dim';
+    }
+  }
+</script>
