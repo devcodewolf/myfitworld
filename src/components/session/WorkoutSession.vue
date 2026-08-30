@@ -125,6 +125,13 @@ const setMarks = computed(() => {
     }));
 });
 
+/** El botón de arranque no se va: cuenta en qué fase estás mientras está apagado. */
+const startLabel = computed(() => {
+  if (phase.value === 'working') return 'Entrenando';
+  if (phase.value === 'resting') return 'Descansando';
+  return 'Empezar serie';
+});
+
 const hint = computed(() =>
   block.value?.repRange
     ? formatRepRange(block.value.repRange)
@@ -381,7 +388,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
     :history-href="historyHref"
   />
 
-  <div v-else-if="step && exercise" class="flex flex-col gap-8">
+  <div v-else-if="step && exercise" class="flex flex-col gap-4">
     <SessionHeader
       v-model:rest-seconds="restSeconds"
       :title="day.title"
@@ -392,26 +399,23 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
       :back-href="backHref"
     />
 
-    <div class="grid gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,21rem)] lg:gap-10">
-      <section class="flex flex-col gap-6" aria-labelledby="ejercicio-actual">
-        <div>
-          <h2
-            id="ejercicio-actual"
-            class="text-figure font-black tracking-[-0.02em] text-balance text-ink"
-          >
-            {{ exercise.name }}
-          </h2>
-          <p class="figures mt-2 text-lg text-ink-dim">
-            <span class="font-bold text-ink">
-              Serie {{ step.setIndex }} de {{ step.totalSets }}
-            </span>
-            <span v-if="step.side">· {{ step.side === 'left' ? 'Izquierda' : 'Derecha' }}</span>
-            · {{ hint }} {{ step.workSeconds ? 'segundos' : 'reps' }} · {{ restSeconds }} s de
-            descanso
-            <span v-if="step.chained" class="text-accent">· encadena con el siguiente</span>
-          </p>
-        </div>
+    <div>
+      <h2
+        id="ejercicio-actual"
+        class="text-figure font-black tracking-[-0.02em] text-balance text-ink"
+      >
+        {{ exercise.name }}
+      </h2>
+      <p class="figures mt-2 text-lg text-ink-dim">
+        <span class="font-bold text-ink"> Serie {{ step.setIndex }} de {{ step.totalSets }} </span>
+        <span v-if="step.side">· {{ step.side === 'left' ? 'Izquierda' : 'Derecha' }}</span>
+        · {{ hint }} {{ step.workSeconds ? 'segundos' : 'reps' }} · {{ restSeconds }} s de descanso
+        <span v-if="step.chained" class="text-accent">· encadena con el siguiente</span>
+      </p>
+    </div>
 
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,26rem)] lg:gap-10">
+      <section class="flex flex-col gap-6" aria-labelledby="ejercicio-actual">
         <!-- El vídeo del ejercicio activo se reproduce solo y en bucle: es lo que estás
              mirando entre serie y serie, sin tocar nada. Solo carga el del ejercicio en
              pantalla. Las plantillas de Vue no entienden los comentarios de Astro: con
@@ -458,7 +462,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
           </p>
         </div>
 
-        <ul class="space-y-2">
+        <ul class="list-disc pl-5">
           <li
             v-for="cue in exercise.cues"
             :key="cue"
@@ -469,13 +473,16 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
         </ul>
       </section>
 
-      <section class="flex flex-col gap-8" aria-label="Serie en curso">
-        <CircularTimer v-if="phase === 'resting'" :timer="restTimer" label="Descanso" :size="180" />
+      <section
+        class="panel flex flex-col gap-4 rounded-card border border-line p-5"
+        aria-label="Serie en curso"
+      >
+        <CircularTimer v-if="phase === 'resting'" :timer="restTimer" label="Descanso" :size="150" />
         <CircularTimer
           v-else
           :timer="workTimer"
           label="Serie"
-          :size="180"
+          :size="150"
           :controls="phase === 'working'"
         />
 
@@ -499,13 +506,15 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
           </li>
         </ol>
 
+        <!-- El botón no desaparece al pulsarlo: se apaga y dice en qué fase
+             estás. Quitarlo movía 72px todo lo de debajo en cada serie. -->
         <button
-          v-if="phase === 'ready'"
           type="button"
-          class="min-h-16 rounded-full border border-line-strong px-8 text-lg font-extrabold text-ink transition-colors hover:bg-raised"
+          :disabled="phase !== 'ready'"
+          class="min-h-14 w-full rounded-full border border-line-strong px-8 text-lg font-extrabold text-ink transition-colors enabled:hover:bg-raised disabled:border-line disabled:text-ink-faint"
           @click="startWork()"
         >
-          Empezar serie
+          {{ startLabel }}
         </button>
 
         <SetPad

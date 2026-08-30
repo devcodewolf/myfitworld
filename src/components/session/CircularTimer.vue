@@ -20,7 +20,7 @@ const props = withDefaults(
     timer: TimerHandle;
     /** Qué se está cronometrando; se lee encima de la cifra. */
     label: string;
-    /** Oculta los controles cuando el temporizador aún no ha arrancado. */
+    /** Habilita los controles. Apagados siguen viéndose: nunca desaparecen. */
     controls?: boolean;
     size?: number;
   }>(),
@@ -33,16 +33,33 @@ const circumference = computed(() => 2 * Math.PI * radius.value);
 const dashoffset = computed(() => circumference.value * (1 - props.timer.reading.value.progress));
 const clock = computed(() => formatClock(props.timer.seconds.value));
 
-// Escrita entera y literal: Tailwind escanea el código fuente, así que una
-// clase compuesta en tiempo de ejecución no se generaría. Va en una constante
-// y no en una regla CSS: este proyecto extrae repetición a componentes.
-const CONTROL =
-  'min-h-14 min-w-20 rounded-full border border-line px-5 text-base font-bold text-ink-dim transition-colors hover:border-line-strong hover:text-ink';
+// Clases escritas enteras y literales: Tailwind escanea el código fuente, así
+// que una clase compuesta en tiempo de ejecución no se generaría. Van en
+// constantes y no en reglas CSS: este proyecto extrae repetición a componentes.
+//
+// Los controles se ven siempre y solo se apagan cuando el reloj no corre.
+// Ocultarlos y reservarles el hueco dejaba un vacío al lado del reloj que
+// parecía un error de maquetado; apagados se leen como lo que son, un control
+// que todavía no toca. 2,75rem de alto es el mínimo táctil del sistema: son
+// secundarios al reloj, pero se pulsan con las manos sudadas igual que el resto.
+const ADJUST =
+  'min-h-11 flex-1 rounded-full border border-line text-xs font-bold text-ink-dim transition-colors enabled:hover:border-line-strong enabled:hover:text-ink disabled:opacity-40';
+
+const PAUSE =
+  'grid min-h-11 flex-1 place-items-center rounded-full border border-line-strong bg-raised text-ink transition-colors enabled:hover:border-ink-faint disabled:opacity-40';
+
+const SKIP =
+  'min-h-11 rounded-full border border-line bg-raised text-sm font-bold text-ink-dim transition-colors enabled:hover:border-line-strong enabled:hover:text-ink disabled:opacity-40';
 </script>
 
 <template>
-  <div class="flex flex-col items-center gap-5">
-    <div class="relative" :style="{ width: `${size}px`, height: `${size}px` }">
+  <!-- Reloj y controles en fila, y la fila no cambia nunca de tamaño: los
+       controles no aparecen ni desaparecen con la fase, solo se apagan. Así el
+       contenido de debajo no se mueve al empezar una serie o un descanso.
+       Las plantillas de Vue no entienden los comentarios de Astro: con
+       {/* */} el texto acaba impreso en la página. -->
+  <div class="flex items-center justify-center gap-4">
+    <div class="relative shrink-0" :style="{ width: `${size}px`, height: `${size}px` }">
       <svg
         :width="size"
         :height="size"
@@ -77,7 +94,7 @@ const CONTROL =
           {{ label }}
         </p>
         <p
-          class="figures text-6xl font-black tabular-nums transition-colors"
+          class="figures text-4xl font-black tabular-nums transition-colors"
           :class="timer.isFinal.value ? 'text-accent' : 'text-ink'"
           role="timer"
           aria-live="off"
@@ -88,17 +105,39 @@ const CONTROL =
       </div>
     </div>
 
-    <div v-if="controls" class="flex flex-wrap items-center justify-center gap-2">
-      <button type="button" :class="CONTROL" @click="timer.adjust(-15)">−15 s</button>
-      <button
-        type="button"
-        :class="[CONTROL, 'min-w-32 bg-raised font-extrabold text-ink']"
-        @click="timer.toggle()"
-      >
-        {{ timer.reading.value.isPaused ? 'Seguir' : 'Pausa' }}
+    <div class="flex w-36 shrink-0 flex-col gap-2">
+      <div class="flex items-center gap-1.5">
+        <button type="button" :class="ADJUST" :disabled="!controls" @click="timer.adjust(-15)">
+          −15
+        </button>
+        <button
+          type="button"
+          :class="PAUSE"
+          :disabled="!controls"
+          :aria-label="timer.reading.value.isPaused ? 'Seguir' : 'Pausa'"
+          @click="timer.toggle()"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path :d="timer.reading.value.isPaused ? 'M7 5l12 7-12 7z' : 'M9 5v14M15 5v14'" />
+          </svg>
+        </button>
+        <button type="button" :class="ADJUST" :disabled="!controls" @click="timer.adjust(15)">
+          +15
+        </button>
+      </div>
+      <button type="button" :class="SKIP" :disabled="!controls" @click="timer.skip()">
+        Saltar
       </button>
-      <button type="button" :class="CONTROL" @click="timer.adjust(15)">+15 s</button>
-      <button type="button" :class="CONTROL" @click="timer.skip()">Saltar</button>
     </div>
   </div>
 </template>

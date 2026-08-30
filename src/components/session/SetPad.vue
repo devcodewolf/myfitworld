@@ -40,7 +40,7 @@ const parse = (event: Event): number | null => {
 };
 
 const FIELD =
-  'figures min-h-16 w-full rounded-card border border-line bg-surface px-4 text-3xl font-extrabold text-ink';
+  'figures min-h-12 w-full rounded-card border border-line bg-surface px-4 text-2xl font-extrabold text-ink';
 </script>
 
 <template>
@@ -91,7 +91,7 @@ const FIELD =
       <button
         type="button"
         :disabled="disabled"
-        class="accion-primaria min-h-16 flex-1 rounded-full px-8 text-lg font-extrabold text-accent-ink transition-transform hover:scale-[1.01] active:scale-100 disabled:opacity-50"
+        class="accion-primaria min-h-14 flex-1 rounded-full px-8 text-lg font-extrabold text-accent-ink transition-transform hover:scale-[1.01] active:scale-100 disabled:opacity-50"
         @click="emit('complete')"
       >
         Serie hecha
@@ -99,7 +99,7 @@ const FIELD =
       <button
         type="button"
         :disabled="disabled"
-        class="min-h-16 rounded-full border border-line px-6 text-base font-bold text-ink-dim transition-colors hover:border-line-strong hover:text-ink"
+        class="min-h-14 rounded-full border border-line px-6 text-base font-bold text-ink-dim transition-colors hover:border-line-strong hover:text-ink"
         @click="emit('skip')"
       >
         Saltar

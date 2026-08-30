@@ -464,9 +464,17 @@ El foco visible es común a todo: contorno de 2px en acento, 3px de separación 
   encima. Lleva el icono `arrow-right` a la derecha. Solo hay una por pantalla.
 - **Hover / Focus:** escala a 1,02 en hover y vuelve a 1 al pulsar; el foco es el contorno común de
   acento. No cambia de color.
-- **Disabled:** cuando la acción todavía no existe (el botón «Entrenar» del día), no se disfraza:
-  se dibuja como cristal con filete marcado y tinta tenue, con el cursor bloqueado, y debajo se
-  escribe en una línea por qué está apagado.
+- **Disabled:** nunca se disfraza. Se dibuja con filete y tinta tenues y el cursor bloqueado, y el
+  motivo tiene que estar a la vista. Hay dos maneras de darlo, y la distancia decide cuál:
+  - **Con una línea al lado** cuando el motivo no se deduce mirando (el botón «Entrenar» de un día
+    futuro, o el compositor de consejos: «no hay servidor todavía»).
+  - **En la propia etiqueta** cuando el botón puede contarlo él solo. El de arranque del modo
+    entreno pasa de «Empezar serie» a «Entrenando» y «Descansando»: apagado sigue informando, y no
+    hace falta una frase debajo.
+- **Un control no desaparece al desactivarse.** Los del reloj y el de arranque siguen en su sitio,
+  apagados. Quitarlos movía 72px todo el contenido de debajo en cada serie, y un hueco reservado
+  pero vacío al lado del reloj parecía un error de maquetado. Apagado se lee como un estado; ausente
+  se lee como un fallo.
 
 ### Chips
 

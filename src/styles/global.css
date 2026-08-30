@@ -118,6 +118,10 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  button {
+    @apply cursor-pointer;
+  }
+
   /* Las superficies del navegador también son parte del diseño. */
   ::selection {
     background-color: var(--color-accent);
