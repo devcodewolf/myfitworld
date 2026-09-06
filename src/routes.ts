@@ -31,6 +31,11 @@ export const routes = {
    */
   login: (returnTo?: string) =>
     '/login' + (returnTo ? `?volver=${encodeURIComponent(returnTo)}` : ''),
+  /**
+   * Cerrar sesión. Es un `POST` a una ruta propia, no un enlace: un enlace lo
+   * seguiría cualquier precarga del navegador y te sacaría de la app sola.
+   */
+  signOut: () => '/salir',
   /** El prefijo bajo el que Better Auth atiende todo lo suyo. */
   authApi: () => '/api/auth',
   /**

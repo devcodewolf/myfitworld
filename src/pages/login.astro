@@ -1,0 +1,180 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PhotoCard from '@/components/ui/PhotoCard.astro';
+import { MIN_PASSWORD_LENGTH } from '@/auth-contract';
+import { routes, safeReturnTo } from '@/routes';
+import { SCENE_PHOTOS } from '@/theme';
+
+/**
+ * La pantalla de entrada.
+ *
+ * Fuera del prerender por dos motivos: tiene que saber si ya has entrado —para
+ * no enseñarle un formulario a quien ya tiene sesión— y tiene que leer el
+ * `volver` de la URL en el servidor, que es donde se puede validar.
+ */
+export const prerender = false;
+
+// A dónde se vuelve. `safeReturnTo` rechaza lo que no sea una ruta propia:
+// sin esa comprobación, `?volver=//otro-sitio` haría de esta pantalla un
+// trampolín a cualquier parte.
+const destination = safeReturnTo(Astro.url.searchParams.get('volver')) ?? routes.home();
+
+// Ya has entrado: aquí no se te ha perdido nada.
+if (Astro.locals.user) return Astro.redirect(destination);
+
+/**
+ * Conmutador de modo. Son dos botones de dos estados, no pestañas: `role="tab"`
+ * le promete a un lector de pantalla que hay paneles debajo, y aquí solo hay un
+ * formulario que cambia de campos. `aria-pressed` dice la verdad.
+ *
+ * En activo manda la superficie, no el acento: el cian está reservado a la
+ * acción primaria, que en esta pantalla es el botón de abajo.
+ */
+const TAB =
+  'min-h-11 flex-1 rounded-full px-4 text-sm font-bold transition-colors aria-pressed:bg-ink aria-pressed:text-ground text-ink-dim hover:text-ink';
+
+/** Campo de formulario: mismo alto, mismo radio, sin cromo del sistema. */
+const FIELD =
+  'min-h-11 w-full rounded-full border border-line bg-surface px-4 text-ink transition-colors hover:border-line-strong';
+
+const LABEL = 'flex flex-col gap-1.5 text-sm';
+const LABEL_TEXT = 'font-bold text-ink-dim';
+const HINT = 'text-sm text-ink-faint';
+---
+
+<BaseLayout
+  title="Entrar · My Fitness World"
+  description="Entra en tu cuenta para registrar lo que entrenas."
+>
+  <div class="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+    <div class="grid items-stretch gap-4 lg:grid-cols-2">
+      <PhotoCard photo={SCENE_PHOTOS.rack} alt="" eager fill class="min-h-64 lg:min-h-[30rem]">
+        <h1 class="text-figure font-black tracking-[-0.02em] text-ink">
+          El plan se mira sin cuenta. Lo que entrenas, no.
+        </h1>
+        <p class="mt-3 max-w-[42ch] text-base leading-relaxed text-ink-dim">
+          Las series, los pesos y el historial son tuyos y viven en tu cuenta. El mesociclo y los
+          ejercicios están abiertos para cualquiera.
+        </p>
+      </PhotoCard>
+
+      <section class="panel flex flex-col rounded-card border border-line p-5 sm:p-8">
+        <div
+          role="group"
+          aria-label="Entrar o crear cuenta"
+          class="flex gap-1 rounded-full border border-line bg-surface p-1"
+        >
+          <button id="modo-entrar" type="button" aria-pressed="true" class={TAB}>Entrar</button>
+          <button id="modo-crear" type="button" aria-pressed="false" class={TAB}
+            >Crear cuenta</button
+          >
+        </div>
+
+        <p
+          id="fallo"
+          hidden
+          role="alert"
+          class="mt-5 rounded-card border border-line-strong px-4 py-3 text-sm text-ink"
+        >
+        </p>
+
+        <form id="form-entrada" class="mt-6 flex flex-col gap-4">
+          <label id="campo-nombre" class={LABEL} for="nombre" hidden>
+            <span class={LABEL_TEXT}>Nombre</span>
+            <input
+              id="nombre"
+              name="nombre"
+              type="text"
+              autocomplete="name"
+              required
+              class={FIELD}
+            />
+          </label>
+
+          <label class={LABEL} for="correo">
+            <span class={LABEL_TEXT}>Correo</span>
+            <input
+              id="correo"
+              name="correo"
+              type="email"
+              autocomplete="email"
+              required
+              inputmode="email"
+              class={FIELD}
+            />
+          </label>
+
+          <label class={LABEL} for="clave">
+            <span class={LABEL_TEXT}>Contraseña</span>
+            <input
+              id="clave"
+              name="clave"
+              type="password"
+              autocomplete="current-password"
+              required
+              minlength={MIN_PASSWORD_LENGTH}
+              class={FIELD}
+            />
+            <span class={HINT}>Mínimo {MIN_PASSWORD_LENGTH} caracteres.</span>
+          </label>
+
+          <label id="campo-invitacion" class={LABEL} for="invitacion" hidden>
+            <span class={LABEL_TEXT}>Código de invitación</span>
+            <input
+              id="invitacion"
+              name="invitacion"
+              type="text"
+              autocomplete="off"
+              required
+              class={FIELD}
+            />
+            <span class={HINT}>
+              Sin él no se puede crear la cuenta. Esta app no está abierta a registro.
+            </span>
+          </label>
+
+          <button
+            id="enviar"
+            type="submit"
+            class="accion-primaria mt-2 min-h-14 rounded-full px-7 text-base font-extrabold text-accent-ink transition-transform hover:scale-[1.02] active:scale-100 disabled:scale-100 disabled:bg-ground disabled:bg-none disabled:text-ink-faint"
+          >
+            Entrar
+          </button>
+        </form>
+
+        {
+          /* No hay «he olvidado mi contraseña» porque no hay proveedor de correo
+            todavía. Prometer un enlace que nunca llega es peor que no ofrecerlo. */
+        }
+        <p class="mt-6 border-t border-line pt-5 text-sm text-ink-faint">
+          Si pierdes la contraseña no hay forma de recuperarla todavía: la app aún no puede enviar
+          correos.
+        </p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<script
+  id="datos-login"
+  type="application/json"
+  is:inline
+  set:html={JSON.stringify({ destination })}
+/>
+
+<script>
+  import { mountLoginPage, type LoginPayload } from '@/browser/login-page';
+
+  // Sin esto, un fallo al montar deja un formulario que no hace nada al pulsar
+  // y ni una sola pista de por qué.
+  try {
+    const raw = document.getElementById('datos-login')?.textContent ?? '{}';
+    mountLoginPage(JSON.parse(raw) as LoginPayload);
+  } catch (error) {
+    const box = document.getElementById('fallo');
+    if (box) {
+      box.hidden = false;
+      box.textContent = `Esta pantalla no se ha podido preparar: ${error instanceof Error ? error.message : String(error)}`;
+    }
+  }
+</script>

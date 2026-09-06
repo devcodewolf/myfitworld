@@ -1,4 +1,5 @@
 ---
+import AccountPill from '@/components/nav/AccountPill.astro';
 import Icon, { type IconName } from '@/components/ui/Icon.astro';
 import { isActiveRoute, routes } from '@/routes';
 
@@ -45,5 +46,19 @@ const links: ReadonlyArray<{ href: string; label: string; icon: IconName }> = [
         })
       }
     </nav>
+
+    {
+      /* `server:defer` lo deja fuera del build: la página se genera entera y
+        este trozo llega después, ya sabiendo si hay cookie. El sustituto ocupa
+        exactamente lo mismo para que la barra no dé un salto al aparecer. */
+    }
+    <AccountPill server:defer>
+      <div
+        slot="fallback"
+        class="h-[3.25rem] w-[5.5rem] shrink-0 rounded-full border border-line bg-surface md:w-32"
+        aria-hidden="true"
+      >
+      </div>
+    </AccountPill>
   </div>
 </header>

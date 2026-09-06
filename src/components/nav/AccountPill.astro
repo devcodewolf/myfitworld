@@ -1,0 +1,59 @@
+---
+/**
+ * Quién está dentro, en la barra de navegación.
+ *
+ * Se monta con `server:defer`, o sea como **server island**: la página se
+ * sigue generando entera en el build y solo este trozo se pide al servidor al
+ * cargarla. Es lo que permite que treinta y cinco páginas estáticas enseñen
+ * algo que depende de tu cookie sin dejar de ser archivos.
+ *
+ * La alternativa era preguntar la sesión desde el navegador en cada página, y
+ * eso es escribir a mano el mismo viaje pero peor: sin HTML del servidor y con
+ * el parpadeo a cargo de uno.
+ *
+ * Salir es un `POST` a `/salir`, no un enlace ni un script: así funciona
+ * también aquí dentro, donde el HTML llega tarde y ningún manejador puesto al
+ * cargar la página lo habría visto nacer.
+ */
+import { routes } from '@/routes';
+
+const user = Astro.locals.user;
+
+/** La inicial del nombre, o del correo si no dio nombre. */
+const initial = (user?.name || user?.email || '?').trim().charAt(0).toUpperCase();
+
+/** El nombre corto: si no hay nombre, lo que va antes de la arroba. */
+const label = user?.name?.trim() || user?.email.split('@')[0] || '';
+
+const GROUP = 'flex shrink-0 items-center gap-1 rounded-full border border-line bg-surface p-1';
+const PILL =
+  'flex min-h-11 items-center gap-2 rounded-full px-3 text-sm font-semibold whitespace-nowrap transition-colors';
+---
+
+{
+  user ? (
+    <div class={GROUP}>
+      <a href={routes.settings()} class:list={[PILL, 'text-ink-dim hover:text-ink']}>
+        <span
+          class="figures flex size-7 shrink-0 items-center justify-center rounded-full bg-raised text-xs font-black text-ink"
+          aria-hidden="true"
+        >
+          {initial}
+        </span>
+        <span class="hidden max-w-32 truncate md:inline">{label}</span>
+        <span class="sr-only">Tu cuenta: {user.email}</span>
+      </a>
+      <form method="POST" action={routes.signOut()}>
+        <button type="submit" class:list={[PILL, 'text-ink-faint hover:text-ink']}>
+          Salir
+        </button>
+      </form>
+    </div>
+  ) : (
+    <div class={GROUP}>
+      <a href={routes.login()} class:list={[PILL, 'px-4 font-bold text-ink']}>
+        Entrar
+      </a>
+    </div>
+  )
+}

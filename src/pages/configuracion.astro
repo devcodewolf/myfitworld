@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { routes } from '@/routes';
 import { SCENE_PHOTOS } from '@/theme';
 
 /**
@@ -194,6 +195,36 @@ const toggles = [
             ))
           }
         </ul>
+      </section>
+
+      {
+        /* La cuenta vive aquí y no solo en la barra: la píldora de arriba es un
+          atajo, pero el sitio donde se administra algo es su pantalla. */
+      }
+      <section class:list={[CELL, 'p-5 sm:p-6']} aria-labelledby="cuenta">
+        <h2 id="cuenta" class={CELL_TITLE}>Cuenta</h2>
+        {
+          Astro.locals.user ? (
+            <>
+              <p class="mt-2 text-sm text-ink-dim">
+                Has entrado como <span class="font-bold text-ink">{Astro.locals.user.email}</span>.
+              </p>
+              <p class="mt-2 text-sm text-ink-faint">
+                Tu historial va con la cuenta, no con este navegador.
+              </p>
+              <form method="POST" action={routes.signOut()} class="mt-5">
+                <button
+                  type="submit"
+                  class="min-h-11 rounded-full border border-line px-6 text-sm font-semibold text-ink-dim transition-colors hover:border-line-strong hover:text-ink"
+                >
+                  Cerrar sesión
+                </button>
+              </form>
+            </>
+          ) : (
+            <p class="mt-2 text-sm text-ink-dim">No has entrado.</p>
+          )
+        }
       </section>
 
       <section class:list={[CELL, 'p-5 sm:p-6']} aria-labelledby="datos">

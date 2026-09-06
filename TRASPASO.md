@@ -104,11 +104,51 @@ siguen estáticas (eran 50: se van 12 de entreno + 3), las públicas dan 200, la
 privadas 302 sin cookie y 200 con ella, y `/semana/99/dia/9/entrenar` da 404
 con sesión.
 
-### ⬜ Paso 5 — Entrar, registrarse y salir
+### ✅ Paso 5 — Entrar, registrarse y salir
 
-Pantallas con el lenguaje visual existente (mirar `DESIGN.md`). El botón
-«Entrenar» manda al login con el destino puesto y vuelve ahí al entrar.
-Cliente: `createAuthClient` de `better-auth/vue` o `better-auth/client`.
+**Decisiones tomadas contigo, no volver a abrirlas:**
+
+- **Solo correo y contraseña.** Google/GitHub se descartó: con OAuth, entrar por
+  primera vez _crea_ la cuenta, así que la puerta habría necesitado además una
+  lista de correos permitidos —y redesplegar cada vez que se añade uno—.
+- **Registro con código de invitación**, comprobado **en el servidor**.
+- **Una sola pantalla** `/login` con conmutador Entrar / Crear cuenta.
+- **Salir en dos sitios**: celda «Cuenta» en Ajustes y píldora en la barra.
+
+**La puerta del registro.** `hooks.before` en `src/auth.ts` corta
+`/sign-up/email` si no llega un código válido por la cabecera
+`x-codigo-invitacion`. Va en cabecera y no en el cuerpo porque el esquema del
+endpoint descarta lo que no reconoce. **Sin `SIGNUP_INVITE_CODE` en el entorno
+no se registra nadie**: un despliegue al que se le olvidó la variable se queda
+con la puerta cerrada, no abierta. Comprobación en tiempo constante sobre
+resúmenes SHA-256.
+
+**Salir es un formulario, no JavaScript.** `src/pages/salir.ts`, solo `POST`,
+con comprobación de `Origin`. Así el mismo botón vale en Ajustes y dentro de la
+isla, y **el cliente de Better Auth no llega a las 35 páginas estáticas**: solo
+lo carga `/login`.
+
+**La píldora de cuenta es un server island** (`server:defer`). Las páginas
+estáticas siguen siendo archivos y solo ese trozo se pide al servidor. Se
+comprobó que la ruta `/_server-islands/[name]` pasa por el middleware, así que
+`Astro.locals.user` llega relleno.
+
+**Archivos nuevos:** `src/auth-contract.ts` (las dos constantes que cruzan al
+navegador sin arrastrar Postgres), `src/browser/auth-client.ts`,
+`src/browser/login-page.ts`, `src/pages/login.astro`, `src/pages/salir.ts`,
+`src/components/nav/AccountPill.astro`. **Tocados:** `src/auth.ts`,
+`src/routes.ts` (`signOut()`), `AppNav.astro`, `configuracion.astro`,
+`.env.example`.
+
+**Sin «he olvidado mi contraseña»**, y la pantalla lo dice. Prometer un enlace
+que nunca llega es peor que no ofrecerlo. Llega con el proveedor de correo.
+
+**Comprobado contra el build:** registro sin código y con código equivocado
+→ `403` y **ningún usuario creado**; con código → `200`; entrar mal → `401`;
+la isla enseña «Entrar» sin cookie y el nombre + «Salir» con ella; `/login` con
+sesión abierta redirige al destino; `?volver=//otro-sitio` se descarta y cae en
+`/`; `/salir` da `403` desde otro origen y `303` con `Set-Cookie` de borrado.
+El cliente de Better Auth se probó tal cual lo usa la página: manda la cabecera.
 
 ### ⬜ Paso 6 — El repositorio contra el servidor
 
@@ -195,6 +235,13 @@ Siete tablas: `user`, `session`, `account`, `verification` (Better Auth) +
   el middleware, un `astro dev` de una hora antes respondía 200 en las rutas
   privadas. No era un fallo del código: era que no existía cuando aquel proceso
   arrancó. Antes de creerte una prueba en 4321, `astro dev status`.
+
+- **`pnpm format` corre Prettier sobre TODO el repositorio.** `.prettierignore`
+  excluía `.agents/` pero no su gemelo `.claude/`, así que una pasada realineó
+  las tablas de las skills instaladas **y reescribió los bloques de código
+  TypeScript de su documentación** con nuestro estilo: 260 archivos de terceros
+  modificados. Arreglado añadiendo `.claude/` a `.prettierignore`. Si algún día
+  aparecen cientos de archivos tocados sin haberlos abierto, mira ahí primero.
 
 **De Docker:**
 

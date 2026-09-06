@@ -188,10 +188,10 @@ const CELL_TITLE = 'flex items-center gap-2.5 text-base font-extrabold text-ink'
       }
       <a
         href={routes.advice()}
-        class:list={[CELL, 'group transition-colors hover:border-line-strong lg:col-span-3']}
+        class="group flex min-w-0 flex-col rounded-card border border-line bg-phase-intensification/40 p-5 text-white backdrop-blur-md transition-all duration-300 hover:scale-101 hover:border-line-strong sm:p-6 lg:col-span-3"
       >
-        <h2 class={CELL_TITLE}>
-          <Icon name="spark" size={20} class="text-ink-faint" />
+        <h2 class:list={[CELL_TITLE, 'text-phase-intensification']}>
+          <Icon name="spark" size={20} class="text-phase-intensification" />
           Pedir consejo sobre tu entreno
         </h2>
         <p class="mt-2 max-w-[70ch] text-sm text-ink-dim">

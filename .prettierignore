@@ -4,6 +4,12 @@ pnpm-lock.yaml
 .astro/
 .impeccable/
 .agents/
+# Gemelo de .agents/. Sin esta línea, `pnpm format` no solo realinea las tablas
+# de las skills instaladas: reescribe los bloques de código TypeScript de su
+# documentación con nuestro estilo. Son archivos de terceros y se actualizan
+# solos; tocarlos genera 260 archivos modificados y un conflicto en cada
+# actualización.
+.claude/
 src/assets/
 DESIGN.md
 PRODUCT.md

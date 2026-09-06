@@ -11,9 +11,13 @@
  * Las tablas que necesita (`user`, `session`, `account`, `verification`) las
  * genera su CLI contra este archivo y viven en `src/db/auth-schema.ts`.
  */
+import { createHash, timingSafeEqual } from 'node:crypto';
+
 import { betterAuth } from 'better-auth';
+import { APIError, createAuthMiddleware } from 'better-auth/api';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
+import { INVITE_HEADER, MIN_PASSWORD_LENGTH } from '@/auth-contract';
 import { db } from '@/db';
 import * as authSchema from '@/db/auth-schema';
 
@@ -33,6 +37,24 @@ function secret(): string {
   return value;
 }
 
+/**
+ * ¿Es válido el código que trae quien intenta registrarse?
+ *
+ * **Sin `SIGNUP_INVITE_CODE` configurado no se registra nadie.** Es
+ * deliberado: un despliegue al que se le olvidó la variable debe quedarse con
+ * la puerta cerrada, no abierta a internet.
+ *
+ * La comparación se hace sobre los resúmenes SHA-256, que siempre miden lo
+ * mismo: así `timingSafeEqual` no necesita que las dos cadenas tengan igual
+ * longitud y de paso no se filtra cuánto mide el código bueno.
+ */
+function inviteAccepted(given: string | null): boolean {
+  const expected = process.env.SIGNUP_INVITE_CODE;
+  if (!expected || !given) return false;
+  const digest = (value: string): Buffer => createHash('sha256').update(value.trim()).digest();
+  return timingSafeEqual(digest(given), digest(expected));
+}
+
 export const auth = betterAuth({
   secret: secret(),
   baseURL: process.env.BETTER_AUTH_URL ?? 'http://localhost:4321',
@@ -44,7 +66,7 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    minPasswordLength: 10,
+    minPasswordLength: MIN_PASSWORD_LENGTH,
     /**
      * Apagado mientras no haya proveedor de correo. En cuanto lo haya, esto
      * pasa a `true` y se rellena `emailVerification.sendVerificationEmail`:
@@ -64,6 +86,29 @@ export const auth = betterAuth({
   // },
   // Y para entrar con código en vez de contraseña, el plugin `emailOTP`.
   // ─────────────────────────────────────────────────────────────────────────
+
+  /**
+   * La puerta del registro, y el **único** sitio donde se decide quién puede
+   * tener cuenta.
+   *
+   * Va aquí y no en el formulario porque el formulario no es una puerta: el
+   * endpoint `/api/auth/sign-up/email` está publicado y cualquiera puede
+   * llamarlo con `curl`. Una comprobación que solo vive en el navegador es
+   * decoración.
+   *
+   * Entrar no pasa por aquí: el código hace falta para crear la cuenta, no
+   * para volver a ella.
+   */
+  hooks: {
+    // `async` porque Better Auth espera una promesa aunque aquí no haya nada que esperar.
+    before: createAuthMiddleware(async (ctx) => {
+      if (ctx.path !== '/sign-up/email') return;
+      if (inviteAccepted(ctx.headers?.get(INVITE_HEADER) ?? null)) return;
+      throw new APIError('FORBIDDEN', {
+        message: 'Ese código de invitación no vale. Sin uno válido no se puede crear la cuenta.',
+      });
+    }),
+  },
 
   session: {
     // Una semana, y se renueva sola si entras dentro del último día. Entrenas
