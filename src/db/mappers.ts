@@ -3,9 +3,8 @@
  *
  * Esta es la pieza que mantiene a `core/` sin enterarse de que existe una base
  * de datos. Va en las dos direcciones y **valida siempre al leer**: una fila
- * que viene de la base es dato tan poco confiable como uno de `localStorage`.
- * Es exactamente la lección que ya estaba escrita en `storage/document.ts`, y
- * el motivo de que exista la cuarentena.
+ * que viene de la base es dato tan poco confiable como uno que llega por la
+ * red: lo escribió una versión anterior de la app, o alguien lo tocó a mano.
  *
  * Lo asimétrico es deliberado: al escribir confiamos en el tipo, porque el
  * objeto viene de dentro de la app; al leer no, porque viene de fuera.
@@ -19,7 +18,7 @@ import {
   type SessionLog,
   type Settings,
 } from '@/core/model';
-import { applyMigrations } from '@/storage/document';
+import { applyMigrations } from '@/core/migrations';
 
 /** Las columnas que escribimos, sin las que genera la base. */
 export interface SessionRow {

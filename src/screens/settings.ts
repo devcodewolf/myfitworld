@@ -4,19 +4,15 @@
  * Vanilla a propósito: son formularios y una lista corta. La única isla de Vue
  * del proyecto se reserva para el modo entreno, donde el estado reactivo sí lo
  * justifica.
+ *
+ * Aquí vivían el exportar y el importar en JSON, y el botón que traía a la
+ * cuenta lo que hubiera en `localStorage`. Se fueron los tres cuando la
+ * persistencia pasó a Postgres: la copia de seguridad ya no es un archivo que
+ * te descargas y guardas tú, son las copias del servidor.
  */
 import type { LoadItem, Settings } from '@/core/model';
-import type { AppRepository } from '@/storage/repository';
 import { achievableLoads } from '@/core/equipment';
-import { backupFilename, buildBackup, importBackup, type ImportMode } from '@/storage/backup';
-import { listQuarantined } from '@/storage/document';
-import { createBrowserStore } from '@/storage/kv';
-import {
-  downloadJson,
-  getLegacyLocalRepository,
-  getRepository,
-  readJsonFile,
-} from '@/browser/repository';
+import { getRepository } from '@/repository';
 
 const KIND_LABELS: Record<LoadItem['kind'], string> = {
   dumbbell: 'Mancuerna',
@@ -26,8 +22,6 @@ const KIND_LABELS: Record<LoadItem['kind'], string> = {
 };
 
 const el = <T extends HTMLElement>(id: string): T | null => document.getElementById(id) as T | null;
-
-type Announce = (message: string, tone?: 'ok' | 'error') => void;
 
 function announce(message: string, tone: 'ok' | 'error' = 'ok'): void {
   const box = el<HTMLParagraphElement>('aviso');
@@ -98,79 +92,10 @@ function renderSettings(settings: Settings): void {
   if (readout) readout.textContent = `${settings.restSeconds} s`;
 }
 
-/**
- * La mudanza: subir a la cuenta lo que este navegador guardaba de antes.
- *
- * Lee el repositorio **de la versión anterior**, no el actual: el actual habla
- * con el servidor y ahí no hay nada que traer. Se fusiona en vez de reemplazar
- * —`importBackup` en modo `merge` nunca pisa un registro más reciente con uno
- * más antiguo— y **no se borra nada de `localStorage`**. Si algo sale mal,
- * lo de antes sigue donde estaba y se puede repetir.
- */
-async function mountMigration(repo: AppRepository, announce: Announce): Promise<void> {
-  const panel = el<HTMLElement>('mudanza');
-  const summary = el<HTMLParagraphElement>('mudanza-resumen');
-  const button = el<HTMLButtonElement>('traer-local');
-  if (!panel || !button) return;
-
-  const local = await getLegacyLocalRepository().snapshot();
-  const count = local.sessions.length;
-  if (count === 0) return;
-
-  panel.hidden = false;
-  if (summary) {
-    summary.textContent =
-      count === 1
-        ? 'Hay 1 sesión guardada aquí de antes.'
-        : `Hay ${count} sesiones guardadas aquí de antes.`;
-  }
-
-  button.addEventListener('click', () => {
-    void (async () => {
-      button.disabled = true;
-      try {
-        const backup = buildBackup(local, new Date().toISOString());
-        const result = importBackup(backup, 'merge', await repo.snapshot());
-        if (!result.report.ok) {
-          announce(result.report.error ?? 'No se pudo traer lo de este navegador.', 'error');
-          button.disabled = false;
-          return;
-        }
-        await repo.restore(result.state);
-        announce(
-          `Traído a tu cuenta: ${result.report.sessionsAdded} sesiones nuevas, ` +
-            `${result.report.sessionsUpdated} actualizadas, ${result.report.sessionsKept} que ya tenías.`,
-        );
-        panel.hidden = true;
-      } catch (error) {
-        announce(
-          `No se pudo subir: ${error instanceof Error ? error.message : String(error)}. ` +
-            'Lo de este navegador sigue intacto.',
-          'error',
-        );
-        button.disabled = false;
-      }
-    })();
-  });
-}
-
 export async function mountSettingsPage(): Promise<void> {
   const repo = getRepository();
   let settings = await repo.settings.get();
   renderSettings(settings);
-
-  // La mudanza se monta aparte y sin `await` que bloquee: si este navegador no
-  // guarda nada de antes, ni siquiera aparece.
-  void mountMigration(repo, announce);
-
-  // Datos que no se pudieron leer: hay que decirlo, no callarlo.
-  const quarantined = listQuarantined(createBrowserStore());
-  if (quarantined.length > 0) {
-    announce(
-      `Hay ${quarantined.length} copia(s) de datos que no se pudieron leer y quedaron apartadas. No se han borrado.`,
-      'error',
-    );
-  }
 
   const save = async (patch: Partial<Settings>): Promise<void> => {
     try {
@@ -227,41 +152,5 @@ export async function mountSettingsPage(): Promise<void> {
   el<HTMLInputElement>('peso-corporal')?.addEventListener('change', (event) => {
     const raw = (event.currentTarget as HTMLInputElement).value;
     void save({ bodyweightKg: raw === '' ? undefined : Number(raw) });
-  });
-
-  el<HTMLButtonElement>('exportar')?.addEventListener('click', () => {
-    void (async () => {
-      const exportedAt = new Date().toISOString();
-      const backup = buildBackup(await repo.snapshot(), exportedAt);
-      downloadJson(backup, backupFilename(exportedAt));
-      announce('Copia descargada. Guárdala en algún sitio que no sea este ordenador.');
-    })();
-  });
-
-  el<HTMLInputElement>('importar')?.addEventListener('change', (event) => {
-    void (async () => {
-      const input = event.currentTarget as HTMLInputElement;
-      const file = input.files?.[0];
-      if (!file) return;
-      const mode = (el<HTMLSelectElement>('modo-import')?.value ?? 'merge') as ImportMode;
-      try {
-        const result = importBackup(await readJsonFile(file), mode, await repo.snapshot());
-        if (!result.report.ok) {
-          announce(result.report.error ?? 'No se pudo importar.', 'error');
-          return;
-        }
-        await repo.restore(result.state);
-        settings = await repo.settings.get();
-        renderSettings(settings);
-        announce(
-          `Importado: ${result.report.sessionsAdded} sesiones nuevas, ` +
-            `${result.report.sessionsUpdated} actualizadas, ${result.report.sessionsKept} conservadas.`,
-        );
-      } catch {
-        announce('Ese archivo no se pudo leer como JSON.', 'error');
-      } finally {
-        input.value = '';
-      }
-    })();
   });
 }

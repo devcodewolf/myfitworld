@@ -19,7 +19,7 @@ import {
 } from '@/core/history';
 import { MUSCLE_LABELS, PHASE_LABELS, formatDuration } from '@/core/labels';
 import type { MuscleSource } from '@/core/volume';
-import { getRepository } from '@/browser/repository';
+import { getRepository } from '@/repository';
 
 export interface HistoryPayload {
   /** Músculos de cada ejercicio, lo único que hace falta para repartir series. */

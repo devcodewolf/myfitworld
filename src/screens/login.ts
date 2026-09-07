@@ -9,7 +9,7 @@
  * hace falta una petición de verdad para que el servidor vea la cookie nueva y
  * el middleware te deje pasar.
  */
-import { authClient, authErrorMessage, type AuthFailure } from '@/browser/auth-client';
+import { authClient, authErrorMessage, type AuthFailure } from '@/auth-client';
 import { INVITE_HEADER } from '@/auth-contract';
 
 export interface LoginPayload {

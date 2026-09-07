@@ -38,7 +38,8 @@ const QuerySchema = z
  *
  * Una fila escrita por una versión anterior que ya no valide no puede tumbar el
  * historial entero. Es la misma decisión que la cuarentena de
- * `storage/document.ts`: no se borra nada, se aparta y se sigue.
+ * la cuarentena que hubo en el navegador: no se tira el historial entero
+ * porque una fila no se entienda.
  */
 function toSessions(
   rows: ReadonlyArray<{ payload: unknown; schemaVersion: number }>,

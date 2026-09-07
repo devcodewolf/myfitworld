@@ -11,7 +11,7 @@ import type { TrackedBlock } from '@/core/history';
 import { briefSizeBytes, buildTrainingBrief, type TrainingBrief } from '@/core/advice';
 import { MUSCLE_LABELS, PHASE_LABELS } from '@/core/labels';
 import type { MuscleSource } from '@/core/volume';
-import { getRepository } from '@/browser/repository';
+import { getRepository } from '@/repository';
 
 export interface AdvicePayload {
   readonly muscles: Record<

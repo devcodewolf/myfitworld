@@ -19,7 +19,7 @@ import {
   saveActiveSession,
 } from '@/actions/sessions';
 import { getSettings, saveSettings } from '@/actions/settings';
-import { getActiveProfile, getSnapshot, listProfiles, restoreState } from '@/actions/state';
+import { getActiveProfile, listProfiles } from '@/actions/profiles';
 
 export const server = {
   sessions: {
@@ -38,9 +38,5 @@ export const server = {
   profiles: {
     getActive: getActiveProfile,
     list: listProfiles,
-  },
-  state: {
-    snapshot: getSnapshot,
-    restore: restoreState,
   },
 };

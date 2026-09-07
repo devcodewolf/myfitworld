@@ -26,7 +26,7 @@ import { defaultValuesFor, findLastPerformance } from '@/core/prefill';
 import { createAudioCues } from '@/browser/audio';
 import { HAPTIC, vibrate } from '@/browser/haptics';
 import { createWakeLock } from '@/browser/wake-lock';
-import { getRepository } from '@/browser/repository';
+import { getRepository } from '@/repository';
 import CircularTimer from '@/components/session/CircularTimer.vue';
 import SessionHeader from '@/components/session/SessionHeader.vue';
 import SessionSummary from '@/components/session/SessionSummary.vue';
@@ -55,6 +55,15 @@ const plan = buildSessionPlan(props.day, catalog);
 type Phase = 'loading' | 'conflict' | 'ready' | 'working' | 'resting' | 'done';
 
 const phase = ref<Phase>('loading');
+/**
+ * Lo último que no se pudo guardar en el servidor.
+ *
+ * Esta pantalla escribe en cada serie que marcas, y desde que el entreno vive
+ * en Postgres ese guardado puede fallar por red. Antes había una copia en el
+ * navegador que lo tapaba; ahora no hay copia ninguna, así que **lo correcto es
+ * decirlo**: fingir que se guardó sería mentir sobre el único dato que importa.
+ */
+const saveError = ref<string | null>(null);
 const session = ref<SessionLog | null>(null);
 const previous = ref<SessionLog | null>(null);
 const settings = ref<Settings | null>(null);
@@ -195,7 +204,15 @@ async function loadValuesFor(current: SessionStep): Promise<void> {
 }
 
 async function persist(next: SessionLog): Promise<void> {
-  session.value = await repo.sessions.saveActiveSession(next);
+  try {
+    session.value = await repo.sessions.saveActiveSession(next);
+    saveError.value = null;
+  } catch (error) {
+    // No se relanza: reventar aquí dejaría la pantalla colgada a mitad de la
+    // serie. Se avisa y se sigue, y la siguiente serie que sí llegue arrastra
+    // el estado entero, porque cada guardado manda la sesión completa.
+    saveError.value = error instanceof Error ? error.message : String(error);
+  }
 }
 
 async function begin(fresh: SessionLog): Promise<void> {
@@ -305,7 +322,17 @@ async function advance(skipped: boolean): Promise<void> {
 }
 
 async function finish(): Promise<void> {
-  const done = await repo.sessions.completeActiveSession(new Date().toISOString());
+  let done: SessionLog | null = null;
+  try {
+    done = await repo.sessions.completeActiveSession(new Date().toISOString());
+    saveError.value = null;
+  } catch (error) {
+    // Cerrar es el momento en que la sesión tiene que quedar guardada. Si falla,
+    // se queda en curso en el servidor y se puede retomar; lo que no se puede
+    // es dar la sesión por buena sin que haya llegado.
+    saveError.value = error instanceof Error ? error.message : String(error);
+    return;
+  }
   if (done) session.value = done;
   cues.sessionDone();
   vibrate(HAPTIC.sessionDone, settings.value?.vibrationEnabled ?? true);
@@ -398,6 +425,18 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
       :ratio="progress.ratio"
       :back-href="backHref"
     />
+
+    <!-- Sin copia en el navegador, un fallo de red significa que esa serie no
+         existe. Se dice donde se está mirando, no en un rincón. -->
+    <p
+      v-if="saveError"
+      role="alert"
+      class="rounded-card border border-line-strong bg-surface px-4 py-3 text-sm text-ink"
+    >
+      <span class="font-bold">No se ha podido guardar en tu cuenta.</span>
+      Vuelve a marcar la serie cuando tengas conexión: lo de antes sigue guardado.
+      <span class="block text-ink-faint">{{ saveError }}</span>
+    </p>
 
     <div>
       <h2

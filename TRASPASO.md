@@ -189,27 +189,58 @@ acepta un usuario por parámetro: sale siempre de la sesión.
   de Postgres dentro**. Ahora devuelve `CONFLICT` con un mensaje, y el
   navegador distingue un rechazo (no se reintenta) de un fallo de red (sí).
 
-### ✅ Paso 7 — Traer el historial local
+### ✅ Paso 7 — (anulado) Traer el historial local
 
-El botón vive en Ajustes y **solo aparece si este navegador guarda algo de
-antes**. Lee el repositorio de la versión anterior —no el actual, que habla con
-el servidor— y fusiona con `importBackup` en modo `merge`, que nunca pisa un
-registro más reciente. **No borra nada de `localStorage`**: se puede repetir sin
-miedo, y repetirlo no duplica.
+**Ya no hace falta y se ha quitado.** Nunca hubo datos de verdad en ningún
+navegador: todo eran pruebas. El puente se construyó, funcionó, y se retiró en
+la limpieza de abajo junto con el resto de `localStorage`.
 
-Exportar e importar se quedan en Ajustes, con el texto corregido: la frase «esta
-exportación es tu única copia de seguridad» era falsa desde que hay Postgres.
+### ✅ Limpieza: fuera `localStorage` y las copias en JSON
 
-### Comprobado
+Decisión tuya y con motivo: exportar a JSON, importar y guardar en el navegador
+se pensaron **cuando no había base de datos**. Con Postgres detrás sobran los
+tres.
+
+**Qué se ha ido** (unas 700 líneas): `createLocalRepository`, el formato de
+copia (`backup.ts`), la lectura de documentos con cuarentena (`document.ts`), el
+puerto de almacenamiento (`kv.ts`), el espejo de la sesión en curso, los botones
+de exportar e importar, el panel de mudanza, y las acciones `state.snapshot` y
+`state.restore` —esta última era la más destructiva del proyecto—.
+**El navegador ya no guarda absolutamente nada tuyo**, y hay una comprobación
+en `pruebas/pantallas.mjs` que lo vigila.
+
+**Qué se ha salvado, mudándose:** la cadena de `MIGRATIONS` vive ahora en
+`src/core/migrations.ts`, con sus tests al lado. Sigue haciendo falta: una fila
+escrita con un esquema viejo sube por ella antes de que Zod la valide.
+
+**Lo que esto obligó a tocar:** sin espejo en el navegador, un fallo de red al
+marcar una serie ya no se puede tapar. `WorkoutSession.vue` ahora lo **captura y
+lo dice en pantalla** en vez de reventar. Se pierde esa serie y hay que volver a
+marcarla; a cambio, nunca se finge que se guardó algo que no llegó.
+
+### ✅ Reparto de carpetas
+
+`src/browser/` mezclaba tres cosas bajo un nombre que solo decía _dónde_ se
+ejecutan. Ahora cada carpeta dice qué hay dentro:
+
+| Antes                                             | Ahora                                                         |
+| ------------------------------------------------- | ------------------------------------------------------------- |
+| `browser/` (todo mezclado)                        | `browser/` solo APIs del aparato: audio, vibración, wake lock |
+| `browser/*-page.ts`                               | `screens/` los controladores de pantalla                      |
+| `browser/repository.ts` + `storage/repository.ts` | `repository/` contrato, implementación remota y composición   |
+| `browser/auth-client.ts`                          | `auth-client.ts`, junto a `auth.ts` y `auth-contract.ts`      |
+| `storage/`                                        | **desaparece**                                                |
+
+### Comprobado### Comprobado
 
 Tres scripts en `pruebas/` (ver `pruebas/LEEME.md`), todos en verde desde una
 base limpia:
 
-- `acciones.mjs` — 22 comprobaciones por HTTP. **La que importa es el
-  aislamiento**: B no ve, no lee, no borra y no restaura nada de A.
+- `acciones.mjs` — 18 comprobaciones por HTTP. **La que importa es el
+  aislamiento**: B no ve, no lee y no borra nada de A.
 - `pantallas.mjs` — las seis pantallas en un Chrome real, cazando errores de
-  consola. Con `--ver` abre ventana.
-- `mudanza.mjs` — el puente del paso 7, incluido que repetirlo no duplique.
+  consola, y que el navegador no guarde ni una clave nuestra. Con `--ver` abre
+  ventana.
 
 ### ⬜ Paso 8 — Docker y despliegue
 

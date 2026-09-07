@@ -188,32 +188,14 @@ ok(
   `restSeconds ${ajustesB.data?.restSeconds}`,
 );
 
-const copiaB = await accion('state.snapshot', {}, Bk);
+const listaBFinal = await accion('sessions.list', { status: 'completed' }, Bk);
 ok(
-  'la copia de B no contiene nada de A',
-  copiaB.data?.sessions?.length === 0,
-  `${copiaB.data?.sessions?.length} sesiones`,
+  'B sigue sin ver nada de A tras todos los intentos',
+  listaBFinal.data?.length === 0,
+  `${listaBFinal.data?.length} sesiones`,
 );
 
-console.log('\n=== 4. Copia y restauracion de A ===');
-const copiaA = await accion('state.snapshot', {}, A);
-ok('la copia de A trae su sesion', copiaA.data?.sessions?.length === 1);
-ok('la copia de A trae su perfil', copiaA.data?.profiles?.length === 1);
-
-const restaurado = await accion('state.restore', copiaA.data, A);
-ok('restaurar la propia copia', restaurado.error === undefined, JSON.stringify(restaurado.error));
-
-const trasRestaurar = await accion('sessions.list', {}, A);
-ok(
-  'sigue estando todo tras restaurar',
-  trasRestaurar.data?.length === 1,
-  `${trasRestaurar.data?.length} sesiones`,
-);
-
-const listaBTrasRestaurar = await accion('sessions.list', {}, Bk);
-ok('restaurar A no toco nada de B', listaBTrasRestaurar.data?.length === 0);
-
-console.log('\n=== 5. Una sola sesion en curso ===');
+console.log('\n=== 4. Una sola sesion en curso ===');
 const s1 = crypto.randomUUID();
 const s2 = crypto.randomUUID();
 await accion('sessions.saveActive', nuevaSesion(perfilA.data.id, s1), A);

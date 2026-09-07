@@ -224,7 +224,7 @@ const CELL_TITLE = 'flex items-center gap-2.5 text-base font-extrabold text-ink'
 <script id="datos-historial" type="application/json" is:inline set:html={JSON.stringify(payload)} />
 
 <script>
-  import { mountHistoryPage, type HistoryPayload } from '@/browser/history-page';
+  import { mountHistoryPage, type HistoryPayload } from '@/screens/history';
 
   // Sin esto, cualquier fallo al leer los datos deja la pantalla en blanco y
   // sin explicación, que es peor que un mensaje feo.

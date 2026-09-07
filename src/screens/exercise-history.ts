@@ -9,7 +9,7 @@
  */
 import type { ExerciseLog, SessionLog, SetLog, Slug } from '@/core/model';
 import { personalRecords } from '@/core/progression';
-import { getRepository } from '@/browser/repository';
+import { getRepository } from '@/repository';
 
 const fecha = (iso: string): string =>
   new Date(iso).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });

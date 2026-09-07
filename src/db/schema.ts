@@ -6,7 +6,7 @@
  * esquema Zod que usa el cliente. Así hay una sola fuente de verdad para la
  * forma de los datos, y `core/` no se entera de que existe una base.
  *
- * Qué se filtra hoy lo dice `SessionQuery` en `storage/repository.ts`:
+ * Qué se filtra hoy lo dice `SessionQuery` en `repository/contract.ts`:
  * mesociclo, semana, día, estado y usuario. Nada más. Todo lo demás —las
  * series, los pesos, las repeticiones— vive dentro del JSON.
  *
@@ -62,9 +62,8 @@ export const settings = pgTable(
  * Una sesión de entrenamiento, terminada o en curso.
  *
  * `payload` es el `SessionLog` completo. `schemaVersion` viaja con cada fila
- * para que la cadena de `MIGRATIONS` de `storage/document.ts` siga sirviendo:
- * un documento guardado con un esquema viejo se migra al leerlo, igual que
- * hacía en `localStorage`.
+ * para que la cadena de `MIGRATIONS` de `core/migrations.ts` siga sirviendo:
+ * una fila guardada con un esquema viejo se migra al leerla.
  *
  * Se llama `workout_sessions` y no `sessions` porque Better Auth ya tiene una
  * tabla `session` —las sesiones de quien ha entrado— y dos nombres que se

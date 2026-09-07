@@ -43,23 +43,25 @@ src/core/      dominio puro. Sin DOM, sin almacenamiento, sin Astro.
                model.ts son los esquemas Zod: la única fuente de verdad de los
                tipos (todo sale de z.infer, nada se declara a mano).
                Cada módulo tiene su *.test.ts al lado. Es lo único con tests.
-src/storage/   la interfaz AppRepository y su implementación local, más el
-               formato de documento y el de copia de seguridad. La app ya no
-               usa la local: quedó para leer lo que guardó la versión anterior.
-src/actions/   las acciones de Astro: el transporte del repositorio remoto.
+src/repository/ contract.ts es lo que la app puede pedirle a la persistencia;
+               remote.ts la única implementación, contra el servidor;
+               index.ts el punto único que decide cuál se enchufa.
+               Ninguna pantalla sabe qué hay detrás.
+src/actions/   las acciones de Astro: el transporte del repositorio.
                Validan con los esquemas Zod de core/ y son el ÚNICO sitio que
-               importa src/db/. Aquí vive el filtro por user_id: no hay RLS,
-               así que una acción que se olvide de filtrar es un agujero.
+               importa src/db/. Aquí va el filtro por user_id de cada consulta.
 src/auth.ts    configuración de Better Auth. El único sitio donde se decide
                cómo se entra. Better Auth NO envía correos: te llama a ti con
-               el enlace o el código ya generados.
+               el enlace o el código ya generados. auth-contract.ts es lo poco
+               que cruza al navegador sin arrastrar la base detrás.
 src/db/        Postgres: esquema Drizzle, conexión y mapeo fila ↔ tipos de core.
                Solo lo importan las acciones. Ni core/, ni components/, ni
                pages/ pueden tocarlo. Las migraciones van en drizzle/ y se
                versionan: son el historial de la forma de la base.
-src/browser/   APIs del navegador (audio, vibración, wake lock), el repositorio
-               remoto y el punto único de composición. `repository.ts` es la
-               única línea que decide qué implementación hay detrás.
+src/browser/   APIs del navegador y nada más: audio, vibración, wake lock.
+               Si algo no es una API del aparato, no va aquí.
+src/screens/   los controladores de las páginas que no son islas de Vue.
+               Uno por pantalla, montado desde su .astro.
 src/content/   los datos. Un JSON por ejercicio, uno por mesociclo.
 src/components/, src/layouts/, src/pages/   lo que se ve.
 src/data.ts    de dónde salen rutinas y ejercicios + comprobación de integridad.
@@ -89,10 +91,12 @@ ni una firma fuera de su carpeta. `specs.md` tiene los pasos concretos.
   consistencia entre colecciones, va aquí.
 - **`blockKeyOf(block)`** (en `core/training.ts`) es la clave con la que un bloque
   se enlaza con su registro en el historial. Cambiarla desconecta datos ya guardados.
-- **`storage/document.ts` nunca borra lo que no entiende:** documento versionado →
-  cadena de `MIGRATIONS` → Zod → si falla, **cuarentena** con marca de tiempo. El
-  export JSON es la única copia de seguridad que existe. Al cambiar un esquema
-  guardado, sube `STORAGE_SCHEMA_VERSION` y añade su migración.
+- **El navegador no guarda nada tuyo.** Ni `localStorage`, ni copias en JSON, ni
+  caché. El servidor es el único sitio donde vive tu entreno, y un fallo de red
+  se dice en pantalla en vez de taparse. Lo que sí sobrevive es la cadena de
+  `MIGRATIONS` de `core/migrations.ts`: una fila escrita con un esquema viejo
+  sube por ella antes de que Zod la valide. Al cambiar un esquema guardado, sube
+  `STORAGE_SCHEMA_VERSION` y añade su migración.
 - **Los temporizadores se calculan por marca de tiempo** (`core/timer.ts`), nunca
   acumulando `setInterval`. `requestAnimationFrame` solo repinta.
 - **El repositorio recibe `now()` y `uuid()` inyectados** para que los tests sean

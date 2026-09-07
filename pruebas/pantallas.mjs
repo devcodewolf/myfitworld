@@ -125,13 +125,15 @@ try {
     JSON.stringify(activa),
   );
 
-  const espejo = await pagina.evaluate(() =>
-    window.localStorage.getItem('mfw:remote:active-session'),
+  // Ya no hay copia en el navegador: se quito todo el localStorage. El servidor
+  // es el unico sitio donde vive el entreno, y esto lo vigila.
+  const enNavegador = await pagina.evaluate(() =>
+    Object.keys(window.localStorage).filter((k) => k.startsWith('mfw:')),
   );
   ok(
-    'y tambien espejo en el navegador',
-    typeof espejo === 'string' && espejo.includes('"synced":true'),
-    espejo ? espejo.slice(0, 60) : 'sin espejo',
+    'el navegador NO guarda nada nuestro',
+    enNavegador.length === 0,
+    enNavegador.join(', ') || 'ninguna clave mfw:',
   );
 
   console.log('\n=== 8. La barra reconoce la cuenta ===');
