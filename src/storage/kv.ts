@@ -85,4 +85,13 @@ export const STORAGE_KEYS = {
   activeSession: 'mfw:active-session',
   /** Prefijo de los datos que no se pudieron leer y se apartaron sin borrarlos. */
   quarantinePrefix: 'mfw:quarantine:',
+  /**
+   * El espejo de la sesión en curso cuando la verdad vive en el servidor.
+   *
+   * Clave **distinta** de `activeSession` a propósito. Aquella guarda lo que
+   * escribió el repositorio local, y sigue intacta para poder traérselo a la
+   * cuenta: si el repositorio remoto escribiera encima, esa mudanza se haría
+   * sobre datos ya mezclados.
+   */
+  remoteActiveSession: 'mfw:remote:active-session',
 } as const;

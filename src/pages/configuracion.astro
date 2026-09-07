@@ -230,8 +230,9 @@ const toggles = [
       <section class:list={[CELL, 'p-5 sm:p-6']} aria-labelledby="datos">
         <h2 id="datos" class={CELL_TITLE}>Tus datos</h2>
         <p class="mt-2 max-w-[70ch] text-sm text-ink-dim">
-          Todo vive en este navegador. Si lo borras o cambias de ordenador, sin copia no hay
-          historial: esta exportación es tu única copia de seguridad.
+          Tu historial vive en tu cuenta, en el servidor, y se guarda solo. Esta exportación ya no
+          es tu única copia: es la que puedes llevarte contigo, y la que te queda si algún día falla
+          todo lo demás.
         </p>
 
         <div class="mt-5 flex flex-wrap items-end gap-3">
@@ -261,6 +262,35 @@ const toggles = [
         <p class="mt-3 text-sm text-ink-faint">
           Al fusionar nunca se pisa un registro más reciente con uno más antiguo.
         </p>
+      </section>
+
+      {
+        /* La mudanza. Solo aparece si este navegador guarda algo de la versión
+          anterior, y desaparece en cuanto no queda nada que traer: un botón
+          permanente para una operación que se hace una vez es ruido. */
+      }
+      <section
+        id="mudanza"
+        hidden
+        class:list={[CELL, 'p-5 sm:p-6 lg:col-span-2']}
+        aria-labelledby="mudanza-tit"
+      >
+        <h2 id="mudanza-tit" class={CELL_TITLE}>Lo que había en este navegador</h2>
+        <p id="mudanza-resumen" class="figures mt-2 max-w-[70ch] text-sm text-ink-dim"></p>
+        <p class="mt-2 max-w-[70ch] text-sm text-ink-faint">
+          Antes tu entreno se guardaba aquí, en este navegador. Ahora va en tu cuenta. Esto lo sube
+          y lo fusiona con lo que ya tengas: no se pisa nada más reciente y no se borra nada de
+          aquí, así que puedes repetirlo sin miedo.
+        </p>
+        <div class="mt-5">
+          <button
+            id="traer-local"
+            type="button"
+            class="accion-primaria min-h-11 rounded-full px-6 text-sm font-extrabold text-accent-ink transition-transform hover:scale-[1.02] active:scale-100 disabled:scale-100 disabled:bg-ground disabled:bg-none disabled:text-ink-faint"
+          >
+            Traer a mi cuenta
+          </button>
+        </div>
       </section>
     </div>
   </div>

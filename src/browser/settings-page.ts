@@ -6,11 +6,17 @@
  * justifica.
  */
 import type { LoadItem, Settings } from '@/core/model';
+import type { AppRepository } from '@/storage/repository';
 import { achievableLoads } from '@/core/equipment';
 import { backupFilename, buildBackup, importBackup, type ImportMode } from '@/storage/backup';
 import { listQuarantined } from '@/storage/document';
 import { createBrowserStore } from '@/storage/kv';
-import { downloadJson, getRepository, readJsonFile } from '@/browser/repository';
+import {
+  downloadJson,
+  getLegacyLocalRepository,
+  getRepository,
+  readJsonFile,
+} from '@/browser/repository';
 
 const KIND_LABELS: Record<LoadItem['kind'], string> = {
   dumbbell: 'Mancuerna',
@@ -20,6 +26,8 @@ const KIND_LABELS: Record<LoadItem['kind'], string> = {
 };
 
 const el = <T extends HTMLElement>(id: string): T | null => document.getElementById(id) as T | null;
+
+type Announce = (message: string, tone?: 'ok' | 'error') => void;
 
 function announce(message: string, tone: 'ok' | 'error' = 'ok'): void {
   const box = el<HTMLParagraphElement>('aviso');
@@ -90,10 +98,70 @@ function renderSettings(settings: Settings): void {
   if (readout) readout.textContent = `${settings.restSeconds} s`;
 }
 
+/**
+ * La mudanza: subir a la cuenta lo que este navegador guardaba de antes.
+ *
+ * Lee el repositorio **de la versión anterior**, no el actual: el actual habla
+ * con el servidor y ahí no hay nada que traer. Se fusiona en vez de reemplazar
+ * —`importBackup` en modo `merge` nunca pisa un registro más reciente con uno
+ * más antiguo— y **no se borra nada de `localStorage`**. Si algo sale mal,
+ * lo de antes sigue donde estaba y se puede repetir.
+ */
+async function mountMigration(repo: AppRepository, announce: Announce): Promise<void> {
+  const panel = el<HTMLElement>('mudanza');
+  const summary = el<HTMLParagraphElement>('mudanza-resumen');
+  const button = el<HTMLButtonElement>('traer-local');
+  if (!panel || !button) return;
+
+  const local = await getLegacyLocalRepository().snapshot();
+  const count = local.sessions.length;
+  if (count === 0) return;
+
+  panel.hidden = false;
+  if (summary) {
+    summary.textContent =
+      count === 1
+        ? 'Hay 1 sesión guardada aquí de antes.'
+        : `Hay ${count} sesiones guardadas aquí de antes.`;
+  }
+
+  button.addEventListener('click', () => {
+    void (async () => {
+      button.disabled = true;
+      try {
+        const backup = buildBackup(local, new Date().toISOString());
+        const result = importBackup(backup, 'merge', await repo.snapshot());
+        if (!result.report.ok) {
+          announce(result.report.error ?? 'No se pudo traer lo de este navegador.', 'error');
+          button.disabled = false;
+          return;
+        }
+        await repo.restore(result.state);
+        announce(
+          `Traído a tu cuenta: ${result.report.sessionsAdded} sesiones nuevas, ` +
+            `${result.report.sessionsUpdated} actualizadas, ${result.report.sessionsKept} que ya tenías.`,
+        );
+        panel.hidden = true;
+      } catch (error) {
+        announce(
+          `No se pudo subir: ${error instanceof Error ? error.message : String(error)}. ` +
+            'Lo de este navegador sigue intacto.',
+          'error',
+        );
+        button.disabled = false;
+      }
+    })();
+  });
+}
+
 export async function mountSettingsPage(): Promise<void> {
   const repo = getRepository();
   let settings = await repo.settings.get();
   renderSettings(settings);
+
+  // La mudanza se monta aparte y sin `await` que bloquee: si este navegador no
+  // guarda nada de antes, ni siquiera aparece.
+  void mountMigration(repo, announce);
 
   // Datos que no se pudieron leer: hay que decirlo, no callarlo.
   const quarantined = listQuarantined(createBrowserStore());

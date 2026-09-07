@@ -150,23 +150,66 @@ sesión abierta redirige al destino; `?volver=//otro-sitio` se descarta y cae en
 `/`; `/salir` da `403` desde otro origen y `303` con `Set-Cookie` de borrado.
 El cliente de Better Auth se probó tal cual lo usa la página: manda la cabecera.
 
-### ⬜ Paso 6 — El repositorio contra el servidor
+### ✅ Paso 6 — El repositorio contra el servidor
 
-Las **12 acciones** de Astro que implementan `AppRepository` y un
-`createRemoteRepository()`. Se cambia **solo `src/browser/repository.ts`**, que
-es el único punto de composición. Las seis pantallas que lo consumen no se tocan.
+**Borrada `src/pages/datos-de-prueba.astro`** antes de nada, como avisaba este
+documento: llamaba a `repo.restore()` y habría borrado los datos del servidor.
 
-> **ANTES de este paso: borrar `src/pages/datos-de-prueba.astro`.** Llama a
-> `repo.restore()` y con el repositorio remoto **borraría los datos del
-> servidor**.
+**13 acciones** en `src/actions/` (sesiones, ajustes, perfiles, estado) y
+`createRemoteRepository()` en `src/browser/remote-repository.ts`. Se cambió
+**solo `src/browser/repository.ts`**: las seis pantallas no se tocaron. Esa era
+la promesa de tener una interfaz delante y se cumplió.
 
-Validar con Zod **también lo que llega del servidor**: una respuesta de red es
-tan poco confiable como `localStorage`.
+**El filtro por `user_id` está en `src/actions/context.ts`** y ninguna acción
+acepta un usuario por parámetro: sale siempre de la sesión.
 
-### ⬜ Paso 7 — Traer el historial local
+**Lo que llega del servidor se valida con Zod**, igual que lo que venía de
+`localStorage`.
 
-Usar el formato de `src/storage/backup.ts`, que ya existe: exportas JSON del
-navegador, lo importas a la cuenta. Sin esto, lo que haya hoy se queda fuera.
+**Decisiones tomadas contigo:**
+
+- **`listSessions` es la única acción que no exige sesión**: devuelve lista
+  vacía. La ficha de ejercicio es pública y estática, y pide el historial; para
+  un anónimo la respuesta correcta es «nada», no un error.
+- **La sesión en curso se escribe antes en el navegador que en el servidor**
+  (`active-session-mirror.ts`). La pantalla de entreno **no captura errores** en
+  `persist()`: sin el espejo, un parpadeo de wifi rompería el entreno. Si el
+  envío falla, la serie ya está a salvo y la siguiente lectura la arrastra.
+- **Servidor manda, navegador cachea.** Una sola dirección, sin conflictos que
+  resolver. Sincronización real entre dispositivos sigue siendo un paso aparte.
+- **Sin caché de lectura**: pintar al instante con lo último visto exigiría que
+  las pantallas supieran refrescarse después, y son justo las que no se tocan.
+
+**Dos asperezas encontradas y arregladas:**
+
+- `ProfileSchema.id` exige un **UUID**. El id derivado del usuario (que evita
+  crear dos perfiles en una carrera) se genera ahora con SHA-256 y los bits de
+  versión puestos: sale estable y sale válido.
+- El índice único de «una sola sesión en curso» devolvía un **500 con el error
+  de Postgres dentro**. Ahora devuelve `CONFLICT` con un mensaje, y el
+  navegador distingue un rechazo (no se reintenta) de un fallo de red (sí).
+
+### ✅ Paso 7 — Traer el historial local
+
+El botón vive en Ajustes y **solo aparece si este navegador guarda algo de
+antes**. Lee el repositorio de la versión anterior —no el actual, que habla con
+el servidor— y fusiona con `importBackup` en modo `merge`, que nunca pisa un
+registro más reciente. **No borra nada de `localStorage`**: se puede repetir sin
+miedo, y repetirlo no duplica.
+
+Exportar e importar se quedan en Ajustes, con el texto corregido: la frase «esta
+exportación es tu única copia de seguridad» era falsa desde que hay Postgres.
+
+### Comprobado
+
+Tres scripts en `pruebas/` (ver `pruebas/LEEME.md`), todos en verde desde una
+base limpia:
+
+- `acciones.mjs` — 22 comprobaciones por HTTP. **La que importa es el
+  aislamiento**: B no ve, no lee, no borra y no restaura nada de A.
+- `pantallas.mjs` — las seis pantallas en un Chrome real, cazando errores de
+  consola. Con `--ver` abre ventana.
+- `mudanza.mjs` — el puente del paso 7, incluido que repetirlo no duplique.
 
 ### ⬜ Paso 8 — Docker y despliegue
 
@@ -250,6 +293,15 @@ Siete tablas: `user`, `session`, `account`, `verification` (Better Auth) +
   nada. Arreglo: `docker compose -f compose.dev.yml up -d --force-recreate`.
   Está anotado en `compose.dev.yml`.
 - `drizzle-kit` **se traga los errores**. Si falla sin mensaje, mira la conexión.
+
+- **Las acciones responden en `application/json+devalue`, no en JSON.** Solo un
+  `undefined` devuelve 204 vacío; un `null` viaja como dato (`[null]`) y por eso
+  el repositorio remoto puede validarlo con `z.null()`. Probarlas con `curl` a
+  pelo engaña: hay que deserializar con devalue.
+- **`writeDocument` guarda el estado tal cual, sin sobre.** El número de versión
+  viaja dentro, en `schemaVersion`. Envolverlo en `{version, data}` hace que
+  `readDocument` no lo valide y lo mande a cuarentena, que es justo lo que debe
+  hacer, pero cuesta un rato entenderlo.
 
 **De Better Auth:**
 

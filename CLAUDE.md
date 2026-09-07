@@ -43,8 +43,13 @@ src/core/      dominio puro. Sin DOM, sin almacenamiento, sin Astro.
                model.ts son los esquemas Zod: la única fuente de verdad de los
                tipos (todo sale de z.infer, nada se declara a mano).
                Cada módulo tiene su *.test.ts al lado. Es lo único con tests.
-src/storage/   persistencia detrás de AppRepository. Nada de fuera sabe que
-               debajo hay localStorage.
+src/storage/   la interfaz AppRepository y su implementación local, más el
+               formato de documento y el de copia de seguridad. La app ya no
+               usa la local: quedó para leer lo que guardó la versión anterior.
+src/actions/   las acciones de Astro: el transporte del repositorio remoto.
+               Validan con los esquemas Zod de core/ y son el ÚNICO sitio que
+               importa src/db/. Aquí vive el filtro por user_id: no hay RLS,
+               así que una acción que se olvide de filtrar es un agujero.
 src/auth.ts    configuración de Better Auth. El único sitio donde se decide
                cómo se entra. Better Auth NO envía correos: te llama a ti con
                el enlace o el código ya generados.
@@ -52,8 +57,9 @@ src/db/        Postgres: esquema Drizzle, conexión y mapeo fila ↔ tipos de co
                Solo lo importan las acciones. Ni core/, ni components/, ni
                pages/ pueden tocarlo. Las migraciones van en drizzle/ y se
                versionan: son el historial de la forma de la base.
-src/browser/   APIs del navegador (audio, vibración, wake lock) y el punto único
-               de composición del repositorio.
+src/browser/   APIs del navegador (audio, vibración, wake lock), el repositorio
+               remoto y el punto único de composición. `repository.ts` es la
+               única línea que decide qué implementación hay detrás.
 src/content/   los datos. Un JSON por ejercicio, uno por mesociclo.
 src/components/, src/layouts/, src/pages/   lo que se ve.
 src/data.ts    de dónde salen rutinas y ejercicios + comprobación de integridad.
