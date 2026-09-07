@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin 'daisyui';
 
 /* Archivo variable, auto-alojada. Vite reescribe estas rutas con el `base` del
    despliegue, cosa que no ocurriría si el archivo viviera en public/. */
