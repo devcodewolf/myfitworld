@@ -1,0 +1,68 @@
+---
+/**
+ * El esqueleto de las dos pantallas de administración.
+ *
+ * Cuentas activas y papelera son la misma tabla con acciones distintas, así que
+ * el marcado vive una sola vez aquí y las filas las rellena
+ * `src/screens/admin.ts`. Duplicar esta tabla en dos `.astro` era la forma
+ * segura de que dentro de un mes tuvieran columnas distintas.
+ */
+interface Props {
+  title: string;
+  description: string;
+  /** Enlace a la otra vista: de cuentas a papelera y al revés. */
+  otherHref: string;
+  otherLabel: string;
+  /** Qué dice la tabla cuando no hay ninguna fila. */
+  empty: string;
+}
+
+const { title, description, otherHref, otherLabel, empty } = Astro.props;
+
+const HEAD =
+  'px-4 py-2.5 text-left text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase';
+---
+
+<div class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+  <header class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <h1 class="text-figure font-black tracking-[-0.02em] text-ink">{title}</h1>
+      <p class="mt-1 max-w-[70ch] text-sm text-ink-dim">{description}</p>
+    </div>
+    <a
+      href={otherHref}
+      class="min-h-11 rounded-full border border-line px-5 py-2.5 text-sm font-semibold text-ink-dim transition-colors hover:border-line-strong hover:text-ink"
+    >
+      {otherLabel}
+    </a>
+  </header>
+
+  <p
+    id="aviso"
+    hidden
+    role="status"
+    class="mt-6 rounded-card border border-line px-4 py-3 text-sm text-ink data-[tone=error]:border-line-strong data-[tone=error]:text-ink-dim"
+  >
+  </p>
+
+  <slot name="antes" />
+
+  <section class="panel mt-6 overflow-hidden rounded-card border border-line">
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[44rem] border-collapse">
+        <thead>
+          <tr>
+            <th scope="col" class={HEAD}>Cuenta</th>
+            <th scope="col" class={HEAD}>Estado</th>
+            <th scope="col" class={HEAD}><slot name="fecha">Alta</slot></th>
+            <th scope="col" class={`${HEAD} text-right`}>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="cuentas"></tbody>
+      </table>
+    </div>
+    <p id="sin-cuentas" hidden class="px-4 py-8 text-center text-sm text-ink-faint">{empty}</p>
+  </section>
+
+  <p id="fallo" hidden role="alert" class="mt-6 text-sm text-ink-dim"></p>
+</div>

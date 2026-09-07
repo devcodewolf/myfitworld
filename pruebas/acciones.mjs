@@ -4,7 +4,7 @@
 // Las acciones responden en `application/json+devalue`, no en JSON plano. pnpm
 // no eleva las dependencias transitivas y devalue es de Astro, no nuestra, asi
 // que hay que buscarla en el almacen en vez de importarla por su nombre.
-import { readdirSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -15,8 +15,19 @@ const { parse: devalueParse } = await import(
   pathToFileURL(join(almacen, carpeta, 'node_modules/devalue/index.js')).href
 );
 
+// El codigo de invitacion: por argumento, o del .env si no se pasa. Sin el, el
+// registro devuelve 403 y todo lo demas falla con un «usuario no encontrado»
+// que no explica nada.
+const env = Object.fromEntries(
+  readFileSync(fileURLToPath(new URL('../.env', import.meta.url)), 'utf8')
+    .split('\n')
+    .filter((l) => l.trim() && !l.trim().startsWith('#') && l.includes('='))
+    .map((l) => [l.slice(0, l.indexOf('=')).trim(), l.slice(l.indexOf('=') + 1).trim()]),
+);
+
 const B = 'http://localhost:4321';
-const CODIGO = process.argv[2];
+const CODIGO = process.argv[2] ?? env['SIGNUP_INVITE_CODE'];
+if (!CODIGO) throw new Error('Falta SIGNUP_INVITE_CODE (por argumento o en .env)');
 
 let fallos = 0;
 function ok(nombre, condicion, detalle = '') {

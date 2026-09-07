@@ -1,0 +1,87 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AccountTable from '@/components/admin/AccountTable.astro';
+import { MIN_PASSWORD_LENGTH } from '@/auth-contract';
+import { routes } from '@/routes';
+
+/**
+ * Administración de cuentas.
+ *
+ * Fuera del prerender, y además **el middleware devuelve 404 a quien no sea
+ * administrador**: no un «prohibido», que confirmaría que aquí hay algo.
+ *
+ * Esta página no decide nada sobre permisos. Cada acción los comprueba por su
+ * cuenta en el servidor; esconder un botón no es seguridad.
+ */
+export const prerender = false;
+
+const FIELD =
+  'min-h-11 rounded-full border border-line bg-surface px-4 text-ink transition-colors hover:border-line-strong';
+const CHEVRON = 'desplegable pr-11';
+---
+
+<BaseLayout title="Cuentas · My Fitness World" description="Administración de cuentas.">
+  <AccountTable
+    title="Cuentas"
+    description="Quién tiene acceso, con qué rol y en qué estado. «Entrar como» abre una sesión a nombre de esa persona durante media hora y queda registrado."
+    otherHref={routes.adminTrash()}
+    otherLabel="Ver la papelera"
+    empty="No hay ninguna cuenta activa."
+  >
+    <section slot="antes" class="panel mt-6 rounded-card border border-line p-5 sm:p-6">
+      <h2 class="text-base font-extrabold text-ink">Crear una cuenta</h2>
+      <p class="mt-2 max-w-[70ch] text-sm text-ink-dim">
+        Creada desde aquí no hace falta código de invitación: el código existe para que nadie se
+        registre solo, no para ti.
+      </p>
+      <form id="form-cuenta" class="mt-5 flex flex-wrap items-end gap-3">
+        <label class="flex flex-col gap-1 text-sm">
+          <span class="text-ink-dim">Nombre</span>
+          <input name="nombre" type="text" required maxlength="40" class={FIELD} />
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          <span class="text-ink-dim">Correo</span>
+          <input name="correo" type="email" required class={`${FIELD} min-w-56`} />
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          <span class="text-ink-dim">Contraseña</span>
+          <input
+            name="clave"
+            type="password"
+            required
+            minlength={MIN_PASSWORD_LENGTH}
+            autocomplete="new-password"
+            class={FIELD}
+          />
+        </label>
+        <label class="flex flex-col gap-1 text-sm">
+          <span class="text-ink-dim">Rol</span>
+          <select name="rol" class={`${FIELD} ${CHEVRON}`}>
+            <option value="user">Usuario</option>
+            <option value="admin">Admin</option>
+          </select>
+        </label>
+        <button
+          type="submit"
+          class="accion-primaria min-h-11 rounded-full px-6 text-sm font-extrabold text-accent-ink transition-transform hover:scale-[1.02] active:scale-100"
+        >
+          Crear
+        </button>
+      </form>
+    </section>
+  </AccountTable>
+</BaseLayout>
+
+<script>
+  import { mountAdminPage } from '@/screens/admin';
+
+  try {
+    await mountAdminPage(false);
+  } catch (error) {
+    const box = document.getElementById('fallo');
+    if (box) {
+      box.hidden = false;
+      box.textContent = `No se pudo cargar la lista: ${error instanceof Error ? error.message : String(error)}`;
+    }
+  }
+</script>

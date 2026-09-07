@@ -1,8 +1,12 @@
 /**
- * GENERADO por el CLI de Better Auth. **No editar a mano.**
+ * Las tablas de Better Auth.
  *
- * Se regenera con:
- *   npx @better-auth/cli generate --config src/auth.ts --output src/db/auth-schema.ts
+ * Nació generado por su CLI, pero **ya no se regenera a ciegas**: el CLI
+ * público va por detrás de la librería y se ha dejado columnas fuera más de una
+ * vez. La lista autorizada la da la propia librería, y hay que consultarla al
+ * añadir un plugin:
+ *
+ *   node -e "import('better-auth/db').then(m => console.log(m.getAuthTables({})))"
  *
  * Son las cuatro tablas que Better Auth necesita:
  *   user          quién eres
@@ -30,6 +34,24 @@ export const user = pgTable('user', {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
+
+  // ── Del plugin `admin` de Better Auth ──────────────────────────────────
+  /** `user` o `admin`. Vacío cuenta como `user`: el valor por defecto lo pone la librería. */
+  role: text('role'),
+  banned: boolean('banned').default(false),
+  banReason: text('ban_reason'),
+  banExpires: timestamp('ban_expires'),
+
+  // ── Nuestro ────────────────────────────────────────────────────────────
+  /**
+   * La papelera. Una cuenta con fecha aquí no puede entrar, pero **sigue
+   * entera**: sus entrenos, sus ajustes y su perfil no se han tocado.
+   *
+   * Existe porque borrar una cuenta de verdad arrastra en cascada todo su
+   * historial, y eso no se deshace. Con la papelera en medio, el borrado
+   * irreversible es un segundo acto deliberado y no un clic de más.
+   */
+  deletedAt: timestamp('deleted_at'),
 });
 
 export const session = pgTable(
@@ -47,6 +69,14 @@ export const session = pgTable(
     userId: text('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
+    /**
+     * Del plugin `admin`: quién está suplantando a quién.
+     *
+     * Cuando un admin entra como otra persona, la sesión es la de esa persona
+     * y aquí queda su firma. Es lo que hace que suplantar deje rastro en vez
+     * de ser indistinguible de un acceso normal.
+     */
+    impersonatedBy: text('impersonated_by'),
   },
   (table) => [index('session_userId_idx').on(table.userId)],
 );

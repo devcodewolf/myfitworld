@@ -15,7 +15,7 @@
  */
 import { defineMiddleware } from 'astro:middleware';
 
-import { auth } from '@/auth';
+import { auth, isAdminUser } from '@/auth';
 import { routes } from '@/routes';
 
 /**
@@ -59,6 +59,17 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (!found && needsSession(context.url.pathname)) {
     // Con el destino puesto: al entrar se vuelve aquí, no a la portada.
     return context.redirect(routes.login(context.url.pathname + context.url.search));
+  }
+
+  /**
+   * La administración no pide sesión: pide ser administrador, que es otra cosa.
+   *
+   * Y a quien no lo sea se le responde **404, no 403**. Un «prohibido»
+   * confirma que ahí hay algo; un «no existe», no. Vale también para quien ni
+   * siquiera ha entrado: sin esto, un desconocido sabría que hay panel.
+   */
+  if (context.url.pathname.startsWith(routes.admin()) && !isAdminUser(context.locals.user)) {
+    return new Response(null, { status: 404 });
   }
 
   return next();

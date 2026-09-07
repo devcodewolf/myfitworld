@@ -11,9 +11,16 @@
  */
 declare namespace App {
   interface Locals {
-    /** Quién está entrando, o `null` si no hay sesión. */
-    user: import('better-auth').User | null;
+    /**
+     * Quién está entrando, o `null` si no hay sesión.
+     *
+     * El tipo sale de la **configuración real** de Better Auth, no del tipo
+     * genérico `User`. Así los campos que añaden los plugins —`role`, `banned`,
+     * `deletedAt`— existen para el compilador igual que existen en tiempo de
+     * ejecución, y no hace falta castear para leerlos.
+     */
+    user: typeof import('@/auth').auth.$Infer.Session.user | null;
     /** La sesión abierta, con su caducidad. `null` si no hay. */
-    session: import('better-auth').Session | null;
+    session: typeof import('@/auth').auth.$Infer.Session.session | null;
   }
 }

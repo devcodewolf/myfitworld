@@ -15,9 +15,13 @@
  * también aquí dentro, donde el HTML llega tarde y ningún manejador puesto al
  * cargar la página lo habría visto nacer.
  */
+import { isAdminUser } from '@/auth';
 import { routes } from '@/routes';
 
 const user = Astro.locals.user;
+
+/** El enlace a la administración solo existe para quien puede entrar ahí. */
+const esAdmin = isAdminUser(user);
 
 /** La inicial del nombre, o del correo si no dio nombre. */
 const initial = (user?.name || user?.email || '?').trim().charAt(0).toUpperCase();
@@ -43,6 +47,11 @@ const PILL =
         <span class="hidden max-w-32 truncate md:inline">{label}</span>
         <span class="sr-only">Tu cuenta: {user.email}</span>
       </a>
+      {esAdmin && (
+        <a href={routes.admin()} class:list={[PILL, 'text-ink-dim hover:text-ink']}>
+          Cuentas
+        </a>
+      )}
       <form method="POST" action={routes.signOut()}>
         <button type="submit" class:list={[PILL, 'text-ink-faint hover:text-ink']}>
           Salir

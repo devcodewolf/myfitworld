@@ -19,16 +19,20 @@ node --env-file=.env dist/server/entry.mjs     # en otra terminal
 
 ## Las tres
 
-| Script          | Qué comprueba                                                                                   |
-| --------------- | ----------------------------------------------------------------------------------------------- |
-| `acciones.mjs`  | Las acciones por HTTP. **Sobre todo el aislamiento**: que un usuario no vea ni toque lo de otro |
-| `pantallas.mjs` | Las seis pantallas en un navegador real, cazando errores de consola                             |
-| `rls.mjs`       | **El segundo cerrojo**: que sea Postgres quien bloquee, sin que intervenga la aplicación        |
+| Script               | Qué comprueba                                                                                    |
+| -------------------- | ------------------------------------------------------------------------------------------------ |
+| `acciones.mjs`       | Las acciones por HTTP. **Sobre todo el aislamiento**: que un usuario no vea ni toque lo de otro  |
+| `pantallas.mjs`      | Las seis pantallas en un navegador real, cazando errores de consola                              |
+| `rls.mjs`            | **El segundo cerrojo**: que sea Postgres quien bloquee, sin que intervenga la aplicación         |
+| `admin.mjs`          | **Que un usuario normal no administre nada.** Y la papelera: que no borre, y que borrar sí borre |
+| `admin-pantalla.mjs` | La pantalla de cuentas en navegador, incluida la suplantación                                    |
 
 ```bash
 node pruebas/acciones.mjs <SIGNUP_INVITE_CODE>
 node pruebas/pantallas.mjs           # añade --ver para abrir una ventana y mirarla
 node pruebas/rls.mjs                 # no necesita ni servidor ni navegador
+node pruebas/admin.mjs
+node pruebas/admin-pantalla.mjs      # añade --ver
 ```
 
 `rls.mjs` es la más importante de las tres y la que menos se parece a las otras.

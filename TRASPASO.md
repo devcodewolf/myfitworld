@@ -276,7 +276,7 @@ crearlo también **en Dokploy** antes de desplegar: queda anotado en el paso 8.
 `src/db/index.ts` avisa por consola al arrancar si `DATABASE_URL` apunta a un
 rol con privilegios, porque es un fallo que no se nota mirando la app.
 
-### Comprobado### Comprobado
+### Comprobado
 
 Tres scripts en `pruebas/` (ver `pruebas/LEEME.md`), todos en verde desde una
 base limpia:
@@ -291,6 +291,64 @@ base limpia:
   eso esta habla con Postgres a pelo, con la cadena de la app, y lo único que
   puede hacerla pasar es que las políticas funcionen.
 
+### ✅ Roles de administración
+
+Plugin `admin` de Better Auth. **Ojo con la palabra «rol»**, que aquí significa
+dos cosas sin relación: el rol de Postgres (`mfw_app`, con qué credenciales se
+conecta la app) y el rol de la aplicación (admin o usuario, propiedad de cada
+cuenta).
+
+**Quién es admin lo dice la columna `role`, y solo ella.** `isAdminUser` no
+mira nada más, y es deliberado: Better Auth hace sus propias comprobaciones
+antes de banear o cambiar un rol, y con dos fuentes distintas nuestra pantalla
+habría dejado pasar a alguien a quien la librería luego le dice que no.
+
+**El primer admin se nombra con `ADMIN_EMAILS`**, que no es una segunda fuente
+sino lo que **escribe** esa columna, en dos momentos:
+
+- al **crear** la cuenta, si el correo está en la lista → nace administrador;
+- al **entrar**, si la lista se puso después de haberse registrado → se repara
+  sola. Sin esto, el remedio sería borrar la cuenta y volver a crearla.
+
+Se compara en minúsculas: la lista la escribe una persona a mano.
+
+| Dónde          | Cómo                                                     | ¿Redespliegue? |
+| -------------- | -------------------------------------------------------- | -------------- |
+| **Producción** | `ADMIN_EMAILS` puesta antes de desplegar, y te registras | no             |
+| **Local**      | `pnpm db:make-admin tu@correo.com`                       | no             |
+
+Se descartó nombrarlo por id de usuario: obligaba a buscar el id en la consola
+de Postgres del servidor y a redesplegar. Lo que se pierde es que ahora quien
+tuviera escritura en la base podría ascenderse solo; a esas alturas ya tendría
+todos los datos igualmente.
+
+**Lo que puede hacer:** listar cuentas, crearlas (sin código de invitación),
+cambiar rol, cambiar la contraseña de otro, suspender, mandar a la papelera,
+restaurar y borrar definitivamente. Todo pasa por `src/actions/admin.ts`, que
+comprueba quién llama antes de delegar en Better Auth. **Las pantallas no
+llaman a `/api/auth/admin/*` directamente.**
+
+**A quien no es admin se le responde `404`, no `403`**, tanto en las páginas
+como en las acciones: un «prohibido» confirma que ahí hay algo.
+
+**Lo que NO puede hacer: leer el entreno de otro.** Las políticas de la base no
+tienen excepción para administradores. El único camino es **suplantar**
+(`/admin/suplantar`, `POST`), que emite una sesión a nombre de la otra persona,
+dura media hora y **deja firma** en `session.impersonatedBy`. Se decidió
+conservarla como escotilla explícita.
+
+**La papelera.** Borrar de verdad arrastra en cascada el perfil, los ajustes y
+el historial entero, y no hay copia en ningún sitio de donde sacarlo. Por eso
+`deletedAt` deja la cuenta sin poder entrar pero **sin perder nada**, y el
+borrado físico es un segundo acto desde `/admin/papelera`, con un aviso que
+dice exactamente qué se pierde. Una acción se niega a borrar lo que no haya
+pasado antes por la papelera, y nadie puede mandarse a sí mismo.
+
+**Comprobado** con `pruebas/admin.mjs` (un usuario normal recibe 404 en las
+nueve acciones y en las dos páginas; la papelera conserva perfil y sesión, y el
+borrado definitivo se los lleva sin dejar huérfanos) y
+`pruebas/admin-pantalla.mjs` (la pantalla en Chrome, incluida la suplantación).
+
 ### ⬜ Paso 8 — Docker y despliegue
 
 `Dockerfile` multietapa, migraciones al arrancar, healthcheck. En Dokploy:
@@ -303,6 +361,12 @@ contraseña que vaya en `DATABASE_URL`. Sin eso la app se conectaría como
 superusuario y **las políticas de seguridad no se aplicarían**, sin que nada lo
 delate. Son dos variables: `DATABASE_URL` (rol de app) y `DATABASE_OWNER_URL`
 (dueño, solo para las migraciones).
+
+**Y `ADMIN_EMAILS` con tu correo, puesta ANTES de desplegar**: así te registras
+y ya entras siendo administrador. Si se olvida, no pasa nada grave —se añade
+después y se arregla la próxima vez que entres—, pero mientras tanto `/admin`
+devuelve 404 a todo el mundo. **Y un `SIGNUP_INVITE_CODE` distinto del de
+local.**
 
 **Comprobación que no se salta:** desplegar, escribir un dato, redesplegar y
 verificar que sigue ahí.

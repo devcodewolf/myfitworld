@@ -36,6 +36,11 @@ export const routes = {
    * seguiría cualquier precarga del navegador y te sacaría de la app sola.
    */
   signOut: () => '/salir',
+  /** Administración de cuentas. Solo la ve un admin; al resto le da 404. */
+  admin: () => '/admin',
+  adminTrash: () => '/admin/papelera',
+  /** Entrar como otra persona. `POST`, por lo mismo que salir. */
+  impersonate: () => '/admin/suplantar',
   /** El prefijo bajo el que Better Auth atiende todo lo suyo. */
   authApi: () => '/api/auth',
   /**

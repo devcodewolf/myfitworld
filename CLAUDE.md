@@ -23,6 +23,8 @@ pnpm db:down                              # pararlo (los datos se quedan)
 pnpm db:generate                          # esquema → SQL en drizzle/, sin conectar
 pnpm db:migrate                           # aplicar migraciones (usa DATABASE_OWNER_URL)
 pnpm db:app-role                          # crear el rol con el que se conecta la app
+pnpm db:users                             # ver ids y correos
+pnpm db:make-admin tu@correo.com          # ascender una cuenta a admin (en local)
 pnpm db:studio                            # ver la base en el navegador
 ```
 
@@ -102,6 +104,25 @@ ni una firma fuera de su carpeta. `specs.md` tiene los pasos concretos.
   **La aplicación se conecta con un rol sin privilegios (`DATABASE_URL`), no
   con el dueño (`DATABASE_OWNER_URL`)**: un superusuario se salta las políticas
   y no se nota mirando. `pruebas/rls.mjs` lo vigila.
+- **«Rol» significa dos cosas distintas y no tienen nada que ver.** El rol de
+  Postgres es con qué credenciales se conecta la app (`mfw_app`, uno para todo
+  el proyecto). El rol de la aplicación es admin o usuario, y es una propiedad
+  de cada cuenta, del plugin `admin` de Better Auth.
+- **Quién es admin lo dice la columna `role`, y solo ella.** `isAdminUser` en
+  `src/auth.ts` no mira nada más, y es a propósito: Better Auth hace sus propias
+  comprobaciones antes de banear o cambiar un rol, y con dos fuentes distintas
+  nuestra pantalla dejaría pasar a quien la librería luego rechaza.
+- **El primer admin se nombra con `ADMIN_EMAILS`**, que **escribe** esa columna:
+  al crear la cuenta si el correo está en la lista, y al entrar si la lista se
+  puso después. En local, el atajo es `pnpm db:make-admin tu@correo.com`.
+- **A quien no es admin, `/admin` le responde 404, no 403.** Un «prohibido»
+  confirma que ahí hay algo. Vale también para las acciones.
+- **Un admin no puede leer el entreno de otro.** Las políticas no tienen
+  excepción para él. El único camino es suplantar, que emite una sesión a
+  nombre del otro, dura media hora y deja firma en `session.impersonatedBy`.
+- **Borrar una cuenta pasa por la papelera.** `deletedAt` la deja sin poder
+  entrar pero **sin perder nada**; el borrado físico es un segundo acto desde
+  `/admin/papelera` y en cascada se lleva perfil, ajustes e historial entero.
 - **Las tablas de Better Auth NO llevan RLS, a propósito.** Tiene que buscarte
   por correo antes de que exista sesión, o sea antes de que haya nadie que
   declarar. Con RLS ahí, no se podría ni entrar.

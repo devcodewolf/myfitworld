@@ -1,0 +1,40 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AccountTable from '@/components/admin/AccountTable.astro';
+import { routes } from '@/routes';
+
+/**
+ * La papelera de cuentas.
+ *
+ * Una cuenta aquí **no ha perdido nada**: sus entrenos, sus ajustes y su perfil
+ * siguen enteros, solo que no puede entrar. Existe este paso intermedio porque
+ * el borrado de verdad arrastra en cascada todo su historial y no se deshace.
+ */
+export const prerender = false;
+---
+
+<BaseLayout title="Papelera · My Fitness World" description="Cuentas retiradas.">
+  <AccountTable
+    title="Papelera"
+    description="Estas cuentas no pueden entrar, pero conservan todo su historial. Restaurarlas las devuelve como estaban. Borrarlas se lleva su entreno entero y no se deshace."
+    otherHref={routes.admin()}
+    otherLabel="Ver las cuentas"
+    empty="La papelera está vacía."
+  >
+    <Fragment slot="fecha">En la papelera desde</Fragment>
+  </AccountTable>
+</BaseLayout>
+
+<script>
+  import { mountAdminPage } from '@/screens/admin';
+
+  try {
+    await mountAdminPage(true);
+  } catch (error) {
+    const box = document.getElementById('fallo');
+    if (box) {
+      box.hidden = false;
+      box.textContent = `No se pudo cargar la papelera: ${error instanceof Error ? error.message : String(error)}`;
+    }
+  }
+</script>

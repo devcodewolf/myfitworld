@@ -19,6 +19,17 @@ import {
   saveActiveSession,
 } from '@/actions/sessions';
 import { getSettings, saveSettings } from '@/actions/settings';
+import {
+  banAccount,
+  createAccount,
+  listAccounts,
+  removeForever,
+  restoreAccount,
+  setPassword,
+  setRole,
+  trashAccount,
+  unbanAccount,
+} from '@/actions/admin';
 import { getActiveProfile, listProfiles } from '@/actions/profiles';
 
 export const server = {
@@ -38,5 +49,21 @@ export const server = {
   profiles: {
     getActive: getActiveProfile,
     list: listProfiles,
+  },
+  /**
+   * Administración de cuentas. Todas comprueban que quien llama sea admin
+   * antes de nada, y responden `NOT_FOUND` a quien no lo sea: para el resto de
+   * la gente, esto no existe.
+   */
+  admin: {
+    list: listAccounts,
+    create: createAccount,
+    setRole,
+    setPassword,
+    ban: banAccount,
+    unban: unbanAccount,
+    trash: trashAccount,
+    restore: restoreAccount,
+    removeForever,
   },
 };
