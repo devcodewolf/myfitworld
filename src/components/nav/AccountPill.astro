@@ -33,12 +33,12 @@ const label = user?.name?.trim() || user?.email.split('@')[0] || '';
 
 {
   user ? (
-    <div class="dropdown dropdown-end shrink-0">
+    <div class="dropdown dropdown-end h-full w-full">
       <div
         tabindex="0"
         role="button"
         aria-haspopup="menu"
-        class="btn h-11 min-h-11 gap-2 rounded-full border-line bg-surface px-3 font-semibold text-ink-dim hover:border-line-strong hover:bg-raised hover:text-ink"
+        class="btn h-11 min-h-11 w-full justify-start gap-2 rounded-full border-line bg-surface px-3 font-semibold text-ink-dim hover:border-line-strong hover:bg-raised hover:text-ink"
       >
         <span
           class="figures flex size-7 shrink-0 items-center justify-center rounded-full bg-raised text-xs font-black text-ink"
@@ -46,7 +46,7 @@ const label = user?.name?.trim() || user?.email.split('@')[0] || '';
         >
           {initial}
         </span>
-        <span class="hidden max-w-32 truncate md:inline">{label}</span>
+        <span class="hidden min-w-0 flex-1 truncate text-left md:inline">{label}</span>
         <span class="sr-only">Tu cuenta: {user.email}</span>
         <svg
           viewBox="0 0 24 24"
@@ -55,7 +55,7 @@ const label = user?.name?.trim() || user?.email.split('@')[0] || '';
           stroke-width="1.75"
           stroke-linecap="round"
           stroke-linejoin="round"
-          class="size-4 shrink-0"
+          class="ml-auto size-4 shrink-0 md:ml-0"
           aria-hidden="true"
         >
           <path d="m6 9 6 6 6-6" />
@@ -95,7 +95,7 @@ const label = user?.name?.trim() || user?.email.split('@')[0] || '';
   ) : (
     <a
       href={routes.login()}
-      class="btn h-11 min-h-11 shrink-0 rounded-full border-line bg-surface px-5 font-bold text-ink hover:border-line-strong hover:bg-raised"
+      class="btn h-11 min-h-11 w-full rounded-full border-line bg-surface px-5 font-bold text-ink hover:border-line-strong hover:bg-raised"
     >
       Entrar
     </a>

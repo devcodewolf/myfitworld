@@ -48,17 +48,33 @@ const links: ReadonlyArray<{ href: string; label: string; icon: IconName }> = [
     </nav>
 
     {
-      /* `server:defer` lo deja fuera del build: la página se genera entera y
-        este trozo llega después, ya sabiendo si hay cookie. El sustituto ocupa
-        exactamente lo mismo para que la barra no dé un salto al aparecer. */
+      /**
+       * La píldora de cuenta, de dos maneras según dónde esté.
+       *
+       * **En una página que ya corre en el servidor** se pinta ahí mismo:
+       * `Astro.locals.user` ya está relleno, así que llega con el HTML y no hay
+       * nada que esperar ni nada que salte. Es el caso de `/admin`,
+       * `/historial`, `/configuracion` y las demás con sesión.
+       *
+       * **En una página estática** no queda otra que `server:defer`: son
+       * archivos en disco y no saben quién los pide. Ahí sí hay una segunda
+       * petición, y por eso hay hueco reservado.
+       *
+       * El hueco tiene **exactamente el tamaño final**, que es lo único que
+       * evita el salto. Antes medía 52px de alto contra los 44 de la píldora, y
+       * el ancho ni siquiera era fijo: al llegar, empujaba toda la barra.
+       */
     }
-    <AccountPill server:defer>
-      <div
-        slot="fallback"
-        class="h-[3.25rem] w-[5.5rem] shrink-0 rounded-full border border-line bg-surface md:w-32"
-        aria-hidden="true"
-      >
-      </div>
-    </AccountPill>
+    <div class="h-11 w-[4.75rem] shrink-0 md:w-40">
+      {
+        Astro.isPrerendered ? (
+          <AccountPill server:defer>
+            <div slot="fallback" class="h-11 w-full skeleton rounded-full" aria-hidden="true" />
+          </AccountPill>
+        ) : (
+          <AccountPill />
+        )
+      }
+    </div>
   </div>
 </header>
