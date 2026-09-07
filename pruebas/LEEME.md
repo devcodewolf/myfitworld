@@ -23,11 +23,20 @@ node --env-file=.env dist/server/entry.mjs     # en otra terminal
 | --------------- | ----------------------------------------------------------------------------------------------- |
 | `acciones.mjs`  | Las acciones por HTTP. **Sobre todo el aislamiento**: que un usuario no vea ni toque lo de otro |
 | `pantallas.mjs` | Las seis pantallas en un navegador real, cazando errores de consola                             |
+| `rls.mjs`       | **El segundo cerrojo**: que sea Postgres quien bloquee, sin que intervenga la aplicación        |
 
 ```bash
 node pruebas/acciones.mjs <SIGNUP_INVITE_CODE>
 node pruebas/pantallas.mjs           # añade --ver para abrir una ventana y mirarla
+node pruebas/rls.mjs                 # no necesita ni servidor ni navegador
 ```
+
+`rls.mjs` es la más importante de las tres y la que menos se parece a las otras.
+El filtro por `user_id` de las acciones **tapa el resultado**: aunque las
+políticas de Postgres estuvieran desactivadas, `acciones.mjs` seguiría en verde.
+Por eso `rls.mjs` habla con la base a pelo, con la misma cadena de conexión que
+usa la app: lo único que puede hacerla pasar es que el cerrojo de la base
+funcione de verdad.
 
 `pantallas.mjs` necesita **Playwright** (instalado global) y usa el Chrome del
 sistema con `channel: 'chrome'`, para no descargar un Chromium propio.

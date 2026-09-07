@@ -21,7 +21,8 @@ node --env-file=.env dist/server/entry.mjs   # servir lo construido
 pnpm db:up                                # Postgres local en Docker
 pnpm db:down                              # pararlo (los datos se quedan)
 pnpm db:generate                          # esquema → SQL en drizzle/, sin conectar
-pnpm db:migrate                           # aplicar las migraciones (necesita DATABASE_URL)
+pnpm db:migrate                           # aplicar migraciones (usa DATABASE_OWNER_URL)
+pnpm db:app-role                          # crear el rol con el que se conecta la app
 pnpm db:studio                            # ver la base en el navegador
 ```
 
@@ -49,7 +50,9 @@ src/repository/ contract.ts es lo que la app puede pedirle a la persistencia;
                Ninguna pantalla sabe qué hay detrás.
 src/actions/   las acciones de Astro: el transporte del repositorio.
                Validan con los esquemas Zod de core/ y son el ÚNICO sitio que
-               importa src/db/. Aquí va el filtro por user_id de cada consulta.
+               importa src/db/. Todo lo que toca la base va dentro de
+               `withUser`, que declara ante Postgres en nombre de quién se
+               actúa; fuera de ahí las políticas no devuelven nada.
 src/auth.ts    configuración de Better Auth. El único sitio donde se decide
                cómo se entra. Better Auth NO envía correos: te llama a ti con
                el enlace o el código ya generados. auth-contract.ts es lo poco
@@ -91,6 +94,17 @@ ni una firma fuera de su carpeta. `specs.md` tiene los pasos concretos.
   consistencia entre colecciones, va aquí.
 - **`blockKeyOf(block)`** (en `core/training.ts`) es la clave con la que un bloque
   se enlaza con su registro en el historial. Cambiarla desconecta datos ya guardados.
+- **Los datos de cada uno están protegidos por dos cerrojos, y hacen falta los
+  dos.** Uno: cada consulta filtra por `user_id` (visible en el código, y es lo
+  que usa los índices). Dos: Postgres filtra por su cuenta con las políticas de
+  `drizzle/0001_rls.sql`, que es la que sigue funcionando si a alguien se le
+  olvida la primera. El puente es `withUser` en `src/actions/context.ts`.
+  **La aplicación se conecta con un rol sin privilegios (`DATABASE_URL`), no
+  con el dueño (`DATABASE_OWNER_URL`)**: un superusuario se salta las políticas
+  y no se nota mirando. `pruebas/rls.mjs` lo vigila.
+- **Las tablas de Better Auth NO llevan RLS, a propósito.** Tiene que buscarte
+  por correo antes de que exista sesión, o sea antes de que haya nadie que
+  declarar. Con RLS ahí, no se podría ni entrar.
 - **El navegador no guarda nada tuyo.** Ni `localStorage`, ni copias en JSON, ni
   caché. El servidor es el único sitio donde vive tu entreno, y un fallo de red
   se dice en pantalla en vez de taparse. Lo que sí sobrevive es la cadena de

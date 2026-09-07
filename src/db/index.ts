@@ -34,8 +34,36 @@ function connectionString(): string {
   return url;
 }
 
+/**
+ * Aviso si la aplicación se conecta con privilegios que no debería tener.
+ *
+ * Las políticas de seguridad por fila **no se le aplican a un superusuario**.
+ * Si `DATABASE_URL` apunta a uno, quedan escritas y desactivadas, y eso no se
+ * nota mirando: las consultas siguen funcionando y devolviendo lo correcto
+ * mientras solo haya un usuario. Se comprueba al arrancar, una vez, porque el
+ * día que falle hay que enterarse antes de que haya dos cuentas y no después.
+ */
+async function warnIfPrivileged(): Promise<void> {
+  try {
+    const result = await pool.query<{ peligroso: boolean }>(
+      'select (rolsuper or rolbypassrls) as peligroso from pg_roles where rolname = current_user',
+    );
+    if (result.rows[0]?.peligroso) {
+      console.error(
+        '[db] AVISO DE SEGURIDAD: la aplicación se conecta con un rol que se salta ' +
+          'las políticas por fila. Cada usuario podría ver los datos de los demás. ' +
+          'Crea el rol de aplicación (scripts/rol-de-app.sql) y apunta ahí DATABASE_URL.',
+      );
+    }
+  } catch {
+    // Que no se pueda comprobar no es motivo para no arrancar.
+  }
+}
+
 export const pool = new Pool({ connectionString: connectionString() });
 
 export const db = drizzle(pool, { schema });
+
+void warnIfPrivileged();
 
 export type Database = typeof db;

@@ -231,6 +231,51 @@ ejecutan. Ahora cada carpeta dice qué hay dentro:
 | `browser/auth-client.ts`                          | `auth-client.ts`, junto a `auth.ts` y `auth-contract.ts`      |
 | `storage/`                                        | **desaparece**                                                |
 
+### ✅ Seguridad a nivel de fila (RLS)
+
+**Dos cerrojos, y hacen falta los dos.** Uno: cada consulta filtra por
+`user_id`, visible en el código y es lo que usa los índices. Dos: Postgres
+filtra por su cuenta con las políticas de `drizzle/0001_rls.sql`. El segundo es
+el que sigue funcionando el día que a alguien se le olvide el primero.
+
+El puente es **`withUser`** en `src/actions/context.ts`: abre una transacción y
+declara ante Postgres en nombre de quién se actúa. Todo lo que toca la base va
+dentro; fuera de ahí las políticas no devuelven nada. El `set_config` va con
+`is_local = true` para que la declaración **muera con la transacción**: sin eso
+quedaría pegada a la conexión, y como las conexiones se reparten entre
+peticiones, la siguiente heredaría tu identidad.
+
+**Falla cerrado.** Si nadie declara nada, `current_setting` devuelve NULL y no
+se ve una fila. Olvidarse deja la pantalla vacía —fallo evidente— en vez de
+enseñar los datos de todos —fallo invisible—.
+
+**Las tablas de Better Auth se quedan fuera, a propósito.** Tiene que buscarte
+por correo _antes_ de que exista sesión, o sea antes de que haya nadie que
+declarar. Con RLS ahí no se podría ni entrar.
+
+#### Lo que se descubrió por probarlo, y que cambió la decisión
+
+Se eligió la opción sencilla —`FORCE ROW LEVEL SECURITY`, una línea, sin tocar
+el despliegue—. **No funcionaba.** Al probarla contra la base, un usuario seguía
+viendo y borrando las filas de otro.
+
+El motivo: Postgres exime de RLS al dueño de la tabla (a eso responde `FORCE`) y
+**a cualquier superusuario** (a eso no responde nada). El usuario que crea la
+base —`mfw` en local, el del recurso en Dokploy— es superusuario. Las políticas
+quedaban escritas y desactivadas: la falsa sensación de estar protegido.
+
+Arreglo: **la aplicación se conecta con un rol propio sin privilegios**.
+
+| Variable             | Quién la usa       | Con qué rol            |
+| -------------------- | ------------------ | ---------------------- |
+| `DATABASE_URL`       | la aplicación      | `mfw_app`, sin poderes |
+| `DATABASE_OWNER_URL` | solo `drizzle-kit` | el dueño               |
+
+El rol se crea con `pnpm db:app-role` (ver `scripts/rol-de-app.sql`), y hay que
+crearlo también **en Dokploy** antes de desplegar: queda anotado en el paso 8.
+`src/db/index.ts` avisa por consola al arrancar si `DATABASE_URL` apunta a un
+rol con privilegios, porque es un fallo que no se nota mirando la app.
+
 ### Comprobado### Comprobado
 
 Tres scripts en `pruebas/` (ver `pruebas/LEEME.md`), todos en verde desde una
@@ -241,12 +286,23 @@ base limpia:
 - `pantallas.mjs` — las seis pantallas en un Chrome real, cazando errores de
   consola, y que el navegador no guarde ni una clave nuestra. Con `--ver` abre
   ventana.
+- `rls.mjs` — **la más importante**. El filtro de las acciones tapa el
+  resultado: aunque RLS estuviera apagado, `acciones.mjs` seguiría en verde. Por
+  eso esta habla con Postgres a pelo, con la cadena de la app, y lo único que
+  puede hacerla pasar es que las políticas funcionen.
 
 ### ⬜ Paso 8 — Docker y despliegue
 
 `Dockerfile` multietapa, migraciones al arrancar, healthcheck. En Dokploy:
 crear Postgres como **recurso** (él configura volumen y credenciales) y apuntar
 las copias a S3.
+
+**No olvidar el rol de aplicación.** Antes del primer despliegue hay que
+ejecutar `scripts/rol-de-app.sql` contra el Postgres de Dokploy, con la
+contraseña que vaya en `DATABASE_URL`. Sin eso la app se conectaría como
+superusuario y **las políticas de seguridad no se aplicarían**, sin que nada lo
+delate. Son dos variables: `DATABASE_URL` (rol de app) y `DATABASE_OWNER_URL`
+(dueño, solo para las migraciones).
 
 **Comprobación que no se salta:** desplegar, escribir un dato, redesplegar y
 verificar que sigue ahí.

@@ -10,26 +10,25 @@
 import { defineAction } from 'astro:actions';
 import { asc, eq } from 'drizzle-orm';
 
-import { db } from '@/db';
 import { rowToProfile } from '@/db/mappers';
 import { profiles } from '@/db/schema';
-import { ensureProfile, requireUserId } from '@/actions/context';
+import { ensureProfile, withUser } from '@/actions/context';
 
 export const getActiveProfile = defineAction({
-  handler: async (_input, context) => ensureProfile(requireUserId(context)),
+  handler: async (_input, context) => withUser(context, (tx, userId) => ensureProfile(tx, userId)),
 });
 
 export const listProfiles = defineAction({
-  handler: async (_input, context) => {
-    const userId = requireUserId(context);
-    // `ensureProfile` primero: listar no debería ser la única operación que
-    // devuelve vacío en una cuenta recién creada.
-    await ensureProfile(userId);
-    const rows = await db
-      .select()
-      .from(profiles)
-      .where(eq(profiles.userId, userId))
-      .orderBy(asc(profiles.createdAt));
-    return rows.map(rowToProfile);
-  },
+  handler: async (_input, context) =>
+    withUser(context, async (tx, userId) => {
+      // `ensureProfile` primero: listar no debería ser la única operación que
+      // devuelve vacío en una cuenta recién creada.
+      await ensureProfile(tx, userId);
+      const rows = await tx
+        .select()
+        .from(profiles)
+        .where(eq(profiles.userId, userId))
+        .orderBy(asc(profiles.createdAt));
+      return rows.map(rowToProfile);
+    }),
 });

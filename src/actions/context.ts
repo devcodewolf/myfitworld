@@ -1,24 +1,38 @@
 /**
- * Lo que toda acción necesita antes de tocar la base: quién llama y con qué
- * perfil.
+ * Lo que toda acción necesita antes de tocar la base: quién llama, y decírselo
+ * a Postgres.
  *
- * **Aquí vive la regla de seguridad de todo el paso 6.** No hay RLS en
- * Postgres: el filtro por `user_id` lo pone el servidor, acción por acción. Una
- * acción que no filtre no es un descuido, es un agujero. Por eso el `userId`
- * no se pide por parámetro en ningún sitio —se saca de la sesión— y por eso
- * ninguna acción acepta que el cliente le diga de quién son los datos.
+ * **Aquí vive la seguridad de los datos.** Hay dos cerrojos, y son a propósito
+ * dos y no uno:
+ *
+ * 1. Cada consulta filtra por `user_id`. Explícito, visible en el código, y
+ *    además es lo que hace que la consulta use los índices.
+ * 2. Postgres filtra por su cuenta, con las políticas de `drizzle/0001_rls.sql`.
+ *    Esa es la que sigue funcionando el día que a alguien se le olvide la
+ *    primera.
+ *
+ * El puente entre ambos es `withUser`: abre una transacción y **declara en
+ * nombre de quién se va a actuar** antes de la primera consulta. Ninguna acción
+ * habla con la base fuera de ahí.
  */
 import { createHash } from 'node:crypto';
 
 import { ActionError, type ActionAPIContext } from 'astro:actions';
-import { asc, eq } from 'drizzle-orm';
+import { asc, eq, sql } from 'drizzle-orm';
 
 import type { Profile } from '@/core/model';
-import { db } from '@/db';
+import { db, type Database } from '@/db';
 import { rowToProfile } from '@/db/mappers';
 import { profiles } from '@/db/schema';
 
-/** El nombre del perfil que se crea solo. Igual que en el repositorio local. */
+/**
+ * El asa de la transacción. Se pasa a mano a todo lo que consulte, en vez de
+ * usar `db` directamente, porque `db` no lleva dentro la declaración de quién
+ * eres: una consulta suelta contra `db` no vería absolutamente nada.
+ */
+export type Tx = Parameters<Parameters<Database['transaction']>[0]>[0];
+
+/** El nombre del perfil que se crea solo. */
 const DEFAULT_PROFILE_NAME = 'Yo';
 
 /** Quién llama, o `null` si nadie ha entrado. */
@@ -33,6 +47,29 @@ export function requireUserId(context: ActionAPIContext): string {
     throw new ActionError({ code: 'UNAUTHORIZED', message: 'Hay que entrar para hacer esto.' });
   }
   return id;
+}
+
+/**
+ * Abre una transacción diciéndole a Postgres en nombre de quién se actúa.
+ *
+ * El tercer argumento de `set_config` en `true` es la pieza importante: hace
+ * que la declaración **muera con la transacción**. Sin él quedaría pegada a la
+ * conexión, y como las conexiones se reparten entre peticiones, la siguiente en
+ * usar esa conexión heredaría tu identidad. Eso no sería un error de
+ * rendimiento: sería enseñarle tu entreno a otro.
+ *
+ * Todo lo que toque la base va dentro. Fuera de aquí, las políticas no ven
+ * ninguna identidad declarada y no devuelven nada.
+ */
+export async function withUser<T>(
+  context: ActionAPIContext,
+  work: (tx: Tx, userId: string) => Promise<T>,
+): Promise<T> {
+  const userId = requireUserId(context);
+  return db.transaction(async (tx) => {
+    await tx.execute(sql`select set_config('app.user_id', ${userId}, true)`);
+    return work(tx, userId);
+  });
 }
 
 /**
@@ -71,8 +108,8 @@ function stableUuidFrom(seed: string): string {
  * Los perfiles que se creen a mano más adelante sí llevarán id aleatorio: la
  * tabla admite varios, esto solo fija cuál es el primero.
  */
-export async function ensureProfile(userId: string): Promise<Profile> {
-  const existing = await db
+export async function ensureProfile(tx: Tx, userId: string): Promise<Profile> {
+  const existing = await tx
     .select()
     .from(profiles)
     .where(eq(profiles.userId, userId))
@@ -88,10 +125,10 @@ export async function ensureProfile(userId: string): Promise<Profile> {
     name: DEFAULT_PROFILE_NAME,
     createdAt: new Date(),
   };
-  await db.insert(profiles).values(created).onConflictDoNothing();
+  await tx.insert(profiles).values(created).onConflictDoNothing();
 
   // Si la carrera la ganó la otra petición, la fila buena es la suya.
-  const settled = await db
+  const settled = await tx
     .select()
     .from(profiles)
     .where(eq(profiles.userId, userId))

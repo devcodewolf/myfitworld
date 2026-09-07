@@ -17,6 +17,7 @@
     "astro": "astro",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
+    "db:app-role": "docker exec -i mfw-dev-db psql -U mfw -d mfw -v rol=mfw_app -v clave=mfw_app -f - < scripts/rol-de-app.sql",
     "db:studio": "drizzle-kit studio",
     "db:up": "docker compose -f compose.dev.yml up -d",
     "db:down": "docker compose -f compose.dev.yml down"

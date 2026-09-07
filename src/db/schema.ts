@@ -15,9 +15,39 @@
  * perfiles, ajustes y sesiones se van con ella y no queda basura huérfana.
  */
 import { sql } from 'drizzle-orm';
-import { index, integer, jsonb, pgTable, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
+import {
+  index,
+  integer,
+  jsonb,
+  pgPolicy,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+} from 'drizzle-orm/pg-core';
 
 import { user } from '@/db/auth-schema';
+
+/**
+ * La regla de seguridad de la base, escrita una sola vez.
+ *
+ * Postgres compara la columna `user_id` de cada fila con quién ha dicho la
+ * aplicación que es, y esa declaración se hace al abrir la transacción con
+ * `set_config('app.user_id', ...)` —ver `src/actions/context.ts`—.
+ *
+ * **Falla cerrado.** Si nadie lo ha declarado, `current_setting` devuelve NULL,
+ * la comparación no es cierta y no se ve ni una fila. Olvidarse deja la
+ * pantalla vacía, que es un fallo evidente; lo contrario sería enseñar los
+ * datos de todos, que es un fallo invisible.
+ *
+ * `using` filtra lo que se lee; `withCheck` impide escribir una fila a nombre
+ * de otro. Hacen falta las dos: sin la segunda, se podría insertar basura en la
+ * cuenta ajena aunque no se pudiera leer.
+ */
+const propiaDelUsuario = sql`user_id = current_setting('app.user_id', true)`;
+
+const soloTusFilas = (nombre: string) =>
+  pgPolicy(nombre, { for: 'all', using: propiaDelUsuario, withCheck: propiaDelUsuario });
 
 /**
  * Un perfil de entrenamiento. Hoy hay uno por usuario, pero la tabla ya admite
@@ -33,8 +63,8 @@ export const profiles = pgTable(
     name: text('name').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
   },
-  (table) => [index('profiles_user_idx').on(table.userId)],
-);
+  (table) => [index('profiles_user_idx').on(table.userId), soloTusFilas('profiles_propias')],
+).enableRLS();
 
 /**
  * Los ajustes: material declarado, descansos, sonido, peso corporal.
@@ -55,8 +85,8 @@ export const settings = pgTable(
     schemaVersion: integer('schema_version').notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
   },
-  (table) => [index('settings_user_idx').on(table.userId)],
-);
+  (table) => [index('settings_user_idx').on(table.userId), soloTusFilas('settings_propios')],
+).enableRLS();
 
 /**
  * Una sesión de entrenamiento, terminada o en curso.
@@ -102,5 +132,6 @@ export const workoutSessions = pgTable(
     uniqueIndex('workout_sessions_one_active_idx')
       .on(table.userId)
       .where(sql`status = 'in_progress'`),
+    soloTusFilas('workout_sessions_propias'),
   ],
-);
+).enableRLS();
