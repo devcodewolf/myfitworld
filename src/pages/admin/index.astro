@@ -15,8 +15,10 @@ import { routes } from '@/routes';
  */
 export const prerender = false;
 
+/** Campo de formulario, con el `input` de daisyUI vestido de la casa. */
 const FIELD =
-  'min-h-11 rounded-full border border-line bg-surface px-4 text-ink transition-colors hover:border-line-strong';
+  'input w-full rounded-full border-line bg-ground text-ink transition-colors hover:border-line-strong focus:border-line-strong';
+/** El galón del desplegable vive en global.css: la URL del SVG no cabe en una clase. */
 const CHEVRON = 'desplegable pr-11';
 ---
 
@@ -28,23 +30,35 @@ const CHEVRON = 'desplegable pr-11';
     otherLabel="Ver la papelera"
     empty="No hay ninguna cuenta activa."
   >
-    <section slot="antes" class="panel mt-6 rounded-card border border-line p-5 sm:p-6">
+    <div slot="aside">
       <h2 class="text-base font-extrabold text-ink">Crear una cuenta</h2>
-      <p class="mt-2 max-w-[70ch] text-sm text-ink-dim">
+      <p class="mt-2 text-sm text-ink-dim">
         Creada desde aquí no hace falta código de invitación: el código existe para que nadie se
         registre solo, no para ti.
       </p>
-      <form id="form-cuenta" class="mt-5 flex flex-wrap items-end gap-3">
-        <label class="flex flex-col gap-1 text-sm">
-          <span class="text-ink-dim">Nombre</span>
+
+      {
+        /* Dos columnas en cuanto hay sitio: son cuatro campos cortos y en una
+          sola fila el panel quedaba larguísimo al lado de una tabla de dos filas. */
+      }
+      <form id="form-cuenta" class="mt-5 grid gap-4 sm:grid-cols-2">
+        <label class="flex flex-col gap-1.5 text-sm">
+          <span class="font-bold text-ink-dim">Nombre</span>
           <input name="nombre" type="text" required maxlength="40" class={FIELD} />
         </label>
-        <label class="flex flex-col gap-1 text-sm">
-          <span class="text-ink-dim">Correo</span>
-          <input name="correo" type="email" required class={`${FIELD} min-w-56`} />
+        <label class="flex flex-col gap-1.5 text-sm">
+          <span class="font-bold text-ink-dim">Rol</span>
+          <select name="rol" class={`${FIELD} ${CHEVRON}`}>
+            <option value="user">Usuario</option>
+            <option value="admin">Admin</option>
+          </select>
         </label>
-        <label class="flex flex-col gap-1 text-sm">
-          <span class="text-ink-dim">Contraseña</span>
+        <label class="flex flex-col gap-1.5 text-sm">
+          <span class="font-bold text-ink-dim">Correo</span>
+          <input name="correo" type="email" required class={FIELD} />
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm">
+          <span class="font-bold text-ink-dim">Contraseña</span>
           <input
             name="clave"
             type="password"
@@ -53,22 +67,16 @@ const CHEVRON = 'desplegable pr-11';
             autocomplete="new-password"
             class={FIELD}
           />
-        </label>
-        <label class="flex flex-col gap-1 text-sm">
-          <span class="text-ink-dim">Rol</span>
-          <select name="rol" class={`${FIELD} ${CHEVRON}`}>
-            <option value="user">Usuario</option>
-            <option value="admin">Admin</option>
-          </select>
+          <span class="text-sm text-ink-faint">Mínimo {MIN_PASSWORD_LENGTH} caracteres.</span>
         </label>
         <button
           type="submit"
-          class="accion-primaria min-h-11 rounded-full px-6 text-sm font-extrabold text-accent-ink transition-transform hover:scale-[1.02] active:scale-100"
+          class="accion-primaria mt-1 inline-flex min-h-12 items-center justify-center rounded-full px-6 text-sm font-extrabold text-accent-ink transition-transform hover:scale-[1.02] active:scale-100 sm:col-span-2"
         >
-          Crear
+          Crear cuenta
         </button>
       </form>
-    </section>
+    </div>
   </AccountTable>
 </BaseLayout>
 

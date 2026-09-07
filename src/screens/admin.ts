@@ -39,16 +39,6 @@ function node(tag: string, className: string, text?: string): HTMLElement {
   return element;
 }
 
-/** Botón de fila. Sin acento: el cian está reservado a la acción primaria. */
-const ACTION =
-  'min-h-9 rounded-full border border-line px-3.5 text-sm font-semibold text-ink-dim transition-colors hover:border-line-strong hover:text-ink';
-
-/** El único destructivo de verdad. Se distingue por el borde, no por color. */
-const DANGER =
-  'min-h-9 rounded-full border border-line-strong px-3.5 text-sm font-bold text-ink transition-colors hover:border-ink';
-
-const CELL = 'px-4 py-3 align-middle';
-
 function announce(message: string, tone: 'ok' | 'error' = 'ok'): void {
   const box = el<HTMLParagraphElement>('aviso');
   if (!box) return;
@@ -57,24 +47,93 @@ function announce(message: string, tone: 'ok' | 'error' = 'ok'): void {
   box.hidden = message === '';
 }
 
-/** Una etiqueta de estado: rol, suspendida, en papelera. */
-function badge(text: string, strong = false): HTMLElement {
-  return node(
-    'span',
-    `inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-bold ${
-      strong ? 'border-line-strong text-ink' : 'border-line text-ink-dim'
-    }`,
-    text,
-  );
+/* ── El diálogo ─────────────────────────────────────────────────────────── */
+
+interface DialogoOpciones {
+  readonly titulo: string;
+  readonly texto: string;
+  readonly confirmar: string;
+  /** Rojo solo cuando lo que se va a hacer no tiene vuelta atrás. */
+  readonly destructivo?: boolean;
+  /** Si se pide un valor: cómo es el campo. Sin esto, es una confirmación. */
+  readonly campo?: {
+    readonly etiqueta: string;
+    readonly tipo?: string;
+    readonly ayuda?: string;
+    readonly obligatorio?: boolean;
+  };
 }
+
+/** Lo escrito, o `null` si se canceló. En una confirmación, cadena vacía. */
+type Respuesta = string | null;
+
+/**
+ * Abre el diálogo y espera a que se cierre.
+ *
+ * Sustituye a `prompt` y `confirm` del navegador, que además de no poder
+ * vestirse tampoco se pueden escribir: `confirm` solo sabe decir «Aceptar» y
+ * «Cancelar», y en un borrado irreversible el botón tiene que decir qué hace.
+ *
+ * Es un `<dialog>` de verdad, así que atrapa el foco, cierra con Escape y
+ * oscurece lo de detrás sin que haya que programar ninguna de las tres cosas.
+ */
+function preguntar(opciones: DialogoOpciones): Promise<Respuesta> {
+  const dialogo = el<HTMLDialogElement>('dialogo');
+  const confirmar = el<HTMLButtonElement>('dialogo-confirmar');
+  const campo = el<HTMLLabelElement>('dialogo-campo');
+  const valor = el<HTMLInputElement>('dialogo-valor');
+  if (!dialogo || !confirmar || !campo || !valor) return Promise.resolve(null);
+
+  const titulo = el<HTMLHeadingElement>('dialogo-titulo');
+  const texto = el<HTMLParagraphElement>('dialogo-texto');
+  if (titulo) titulo.textContent = opciones.titulo;
+  if (texto) texto.textContent = opciones.texto;
+
+  confirmar.textContent = opciones.confirmar;
+  // El único rojo del proyecto, y solo aquí: lo que destruye datos sin vuelta
+  // atrás. El resto de lo destructivo se distingue por el borde, no por color.
+  const destructivo = opciones.destructivo === true;
+  confirmar.classList.toggle('bg-error', destructivo);
+  confirmar.classList.toggle('text-error-content', destructivo);
+  confirmar.classList.toggle('accion-primaria', !destructivo);
+  confirmar.classList.toggle('text-accent-ink', !destructivo);
+
+  campo.hidden = opciones.campo === undefined;
+  valor.disabled = opciones.campo === undefined;
+  valor.value = '';
+  if (opciones.campo) {
+    const etiqueta = el<HTMLSpanElement>('dialogo-etiqueta');
+    const ayuda = el<HTMLSpanElement>('dialogo-ayuda');
+    if (etiqueta) etiqueta.textContent = opciones.campo.etiqueta;
+    if (ayuda) ayuda.textContent = opciones.campo.ayuda ?? '';
+    valor.type = opciones.campo.tipo ?? 'text';
+    valor.required = opciones.campo.obligatorio === true;
+    valor.autocomplete = 'off';
+  }
+
+  return new Promise<Respuesta>((resolve) => {
+    const alCerrar = (): void => {
+      dialogo.removeEventListener('close', alCerrar);
+      // `returnValue` lo pone el botón que envió el formulario. El fondo y la
+      // tecla Escape lo dejan vacío, que también es cancelar.
+      resolve(dialogo.returnValue === 'confirmar' ? valor.value.trim() : null);
+    };
+    dialogo.addEventListener('close', alCerrar);
+    dialogo.returnValue = '';
+    dialogo.showModal();
+    if (opciones.campo) valor.focus();
+  });
+}
+
+/* ── Las acciones de una fila ───────────────────────────────────────────── */
 
 interface Accion {
   readonly texto: string;
-  readonly peligrosa?: boolean;
+  readonly destructiva?: boolean;
+  /** El aviso que se enseña, o cadena vacía si se canceló. */
   run(cuenta: Account): Promise<string>;
 }
 
-/** Envuelve una llamada a una acción y devuelve su mensaje de error, si lo hay. */
 async function llamar(
   promesa: Promise<{ error?: { message: string } | undefined }>,
 ): Promise<void> {
@@ -82,12 +141,6 @@ async function llamar(
   if (error) throw new Error(error.message);
 }
 
-function pedir(mensaje: string, valorPorDefecto = ''): string | null {
-  const valor = window.prompt(mensaje, valorPorDefecto);
-  return valor === null || valor.trim() === '' ? null : valor.trim();
-}
-
-/** Las acciones de una cuenta activa. */
 function accionesActivas(): Accion[] {
   return [
     {
@@ -101,8 +154,18 @@ function accionesActivas(): Accion[] {
     {
       texto: 'Cambiar contraseña',
       async run(cuenta) {
-        const clave = pedir(`Nueva contraseña para ${cuenta.email}:`);
-        if (clave === null) return '';
+        const clave = await preguntar({
+          titulo: 'Cambiar contraseña',
+          texto: `Se le pondrá una contraseña nueva a ${cuenta.email}.`,
+          confirmar: 'Cambiarla',
+          campo: {
+            etiqueta: 'Contraseña nueva',
+            tipo: 'password',
+            ayuda: 'Mínimo 10 caracteres.',
+            obligatorio: true,
+          },
+        });
+        if (clave === null || clave === '') return '';
         await llamar(actions.admin.setPassword({ userId: cuenta.id, password: clave }));
         return `Contraseña de ${cuenta.email} cambiada.`;
       },
@@ -114,7 +177,13 @@ function accionesActivas(): Accion[] {
           await llamar(actions.admin.unban({ userId: cuenta.id }));
           return `${cuenta.email} vuelve a poder entrar.`;
         }
-        const motivo = pedir(`Motivo para suspender a ${cuenta.email} (opcional):`) ?? undefined;
+        const motivo = await preguntar({
+          titulo: 'Suspender la cuenta',
+          texto: `${cuenta.email} dejará de poder entrar. Sus datos no se tocan y puedes reactivarla cuando quieras.`,
+          confirmar: 'Suspender',
+          campo: { etiqueta: 'Motivo', ayuda: 'Opcional. Se guarda con la suspensión.' },
+        });
+        if (motivo === null) return '';
         await llamar(
           actions.admin.ban({ userId: cuenta.id, ...(motivo ? { reason: motivo } : {}) }),
         );
@@ -124,6 +193,19 @@ function accionesActivas(): Accion[] {
     {
       texto: 'A la papelera',
       async run(cuenta) {
+        // Se pregunta aunque no sea irreversible: la cuenta deja de poder
+        // entrar y sus sesiones abiertas se cierran, y eso no es un cambio que
+        // deba ocurrir por un clic de más. Sin rojo: esto se deshace.
+        const confirmado = await preguntar({
+          titulo: 'Mandar a la papelera',
+          texto:
+            `${cuenta.email} dejará de poder entrar y se le cerrarán las sesiones que tenga ` +
+            'abiertas.\n\n' +
+            'Sus entrenos, sus ajustes y su perfil no se tocan: desde la papelera puedes ' +
+            'restaurarla tal y como estaba.',
+          confirmar: 'A la papelera',
+        });
+        if (confirmado === null) return '';
         await llamar(actions.admin.trash({ userId: cuenta.id }));
         return `${cuenta.email} está en la papelera. Sus datos siguen intactos.`;
       },
@@ -131,7 +213,6 @@ function accionesActivas(): Accion[] {
   ];
 }
 
-/** Las acciones de una cuenta en la papelera. */
 function accionesPapelera(): Accion[] {
   return [
     {
@@ -143,16 +224,19 @@ function accionesPapelera(): Accion[] {
     },
     {
       texto: 'Borrar para siempre',
-      peligrosa: true,
+      destructiva: true,
       async run(cuenta) {
         // El aviso dice exactamente qué se pierde. «¿Seguro?» no informa de nada.
-        const confirmado = window.confirm(
-          `Se va a borrar la cuenta ${cuenta.email} y CON ELLA su historial de ` +
-            'entrenamiento entero, sus ajustes y su perfil.\n\n' +
-            'No se puede deshacer y no hay ninguna copia de donde sacarlo.\n\n' +
-            '¿Continuar?',
-        );
-        if (!confirmado) return '';
+        const confirmado = await preguntar({
+          titulo: 'Borrar para siempre',
+          texto:
+            `Se borrará la cuenta ${cuenta.email} y con ella su historial de entrenamiento ` +
+            'entero, sus ajustes y su perfil.\n\n' +
+            'No se puede deshacer y no hay ninguna copia de donde sacarlo.',
+          confirmar: 'Borrar para siempre',
+          destructivo: true,
+        });
+        if (confirmado === null) return '';
         await llamar(actions.admin.removeForever({ userId: cuenta.id }));
         return `${cuenta.email} borrada definitivamente.`;
       },
@@ -160,70 +244,147 @@ function accionesPapelera(): Accion[] {
   ];
 }
 
-function fila(cuenta: Account, acciones: Accion[], onCambio: () => void): HTMLTableRowElement {
-  const tr = document.createElement('tr');
-  tr.className = 'border-t border-line';
+/* ── La tabla ───────────────────────────────────────────────────────────── */
 
-  const quien = node('td', CELL);
-  quien.append(
-    node('span', 'block text-sm font-bold text-ink', cuenta.name),
-    node('span', 'block text-sm text-ink-faint', cuenta.email),
+/** Los tres puntos: hay más opciones y hay que pulsar para verlas. */
+function puntosSuspensivos(): SVGSVGElement {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('fill', 'currentColor');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('class', 'size-5');
+  for (const cx of [5, 12, 19]) {
+    const punto = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    punto.setAttribute('cx', String(cx));
+    punto.setAttribute('cy', '12');
+    punto.setAttribute('r', '1.75');
+    svg.append(punto);
+  }
+  return svg;
+}
+
+function badge(texto: string, fuerte = false): HTMLElement {
+  return node(
+    'span',
+    `badge badge-sm border-line font-bold whitespace-nowrap ${
+      fuerte ? 'bg-raised text-ink' : 'bg-transparent text-ink-dim'
+    }`,
+    texto,
   );
+}
 
-  const estado = node('td', `${CELL} space-x-1.5 whitespace-nowrap`);
-  estado.append(badge(cuenta.role === 'admin' ? 'Admin' : 'Usuario', cuenta.role === 'admin'));
-  if (cuenta.banned) estado.append(badge('Suspendida', true));
+/**
+ * El menú de una fila.
+ *
+ * Va con la **API de popover**, no con el desplegable normal, y por un motivo
+ * concreto: la tabla vive dentro de un contenedor que recorta lo que se sale
+ * —lo necesita para poder deslizarse en horizontal en un móvil— y un menú
+ * corriente se quedaba cortado por el borde. Un popover se dibuja en la capa
+ * superior del navegador, por encima de todo, así que el recorte no le afecta.
+ *
+ * De regalo: se cierra solo al pulsar fuera y con la tecla Escape, sin
+ * escribir una línea para ello.
+ */
+function menuDeFila(cuenta: Account, acciones: Accion[], alCambiar: () => void): HTMLElement {
+  const contenedor = node('div', 'inline-block');
+  const idMenu = `menu-${cuenta.id}`;
+  const ancla = `--ancla-${cuenta.id}`;
 
-  const alta = node('td', `${CELL} figures text-sm whitespace-nowrap text-ink-faint`);
-  alta.textContent = fecha(cuenta.deletedAt ?? cuenta.createdAt);
+  const disparador = document.createElement('button');
+  disparador.type = 'button';
+  disparador.className =
+    'btn btn-square btn-ghost h-10 min-h-10 w-10 rounded-full text-ink-dim hover:bg-raised hover:text-ink';
+  disparador.setAttribute('popovertarget', idMenu);
+  disparador.style.setProperty('anchor-name', ancla);
+  disparador.setAttribute('aria-label', `Opciones de ${cuenta.email}`);
+  disparador.append(puntosSuspensivos());
 
-  const botones = node('td', `${CELL} text-right`);
-  const grupo = node('div', 'flex flex-wrap justify-end gap-2');
+  const lista = node(
+    'ul',
+    'dropdown dropdown-end menu w-60 rounded-card border border-line bg-raised p-2',
+  );
+  lista.id = idMenu;
+  lista.setAttribute('popover', '');
+  lista.style.setProperty('position-anchor', ancla);
+
+  const ejecutar = async (accion: Accion, boton: HTMLButtonElement): Promise<void> => {
+    // Cerrar antes de nada: si se abre un diálogo con el menú aún desplegado,
+    // el menú se queda flotando por detrás.
+    lista.hidePopover();
+    boton.disabled = true;
+    try {
+      const mensaje = await accion.run(cuenta);
+      if (mensaje) {
+        announce(mensaje);
+        alCambiar();
+      }
+    } catch (error) {
+      announce(error instanceof Error ? error.message : String(error), 'error');
+    } finally {
+      boton.disabled = false;
+    }
+  };
+
   for (const accion of acciones) {
+    const item = document.createElement('li');
     const boton = document.createElement('button');
     boton.type = 'button';
-    boton.className = accion.peligrosa ? DANGER : ACTION;
+    boton.className = accion.destructiva ? 'font-bold text-error' : 'text-ink-dim hover:text-ink';
     boton.textContent = accion.texto === 'Suspender' && cuenta.banned ? 'Reactivar' : accion.texto;
-    boton.addEventListener('click', () => {
-      void (async () => {
-        boton.disabled = true;
-        try {
-          const mensaje = await accion.run(cuenta);
-          if (mensaje) {
-            announce(mensaje);
-            onCambio();
-          }
-        } catch (error) {
-          announce(error instanceof Error ? error.message : String(error), 'error');
-        } finally {
-          boton.disabled = false;
-        }
-      })();
-    });
-    grupo.append(boton);
+    boton.addEventListener('click', () => void ejecutar(accion, boton));
+    item.append(boton);
+    lista.append(item);
   }
-  // Suplantar va aparte, y como formulario: la respuesta trae la cookie de la
-  // sesión nueva, y eso solo funciona con una navegación de verdad. Es lo
-  // mismo que hace el botón de salir.
+
+  // Suplantar va como formulario: la respuesta trae la cookie de la sesión
+  // nueva, y eso solo funciona con una navegación de verdad.
   if (!cuenta.deletedAt) {
+    const item = document.createElement('li');
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = IMPERSONATE_PATH;
+    form.className = 'text-ink-dim hover:text-ink';
     const oculto = document.createElement('input');
     oculto.type = 'hidden';
     oculto.name = 'userId';
     oculto.value = cuenta.id;
     const boton = document.createElement('button');
     boton.type = 'submit';
-    boton.className = ACTION;
+    boton.className = 'w-full cursor-pointer text-left';
     boton.textContent = 'Entrar como';
     form.append(oculto, boton);
-    grupo.append(form);
+    item.append(form);
+    lista.append(item);
   }
 
-  botones.append(grupo);
+  contenedor.append(disparador, lista);
+  return contenedor;
+}
 
-  tr.append(quien, estado, alta, botones);
+function fila(cuenta: Account, acciones: Accion[], alCambiar: () => void): HTMLTableRowElement {
+  const tr = document.createElement('tr');
+  tr.className = 'border-line';
+
+  const quien = document.createElement('td');
+  quien.append(
+    node('span', 'block font-bold text-ink', cuenta.name),
+    node('span', 'block text-sm text-ink-faint', cuenta.email),
+  );
+
+  const estado = document.createElement('td');
+  estado.className = 'space-x-1.5 whitespace-nowrap';
+  estado.append(badge(cuenta.role === 'admin' ? 'Admin' : 'Usuario', cuenta.role === 'admin'));
+  if (cuenta.banned) estado.append(badge('Suspendida', true));
+
+  const cuando = document.createElement('td');
+  cuando.className = 'figures text-sm whitespace-nowrap text-ink-faint';
+  cuando.textContent = fecha(cuenta.deletedAt ?? cuenta.createdAt);
+
+  const opciones = document.createElement('td');
+  opciones.className = 'text-right';
+  opciones.append(menuDeFila(cuenta, acciones, alCambiar));
+
+  tr.append(quien, estado, cuando, opciones);
   return tr;
 }
 

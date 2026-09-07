@@ -153,8 +153,22 @@ Los tokens viven en `@theme` dentro de `src/styles/global.css` (Tailwind v4,
 CSS-first, **no hay `tailwind.config.js`**). `DESIGN.md` describe el mundo visual;
 consúltalo antes de tocar estilos.
 
+**daisyUI está vestido con esos mismos tokens.** Sus temas de serie están
+apagados (`themes: false`) y en su lugar hay uno propio cuyos colores son los
+del `@theme`: un `menu`, un `modal` o un `btn` salen ya con el negro azulado y
+el cian de la casa. Si cambias un color, cámbialo en los dos bloques.
+
+Se usa para lo que aporta comportamiento que no teníamos —`dropdown`, `modal`,
+`table`, `badge`— y **no para la acción primaria**: `.btn` vive en la capa de
+utilidades y tapa el degradado de `.accion-primaria`, que vive en components.
+Los botones primarios llevan las clases de la casa, sin `btn`.
+
 Reglas que no se ven en el código pero se rompen fácil:
 
+- **Un desplegable dentro de una tabla necesita la API de popover.** La tabla
+  se recorta para poder deslizarse en el móvil, y un `dropdown` normal se queda
+  cortado por el borde. Con `popover` se dibuja en la capa superior y además
+  cierra solo al pulsar fuera. Está así en `screens/admin.ts`.
 - **Los patrones de clases repetidos se extraen a componentes, no a `@apply`.**
   Si una clase compuesta se repite dentro de un `.vue`, sácala a una constante.
 - **El acento cian está reservado** a la acción primaria y a lo que toca _ahora_.

@@ -55,6 +55,21 @@ const errores = [];
 pagina.on('console', (m) => m.type() === 'error' && errores.push(m.text()));
 pagina.on('pageerror', (e) => errores.push(e.message));
 
+/** Abre el menu de tres puntos de una fila y pulsa una de sus opciones. */
+async function opcion(correo, nombre) {
+  await pagina.locator('#cuentas tr', { hasText: correo }).locator('[popovertarget]').click();
+  await pagina.waitForTimeout(400);
+  await pagina.getByRole('button', { name: nombre, exact: true }).click();
+  await pagina.waitForTimeout(500);
+}
+
+/** Confirma el dialogo, escribiendo antes en su campo si lo pide. */
+async function confirmar(valor) {
+  if (valor !== undefined) await pagina.fill('#dialogo-valor', valor);
+  await pagina.click('#dialogo-confirmar');
+  await pagina.waitForTimeout(1500);
+}
+
 const cliente = new pg.Client({ connectionString: env['DATABASE_OWNER_URL'] });
 await cliente.connect();
 
@@ -89,47 +104,34 @@ try {
   );
 
   console.log('\n=== 3. Suspender desde la pantalla ===');
-  const filaOtro = pagina.locator('#cuentas tr', { hasText: OTRO });
-  pagina.once('dialog', (d) => d.accept('prueba'));
-  await filaOtro.getByRole('button', { name: 'Suspender' }).click();
-  await pagina.waitForTimeout(1500);
+  await opcion(OTRO, 'Suspender');
+  ok(
+    'sale el dialogo de daisyUI, no el del navegador',
+    await pagina.locator('#dialogo').isVisible(),
+  );
+  await confirmar('prueba');
   const aviso = await pagina.textContent('#aviso');
   ok('avisa de la suspension', (aviso ?? '').includes('suspendida'), (aviso ?? '').slice(0, 60));
   const trasSuspender = await pagina.textContent('#cuentas');
   ok('y la fila lo refleja', (trasSuspender ?? '').includes('Suspendida'));
 
-  await pagina
-    .locator('#cuentas tr', { hasText: OTRO })
-    .getByRole('button', { name: 'Reactivar' })
-    .click();
-  await pagina.waitForTimeout(1500);
+  await opcion(OTRO, 'Reactivar');
 
   console.log('\n=== 4. La papelera ===');
-  await pagina
-    .locator('#cuentas tr', { hasText: OTRO })
-    .getByRole('button', { name: 'A la papelera' })
-    .click();
-  await pagina.waitForTimeout(1500);
+  await opcion(OTRO, 'A la papelera');
   await pagina.goto(`${B}/admin/papelera`, { waitUntil: 'networkidle' });
   await pagina.waitForTimeout(900);
   const papelera = await pagina.textContent('#cuentas');
   ok('la cuenta aparece en la papelera', (papelera ?? '').includes(OTRO));
   ok('con el boton de borrar para siempre', (papelera ?? '').includes('Borrar para siempre'));
 
-  await pagina
-    .locator('#cuentas tr', { hasText: OTRO })
-    .getByRole('button', { name: 'Restaurar' })
-    .click();
-  await pagina.waitForTimeout(1500);
+  await opcion(OTRO, 'Restaurar');
 
   console.log('\n=== 5. Suplantar ===');
   await pagina.goto(`${B}/admin`, { waitUntil: 'networkidle' });
   await pagina.waitForTimeout(900);
   errores.length = 0;
-  await pagina
-    .locator('#cuentas tr', { hasText: OTRO })
-    .getByRole('button', { name: 'Entrar como' })
-    .click();
+  await opcion(OTRO, 'Entrar como');
   await pagina.waitForURL(`${B}/`, { timeout: 15000 });
   await pagina.waitForTimeout(1200);
 

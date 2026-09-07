@@ -6,6 +6,10 @@
  * el marcado vive una sola vez aquí y las filas las rellena
  * `src/screens/admin.ts`. Duplicar esta tabla en dos `.astro` era la forma
  * segura de que dentro de un mes tuvieran columnas distintas.
+ *
+ * El hueco `aside` es la columna derecha. La papelera no lo usa, y entonces la
+ * tabla ocupa el ancho entero: una columna vacía a la derecha se lee como algo
+ * que falta.
  */
 interface Props {
   title: string;
@@ -15,15 +19,16 @@ interface Props {
   otherLabel: string;
   /** Qué dice la tabla cuando no hay ninguna fila. */
   empty: string;
+  /** Encabezado de la tercera columna: cambia entre «Alta» y la fecha de retirada. */
+  dateLabel?: string;
 }
 
-const { title, description, otherHref, otherLabel, empty } = Astro.props;
+const { title, description, otherHref, otherLabel, empty, dateLabel = 'Alta' } = Astro.props;
 
-const HEAD =
-  'px-4 py-2.5 text-left text-[0.72rem] font-bold tracking-[0.2em] text-ink-faint uppercase';
+const conAside = Astro.slots.has('aside');
 ---
 
-<div class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
   <header class="flex flex-wrap items-end justify-between gap-4">
     <div>
       <h1 class="text-figure font-black tracking-[-0.02em] text-ink">{title}</h1>
@@ -31,7 +36,7 @@ const HEAD =
     </div>
     <a
       href={otherHref}
-      class="min-h-11 rounded-full border border-line px-5 py-2.5 text-sm font-semibold text-ink-dim transition-colors hover:border-line-strong hover:text-ink"
+      class="btn h-11 min-h-11 rounded-full border-line bg-surface px-5 font-semibold text-ink-dim hover:border-line-strong hover:bg-raised hover:text-ink"
     >
       {otherLabel}
     </a>
@@ -41,28 +46,103 @@ const HEAD =
     id="aviso"
     hidden
     role="status"
-    class="mt-6 rounded-card border border-line px-4 py-3 text-sm text-ink data-[tone=error]:border-line-strong data-[tone=error]:text-ink-dim"
+    class="mt-6 alert rounded-card border-line bg-surface text-sm text-ink data-[tone=error]:border-line-strong data-[tone=error]:text-ink-dim"
   >
   </p>
 
-  <slot name="antes" />
+  <div
+    class:list={[
+      'mt-6 grid items-start gap-4',
+      conAside && 'lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]',
+    ]}
+  >
+    <section class="panel overflow-hidden rounded-card border border-line">
+      <div class="overflow-x-auto">
+        <table class="table">
+          <thead>
+            <tr class="border-line">
+              <th class="text-ink-faint">Cuenta</th>
+              <th class="text-ink-faint">Estado</th>
+              <th class="whitespace-nowrap text-ink-faint">{dateLabel}</th>
+              <th class="w-px"><span class="sr-only">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody id="cuentas"></tbody>
+        </table>
+      </div>
+      <p id="sin-cuentas" hidden class="px-4 py-10 text-center text-sm text-ink-faint">{empty}</p>
+    </section>
 
-  <section class="panel mt-6 overflow-hidden rounded-card border border-line">
-    <div class="overflow-x-auto">
-      <table class="w-full min-w-[44rem] border-collapse">
-        <thead>
-          <tr>
-            <th scope="col" class={HEAD}>Cuenta</th>
-            <th scope="col" class={HEAD}>Estado</th>
-            <th scope="col" class={HEAD}><slot name="fecha">Alta</slot></th>
-            <th scope="col" class={`${HEAD} text-right`}>Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="cuentas"></tbody>
-      </table>
-    </div>
-    <p id="sin-cuentas" hidden class="px-4 py-8 text-center text-sm text-ink-faint">{empty}</p>
-  </section>
+    {
+      conAside && (
+        <aside class="panel rounded-card border border-line p-5 sm:p-6">
+          <slot name="aside" />
+        </aside>
+      )
+    }
+  </div>
 
   <p id="fallo" hidden role="alert" class="mt-6 text-sm text-ink-dim"></p>
 </div>
+
+{
+  /**
+   * El diálogo que sustituye a `prompt` y `confirm` del navegador.
+   *
+   * Uno solo para las tres cosas que lo usan —cambiar contraseña, suspender y
+   * borrar— porque son la misma pieza con otro texto. Lo rellena
+   * `src/screens/admin.ts` antes de abrirlo.
+   *
+   * Es un `<dialog>` de verdad: se abre con `showModal()`, atrapa el foco,
+   * cierra con Escape y oscurece lo de detrás sin que haya que programarlo.
+   */
+}
+<dialog id="dialogo" class="modal">
+  <div class="modal-box rounded-card border border-line bg-surface text-ink">
+    <h3 id="dialogo-titulo" class="text-lg font-extrabold text-ink"></h3>
+    <p id="dialogo-texto" class="mt-2 text-sm whitespace-pre-line text-ink-dim"></p>
+
+    <form id="dialogo-form" method="dialog" class="mt-5">
+      <label id="dialogo-campo" hidden class="flex flex-col gap-1.5 text-sm">
+        <span id="dialogo-etiqueta" class="font-bold text-ink-dim"></span>
+        <input
+          id="dialogo-valor"
+          name="valor"
+          class="input w-full rounded-full border-line bg-ground text-ink focus:border-line-strong"
+        />
+        <span id="dialogo-ayuda" class="text-sm text-ink-faint"></span>
+      </label>
+
+      <div class="modal-action mt-6">
+        {
+          /* `formnovalidate` es lo que hace que cancelar cancele. Los dos botones
+            envían el formulario —así es como se cierra un `<dialog>`—, y sin
+            esto el navegador exigía rellenar el campo obligatorio también para
+            salir: te dejaba atrapado en el diálogo. */
+        }
+        <button
+          type="submit"
+          value="cancelar"
+          formnovalidate
+          class="btn h-11 min-h-11 rounded-full border-line bg-transparent font-semibold text-ink-dim hover:border-line-strong hover:bg-raised hover:text-ink"
+        >
+          Cancelar
+        </button>
+        {
+          /* Sin `btn`: daisyUI pinta su propio fondo en la capa de utilidades y
+            taparía el degradado de `accion-primaria`, que vive en components. */
+        }
+        <button
+          id="dialogo-confirmar"
+          type="submit"
+          value="confirmar"
+          class="inline-flex min-h-11 items-center justify-center rounded-full px-6 text-sm font-extrabold transition-transform hover:scale-[1.02] active:scale-100"
+        >
+        </button>
+      </div>
+    </form>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>Cerrar</button>
+  </form>
+</dialog>

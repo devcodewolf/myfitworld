@@ -1,5 +1,77 @@
 @import 'tailwindcss';
-@plugin 'daisyui';
+
+/**
+ * daisyUI, vestido con la ropa de esta app.
+ *
+ * `themes: false` apaga los temas que trae de serie. Si se dejaran, sus
+ * componentes vendrían con una paleta que no es la nuestra y el mundo visual de
+ * DESIGN.md se rompería en cuanto se usara un dropdown.
+ *
+ * En su lugar se define un tema único cuyos colores **son** los tokens del
+ * `@theme` de abajo. Así un `menu`, un `modal` o un `btn` salen ya con el negro
+ * azulado, la tinta y el cian de la casa, sin tener que corregirlos uno a uno
+ * con utilidades.
+ *
+ * Los valores se repiten aquí en crudo porque el bloque de daisyUI se procesa
+ * antes que `@theme` y no puede referirse a sus variables. Si cambias un color,
+ * cámbialo en los dos sitios.
+ */
+@plugin 'daisyui' {
+  themes: false;
+}
+
+@plugin 'daisyui/theme' {
+  name: 'mfw';
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+
+  /* Superficies: las mismas tres de siempre, de fondo a elevado. */
+  --color-base-100: #091017;
+  --color-base-200: #141d26;
+  --color-base-300: #1e2934;
+  --color-base-content: #f0f6fa;
+
+  /* El único croma alto del sistema. Acción primaria y nada más. */
+  --color-primary: #34dafa;
+  --color-primary-content: #031c30;
+
+  /* Las pastel de las fases. Identifican, no gritan. */
+  --color-secondary: #99a6e7;
+  --color-secondary-content: #031c30;
+  --color-accent: #7dcece;
+  --color-accent-content: #031c30;
+
+  --color-neutral: #141d26;
+  --color-neutral-content: #f0f6fa;
+
+  --color-info: #88c0e1;
+  --color-info-content: #031c30;
+  --color-success: #9dceb7;
+  --color-success-content: #031c30;
+  --color-warning: #e1c088;
+  --color-warning-content: #031c30;
+  /*
+   * El único rojo del proyecto, y contenido a propósito: se reserva para lo que
+   * destruye datos sin vuelta atrás. Fuera de ahí, lo destructivo se distingue
+   * por el borde, no por el color.
+   */
+  --color-error: #e08a7d;
+  --color-error-content: #1c0705;
+
+  /* Radios: tarjeta de 14px como el resto, y campos y botones en píldora. */
+  --radius-selector: 2rem;
+  --radius-field: 2rem;
+  --radius-box: 0.875rem;
+
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  --border: 1px;
+  /* Sin sombras ni grano: la elevación de este mundo se lee por superficie. */
+  --depth: 0;
+  --noise: 0;
+}
 
 /* Archivo variable, auto-alojada. Vite reescribe estas rutas con el `base` del
    despliegue, cosa que no ocurriría si el archivo viviera en public/. */

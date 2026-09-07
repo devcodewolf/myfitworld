@@ -4,23 +4,24 @@
  *
  * Se monta con `server:defer`, o sea como **server island**: la página se
  * sigue generando entera en el build y solo este trozo se pide al servidor al
- * cargarla. Es lo que permite que treinta y cinco páginas estáticas enseñen
- * algo que depende de tu cookie sin dejar de ser archivos.
+ * cargarla. Es lo que permite que las páginas estáticas enseñen algo que
+ * depende de tu cookie sin dejar de ser archivos.
  *
- * La alternativa era preguntar la sesión desde el navegador en cada página, y
- * eso es escribir a mano el mismo viaje pero peor: sin HTML del servidor y con
- * el parpadeo a cargo de uno.
+ * El desplegable es el `dropdown` de daisyUI en su variante **sin JavaScript**:
+ * abre con el foco y cierra al perderlo. Eso importa aquí más que en ningún
+ * sitio, porque este HTML llega tarde —después de la carga— y cualquier
+ * manejador puesto al arrancar la página no lo habría visto nacer. Y porque
+ * esta barra sale en las treinta y cuatro páginas estáticas: no puede arrastrar
+ * un paquete de scripts a todas ellas para abrir un menú.
  *
- * Salir es un `POST` a `/salir`, no un enlace ni un script: así funciona
- * también aquí dentro, donde el HTML llega tarde y ningún manejador puesto al
- * cargar la página lo habría visto nacer.
+ * Salir sigue siendo un `POST` a `/salir`, por lo mismo.
  */
 import { isAdminUser } from '@/auth';
 import { routes } from '@/routes';
 
 const user = Astro.locals.user;
 
-/** El enlace a la administración solo existe para quien puede entrar ahí. */
+/** La administración solo se ofrece a quien puede entrar ahí. */
 const esAdmin = isAdminUser(user);
 
 /** La inicial del nombre, o del correo si no dio nombre. */
@@ -28,16 +29,17 @@ const initial = (user?.name || user?.email || '?').trim().charAt(0).toUpperCase(
 
 /** El nombre corto: si no hay nombre, lo que va antes de la arroba. */
 const label = user?.name?.trim() || user?.email.split('@')[0] || '';
-
-const GROUP = 'flex shrink-0 items-center gap-1 rounded-full border border-line bg-surface p-1';
-const PILL =
-  'flex min-h-11 items-center gap-2 rounded-full px-3 text-sm font-semibold whitespace-nowrap transition-colors';
 ---
 
 {
   user ? (
-    <div class={GROUP}>
-      <a href={routes.settings()} class:list={[PILL, 'text-ink-dim hover:text-ink']}>
+    <div class="dropdown dropdown-end shrink-0">
+      <div
+        tabindex="0"
+        role="button"
+        aria-haspopup="menu"
+        class="btn h-11 min-h-11 gap-2 rounded-full border-line bg-surface px-3 font-semibold text-ink-dim hover:border-line-strong hover:bg-raised hover:text-ink"
+      >
         <span
           class="figures flex size-7 shrink-0 items-center justify-center rounded-full bg-raised text-xs font-black text-ink"
           aria-hidden="true"
@@ -46,23 +48,56 @@ const PILL =
         </span>
         <span class="hidden max-w-32 truncate md:inline">{label}</span>
         <span class="sr-only">Tu cuenta: {user.email}</span>
-      </a>
-      {esAdmin && (
-        <a href={routes.admin()} class:list={[PILL, 'text-ink-dim hover:text-ink']}>
-          Cuentas
-        </a>
-      )}
-      <form method="POST" action={routes.signOut()}>
-        <button type="submit" class:list={[PILL, 'text-ink-faint hover:text-ink']}>
-          Salir
-        </button>
-      </form>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.75"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="size-4 shrink-0"
+          aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </div>
+
+      <ul
+        tabindex="0"
+        class="menu dropdown-content z-50 mt-2 w-56 rounded-card border border-line bg-raised p-2"
+      >
+        <li class="menu-title px-3 pt-1 pb-2 text-xs font-bold tracking-normal text-ink-faint normal-case">
+          <span class="block truncate">{user.email}</span>
+        </li>
+        <li>
+          <a href={routes.settings()} class="text-ink-dim hover:text-ink">
+            Ajustes
+          </a>
+        </li>
+        {esAdmin && (
+          <li>
+            <a href={routes.admin()} class="text-ink-dim hover:text-ink">
+              Cuentas
+            </a>
+          </li>
+        )}
+        {/* El formulario es el elemento de la lista: daisyUI le da el hueco y el
+            estado de foco, y el botón lo rellena entero. */}
+        <li>
+          <form method="POST" action={routes.signOut()} class="text-ink-dim hover:text-ink">
+            <button type="submit" class="w-full cursor-pointer text-left">
+              Salir
+            </button>
+          </form>
+        </li>
+      </ul>
     </div>
   ) : (
-    <div class={GROUP}>
-      <a href={routes.login()} class:list={[PILL, 'px-4 font-bold text-ink']}>
-        Entrar
-      </a>
-    </div>
+    <a
+      href={routes.login()}
+      class="btn h-11 min-h-11 shrink-0 rounded-full border-line bg-surface px-5 font-bold text-ink hover:border-line-strong hover:bg-raised"
+    >
+      Entrar
+    </a>
   )
 }
