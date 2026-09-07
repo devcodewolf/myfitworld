@@ -388,11 +388,28 @@ function fila(cuenta: Account, acciones: Accion[], alCambiar: () => void): HTMLT
   return tr;
 }
 
-async function pintar(cuerpo: HTMLElement, vacio: HTMLElement, trashed: boolean): Promise<void> {
-  const { data, error } = await actions.admin.list({ trashed });
-  if (error) throw new Error(error.message);
+/**
+ * Pinta la tabla.
+ *
+ * `yaCargadas` es la lista que vino dentro de la página: con ella la primera
+ * pintada no espera a nadie. Sin ella —después de cambiar algo— se piden al
+ * servidor, que es lo correcto: acabas de tocar los datos y hay que releerlos.
+ */
+async function pintar(
+  cuerpo: HTMLElement,
+  vacio: HTMLElement,
+  trashed: boolean,
+  yaCargadas?: readonly Account[],
+): Promise<void> {
+  let cuentas: Account[];
+  if (yaCargadas) {
+    cuentas = [...yaCargadas];
+  } else {
+    const { data, error } = await actions.admin.list({ trashed });
+    if (error) throw new Error(error.message);
+    cuentas = (data ?? []) as Account[];
+  }
 
-  const cuentas = (data ?? []) as Account[];
   cuerpo.replaceChildren();
   vacio.hidden = cuentas.length > 0;
 
@@ -401,7 +418,15 @@ async function pintar(cuerpo: HTMLElement, vacio: HTMLElement, trashed: boolean)
   for (const cuenta of cuentas) cuerpo.append(fila(cuenta, acciones, recargar));
 }
 
-export async function mountAdminPage(trashed: boolean): Promise<void> {
+export interface AdminPayload {
+  /** Qué vista es: cuentas activas o papelera. */
+  readonly trashed: boolean;
+  /** Las cuentas, ya resueltas por el servidor al montar la página. */
+  readonly cuentas: readonly Account[];
+}
+
+export async function mountAdminPage(payload: AdminPayload): Promise<void> {
+  const { trashed } = payload;
   const cuerpo = el<HTMLTableSectionElement>('cuentas');
   const vacio = el<HTMLElement>('sin-cuentas');
   if (!cuerpo || !vacio) throw new Error('Falta la tabla de cuentas.');
@@ -429,5 +454,5 @@ export async function mountAdminPage(trashed: boolean): Promise<void> {
     })();
   });
 
-  await pintar(cuerpo, vacio, trashed);
+  await pintar(cuerpo, vacio, trashed, payload.cuentas);
 }

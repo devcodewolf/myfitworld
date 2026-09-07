@@ -1,4 +1,6 @@
 ---
+import { actions } from 'astro:actions';
+
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import AccountTable from '@/components/admin/AccountTable.astro';
 import { routes } from '@/routes';
@@ -11,6 +13,9 @@ import { routes } from '@/routes';
  * el borrado de verdad arrastra en cascada todo su historial y no se deshace.
  */
 export const prerender = false;
+
+/** Igual que en `/admin`: la lista va dentro de la página, no en un viaje aparte. */
+const { data: cuentas } = await Astro.callAction(actions.admin.list, { trashed: true });
 ---
 
 <BaseLayout title="Papelera · My Fitness World" description="Cuentas retiradas.">
@@ -24,11 +29,19 @@ export const prerender = false;
   />
 </BaseLayout>
 
+<script
+  id="datos-admin"
+  type="application/json"
+  is:inline
+  set:html={JSON.stringify({ trashed: true, cuentas: cuentas ?? [] })}
+/>
+
 <script>
-  import { mountAdminPage } from '@/screens/admin';
+  import { mountAdminPage, type AdminPayload } from '@/screens/admin';
 
   try {
-    await mountAdminPage(true);
+    const raw = document.getElementById('datos-admin')?.textContent ?? '{}';
+    await mountAdminPage(JSON.parse(raw) as AdminPayload);
   } catch (error) {
     const box = document.getElementById('fallo');
     if (box) {

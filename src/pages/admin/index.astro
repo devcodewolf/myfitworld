@@ -1,4 +1,6 @@
 ---
+import { actions } from 'astro:actions';
+
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import AccountTable from '@/components/admin/AccountTable.astro';
 import { MIN_PASSWORD_LENGTH } from '@/auth-contract';
@@ -14,6 +16,20 @@ import { routes } from '@/routes';
  * cuenta en el servidor; esconder un botón no es seguridad.
  */
 export const prerender = false;
+
+/**
+ * La lista viaja DENTRO de la página.
+ *
+ * El servidor ya tenía las cuentas delante al montar esto. Mandar la tabla
+ * vacía y esperar a que el navegador las pidiera otra vez era un viaje de ida y
+ * vuelta de más, y se notaba: la tabla aparecía en blanco y daba un salto al
+ * llenarse casi un segundo después.
+ *
+ * `Astro.callAction` llama a la misma acción que usaría el cliente, así que la
+ * comprobación de permisos es exactamente la misma y no hay una segunda
+ * consulta que mantener al día.
+ */
+const { data: cuentas } = await Astro.callAction(actions.admin.list, { trashed: false });
 
 /** Campo de formulario, con el `input` de daisyUI vestido de la casa. */
 const FIELD =
@@ -80,11 +96,19 @@ const CHEVRON = 'desplegable pr-11';
   </AccountTable>
 </BaseLayout>
 
+<script
+  id="datos-admin"
+  type="application/json"
+  is:inline
+  set:html={JSON.stringify({ trashed: false, cuentas: cuentas ?? [] })}
+/>
+
 <script>
-  import { mountAdminPage } from '@/screens/admin';
+  import { mountAdminPage, type AdminPayload } from '@/screens/admin';
 
   try {
-    await mountAdminPage(false);
+    const raw = document.getElementById('datos-admin')?.textContent ?? '{}';
+    await mountAdminPage(JSON.parse(raw) as AdminPayload);
   } catch (error) {
     const box = document.getElementById('fallo');
     if (box) {
