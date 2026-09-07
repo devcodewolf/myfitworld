@@ -322,3 +322,66 @@
     );
   }
 }
+
+/**
+ * El velo de los diálogos: más oscuro y desenfocado.
+ *
+ * daisyUI **apaga el `::backdrop` nativo** y oscurece con el fondo del propio
+ * `.modal`, un negro al 40 %. Sobre un fondo ya tan oscuro, ese 40 % dejaba
+ * leer la tabla de detrás y el diálogo no llegaba a despegarse.
+ *
+ * Se sube a `shade` —el tono con el que este mundo hunde los bordes— y se le
+ * añade desenfoque, que es lo que de verdad manda lo de detrás a otro plano:
+ * oscurecer solo lo apaga; desenfocar lo aleja.
+ *
+ * ── POR QUÉ ESTÁ AQUÍ ABAJO Y SIN `@layer` ────────────────────────────────
+ * Es la única forma de ganarle a daisyUI **con certeza**. Sus componentes
+ * viven en capas anidadas (`daisyui.l1.l2`), y dentro de una capa las reglas
+ * sueltas tienen prioridad sobre las de sus subcapas, así que meter esto en
+ * cualquier capa era jugársela a un orden que no controlamos. El CSS sin capa
+ * gana siempre a todo lo que esté en una, sin necesidad de `!important`.
+ *
+ * Es la misma pelea que hizo que los botones primarios no lleven `btn`.
+ */
+/*
+ * El estado de reposo, y la transición completa.
+ *
+ * Hace falta declarar aquí las dos cosas, y este es el porqué:
+ *
+ * 1. `blur(0)` en reposo. Un desenfoque no sabe ir de `blur(8px)` a «nada»:
+ *    hay que darle un valor al que volver o salta de golpe.
+ * 2. La transición entera, repitiendo la de daisyUI **más `backdrop-filter`**.
+ *    La suya no lo incluye, así que al cerrar el desenfoque desaparecía de
+ *    inmediato mientras el oscuro seguía desvaneciéndose: el velo se partía en
+ *    dos mitades a velocidades distintas y se notaba.
+ *
+ * `overlay` y `visibility` con `allow-discrete` son de daisyUI y se conservan
+ * tal cual: son las que dejan animar un `<dialog>` mientras sale de la capa
+ * superior del navegador. Sin ellas, el diálogo desaparecería sin transición.
+ */
+.modal {
+  backdrop-filter: blur(0);
+  transition:
+    overlay 0.3s allow-discrete,
+    visibility 0.3s allow-discrete,
+    background-color 0.3s ease-out,
+    backdrop-filter 0.3s ease-out,
+    opacity 0.1s ease-out;
+}
+
+/*
+ * Y en abierto otra vez, porque daisyUI vuelve a declarar ahí la transición y
+ * tampoco mete `backdrop-filter`. Al cerrar manda la regla base y al abrir
+ * manda esta: hacen falta las dos para que el velo entre y salga de una pieza.
+ */
+.modal[open],
+.modal.modal-open,
+.modal:popover-open {
+  background-color: color-mix(in oklab, var(--color-shade) 72%, transparent);
+  backdrop-filter: blur(8px);
+  transition:
+    visibility 0s allow-discrete,
+    background-color 0.3s ease-out,
+    backdrop-filter 0.3s ease-out,
+    opacity 0.1s ease-out;
+}
