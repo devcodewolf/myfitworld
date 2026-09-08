@@ -38,6 +38,23 @@ const FIELD =
   'min-h-11 w-full rounded-full border border-line bg-surface px-4 text-ink transition-colors hover:border-line-strong';
 
 const LABEL = 'flex flex-col gap-1.5 text-sm';
+
+/**
+ * Los dos campos que solo existen al crear cuenta.
+ *
+ * Ocultos de verdad —`display: none`— cuando se entra: nada de plegados. El
+ * truco para que el panel no cambie de alto no está aquí, está en que los dos
+ * modos ocupan **las mismas dos filas** (ver el comentario del formulario).
+ */
+const SOLO_AL_CREAR = 'hidden group-data-[modo=crear]:block';
+
+/**
+ * Correo y contraseña: fila entera al entrar, media al crear.
+ *
+ * Es lo que iguala las dos alturas. Entrando son dos filas de un campo; creando
+ * son dos filas de dos campos. El mismo alto sin fijar ninguno.
+ */
+const COMUN = 'sm:col-span-2 sm:group-data-[modo=crear]:col-span-1';
 const LABEL_TEXT = 'font-bold text-ink-dim';
 const HINT = 'text-sm text-ink-faint';
 ---
@@ -46,9 +63,9 @@ const HINT = 'text-sm text-ink-faint';
   title="Entrar · My Fitness World"
   description="Entra en tu cuenta para registrar lo que entrenas."
 >
-  <div class="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+  <div class="mx-auto flex min-h-full max-w-5xl flex-col justify-center px-4 py-8 sm:px-6 lg:px-8">
     <div class="grid items-stretch gap-4 lg:grid-cols-2">
-      <PhotoCard photo={SCENE_PHOTOS.rack} alt="" eager fill class="min-h-64 lg:min-h-[30rem]">
+      <PhotoCard photo={SCENE_PHOTOS.rack} alt="" eager fill class="min-h-72 lg:min-h-[34rem]">
         <h1 class="text-figure font-black tracking-[-0.02em] text-ink">
           El plan se mira sin cuenta. Lo que entrenas, no.
         </h1>
@@ -78,20 +95,36 @@ const HINT = 'text-sm text-ink-faint';
         >
         </p>
 
-        <form id="form-entrada" class="mt-6 flex flex-col gap-4">
-          <label id="campo-nombre" class={LABEL} for="nombre" hidden>
-            <span class={LABEL_TEXT}>Nombre</span>
-            <input
-              id="nombre"
-              name="nombre"
-              type="text"
-              autocomplete="name"
-              required
-              class={FIELD}
-            />
-          </label>
+        {
+          /**
+           * Los dos modos ocupan **las mismas dos filas**, y en eso consiste
+           * todo: entrando, correo y contraseña ocupan la fila entera; creando,
+           * comparten fila con nombre y con el código. Dos filas en los dos
+           * casos, así que el panel no cambia de alto y la foto de al lado no
+           * se estira ni encoge.
+           *
+           * El modo vive en `data-modo` sobre el formulario, y los campos se
+           * colocan solos con `group-data-[…]`. Sin plegados y sin alturas
+           * escritas a mano.
+           */
+        }
+        <form id="form-entrada" data-modo="entrar" class="group mt-6 grid gap-4 sm:grid-cols-2">
+          <div id="campo-nombre" class={SOLO_AL_CREAR}>
+            <label class={LABEL} for="nombre">
+              <span class={LABEL_TEXT}>Nombre</span>
+              <input
+                id="nombre"
+                name="nombre"
+                type="text"
+                autocomplete="name"
+                required
+                disabled
+                class={FIELD}
+              />
+            </label>
+          </div>
 
-          <label class={LABEL} for="correo">
+          <label class:list={[LABEL, COMUN]} for="correo">
             <span class={LABEL_TEXT}>Correo</span>
             <input
               id="correo"
@@ -104,7 +137,7 @@ const HINT = 'text-sm text-ink-faint';
             />
           </label>
 
-          <label class={LABEL} for="clave">
+          <label class:list={[LABEL, COMUN]} for="clave">
             <span class={LABEL_TEXT}>Contraseña</span>
             <input
               id="clave"
@@ -118,25 +151,27 @@ const HINT = 'text-sm text-ink-faint';
             <span class={HINT}>Mínimo {MIN_PASSWORD_LENGTH} caracteres.</span>
           </label>
 
-          <label id="campo-invitacion" class={LABEL} for="invitacion" hidden>
-            <span class={LABEL_TEXT}>Código de invitación</span>
-            <input
-              id="invitacion"
-              name="invitacion"
-              type="text"
-              autocomplete="off"
-              required
-              class={FIELD}
-            />
-            <span class={HINT}>
-              Sin él no se puede crear la cuenta. Esta app no está abierta a registro.
-            </span>
-          </label>
+          <div id="campo-invitacion" class={SOLO_AL_CREAR}>
+            <label class={LABEL} for="invitacion">
+              <span class={LABEL_TEXT}>Código de invitación</span>
+              <input
+                id="invitacion"
+                name="invitacion"
+                type="text"
+                autocomplete="off"
+                required
+                disabled
+                class={FIELD}
+              />
+              {/* De una línea, como el de la contraseña: es su pareja de fila. */}
+              <span class={HINT}>Esta app no está abierta a registro.</span>
+            </label>
+          </div>
 
           <button
             id="enviar"
             type="submit"
-            class="accion-primaria mt-2 min-h-14 rounded-full px-7 text-base font-extrabold text-accent-ink transition-transform hover:scale-[1.02] active:scale-100 disabled:scale-100 disabled:bg-ground disabled:bg-none disabled:text-ink-faint"
+            class="accion-primaria mt-2 min-h-14 rounded-full px-7 text-base font-extrabold text-accent-ink transition-transform hover:scale-[1.02] active:scale-100 disabled:scale-100 disabled:bg-ground disabled:bg-none disabled:text-ink-faint sm:col-span-2"
           >
             Entrar
           </button>

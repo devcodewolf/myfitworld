@@ -21,7 +21,7 @@ type Mode = 'entrar' | 'crear';
 
 const el = <T extends HTMLElement>(id: string): T | null => document.getElementById(id) as T | null;
 
-/** Un campo que solo existe en uno de los dos modos. */
+/** Un campo que solo se usa al crear cuenta. */
 interface OptionalField {
   readonly wrapper: HTMLElement | null;
   readonly input: HTMLInputElement | null;
@@ -32,13 +32,15 @@ function optional(id: string): OptionalField {
 }
 
 /**
- * Esconder un campo no basta: un `required` invisible bloquea el envío con un
- * «campo no enfocable» que no se ve por ninguna parte. Se desactiva además de
- * ocultarse, y así tampoco viaja en el formulario.
+ * Activa o desactiva un campo que solo existe en uno de los dos modos.
+ *
+ * **Esconderlo lo hace el CSS**, a partir del `data-modo` del formulario: aquí
+ * solo se desactiva. Y desactivarlo no es cosmético — es lo que hace que su
+ * `required` deje de contar. Un campo obligatorio que no se ve bloquea el envío
+ * con un «campo no enfocable» que no aparece por ninguna parte.
  */
-function toggleField(field: OptionalField, visible: boolean): void {
-  if (field.wrapper) field.wrapper.hidden = !visible;
-  if (field.input) field.input.disabled = !visible;
+function toggleField(field: OptionalField, active: boolean): void {
+  if (field.input) field.input.disabled = !active;
 }
 
 export function mountLoginPage(payload: LoginPayload): void {
@@ -64,6 +66,8 @@ export function mountLoginPage(payload: LoginPayload): void {
   const setMode = (next: Mode): void => {
     mode = next;
     say('');
+    // El `data-modo` lo lee el CSS: coloca los campos y esconde los que no van.
+    form.dataset['modo'] = next;
     toggleField(name, next === 'crear');
     toggleField(invite, next === 'crear');
     submit.textContent = next === 'crear' ? 'Crear cuenta' : 'Entrar';
