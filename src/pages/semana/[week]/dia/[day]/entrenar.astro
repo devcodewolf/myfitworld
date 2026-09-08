@@ -23,7 +23,13 @@ const day = week && Number.isInteger(dayOrder) ? findDay(week, dayOrder) : undef
 
 // Antes, una semana inventada no tenía archivo y el 404 salía solo. Ahora la
 // ruta responde siempre, así que el «no existe» hay que darlo a mano.
-if (!week || !day) return new Response(null, { status: 404 });
+//
+// Se reescribe a `/404` en vez de devolver un `Response` vacío: Astro solo
+// cambia una respuesta por la página de error cuando el error lo genera él, y
+// un 404 devuelto desde aquí se servía tal cual, en blanco. Reescribiendo se
+// pinta la página de verdad, y el estado sigue siendo 404 porque lo pone la
+// propia ruta `/404`.
+if (!week || !day) return Astro.rewrite('/404');
 
 const mesocycleId = mesocycle.id;
 const catalog = await getExerciseCatalog();

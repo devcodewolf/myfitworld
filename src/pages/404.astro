@@ -1,0 +1,75 @@
+---
+/**
+ * La página que se ve al llegar a una dirección que no existe.
+ *
+ * Se compone como la tarjeta principal de la portada —fotografía a sangre, el
+ * titular a tamaño grande encima, la acción primaria y las píldoras debajo—
+ * porque una 404 es el peor sitio para que la app parezca otra: quien llega
+ * aquí ya está desorientado.
+ *
+ * La foto es el suelo vacío del gimnasio, y esa elección es la que dice
+ * «aquí no hay nada» antes de que nadie lea una palabra.
+ *
+ * Sin *eyebrow* sobre el titular, como manda `DESIGN.md`: el número de error
+ * va en una píldora, debajo, donde no compite con lo que de verdad importa.
+ *
+ * **Se genera en el build**, así que es un archivo en disco: aparece aunque la
+ * base de datos no esté, que es justo cuando más falta hace que algo funcione.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PhotoCard from '@/components/ui/PhotoCard.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { routes } from '@/routes';
+import { SCENE_PHOTOS } from '@/theme';
+---
+
+<BaseLayout
+  title="Aquí no hay nada · My Fitness World"
+  description="La dirección a la que has llegado no existe."
+>
+  <div class="mx-auto flex min-h-full max-w-5xl flex-col justify-center px-4 py-8 sm:px-6 lg:px-8">
+    <PhotoCard photo={SCENE_PHOTOS.floor} alt="" eager fill class="min-h-[26rem]">
+      <h1 class="text-display font-black tracking-[-0.03em] text-balance text-ink">
+        Aquí no hay nada
+      </h1>
+      <p class="mt-3 max-w-[52ch] text-lg leading-relaxed text-ink-dim">
+        Esta dirección no lleva a ningún sitio. Puede que la escribieras a mano, o que apunte a una
+        semana o un día que no están en el mesociclo.
+      </p>
+
+      <div class="mt-6 flex flex-wrap items-center gap-4">
+        <a
+          href={routes.home()}
+          class="accion-primaria inline-flex min-h-14 items-center gap-3 rounded-full px-7 text-base font-extrabold text-accent-ink transition-transform hover:scale-[1.02] active:scale-100"
+        >
+          Volver al mesociclo
+          <Icon name="arrow-right" size={20} class="shrink-0" />
+        </a>
+        <ul class="figures flex flex-wrap gap-2">
+          <li
+            class="rounded-full border border-line bg-[color-mix(in_oklab,var(--color-ground)_65%,transparent)] px-3.5 py-1.5 text-sm font-semibold text-ink backdrop-blur-sm"
+          >
+            Error 404
+          </li>
+        </ul>
+      </div>
+    </PhotoCard>
+
+    <nav class="mt-6 flex flex-wrap gap-3" aria-label="Otras secciones">
+      <a
+        href={routes.exercises()}
+        class="inline-flex min-h-12 items-center gap-2 rounded-full border border-line px-6 text-sm font-bold text-ink-dim transition-colors hover:border-line-strong hover:text-ink"
+      >
+        <Icon name="catalog" size={18} class="shrink-0" />
+        Ejercicios
+      </a>
+      <a
+        href={routes.history()}
+        class="inline-flex min-h-12 items-center gap-2 rounded-full border border-line px-6 text-sm font-bold text-ink-dim transition-colors hover:border-line-strong hover:text-ink"
+      >
+        <Icon name="history" size={18} class="shrink-0" />
+        Historial
+      </a>
+    </nav>
+  </div>
+</BaseLayout>
