@@ -6,5 +6,17 @@
   "[astro]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "prettier.documentSelectors": ["**/*.astro"]
+  "prettier.documentSelectors": ["**/*.astro"],
+
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    ".gitignore": ".gitattributes",
+    ".prettierrc.json": ".prettierignore",
+    "package.json": "pnpm-lock.yaml, pnpm-workspace.yaml, tsconfig.json",
+    "CLAUDE.md": "AGENTS.md, README.md, DESIGN.md, PRODUCT.md, specs.md, instrucciones.md, TRASPASO.md",
+    ".env": ".env.*",
+    "*.ts": "$(capture).test.ts",
+    "*.vue": "$(capture).test.ts"
+  }
 }

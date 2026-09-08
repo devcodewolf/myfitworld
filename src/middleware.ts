@@ -50,10 +50,43 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // preguntarla aquí sería una consulta de más en cada entrada y cada salida.
   if (context.url.pathname.startsWith(routes.authApi())) return next();
 
-  const found = await auth.api.getSession({ headers: context.request.headers });
+  /**
+   * Saber quién eres puede fallar, y «falló» no es lo mismo que «no has
+   * entrado».
+   *
+   * Leer la sesión toca la base de datos. Si Postgres no responde, sin este
+   * `try` la excepción sube y **cualquier ruta dinámica se convierte en un
+   * error**, incluidas las que no necesitan la base para nada. Se ha visto:
+   * con el contenedor parado, entrar en la app enseñaba una traza.
+   *
+   * Distinguir los dos casos es lo que permite que lo público siga funcionando
+   * mientras lo tuyo, honestamente, dice que ahora mismo no se puede.
+   */
+  let found = null;
+  let sinPoderPreguntar = false;
+  try {
+    found = await auth.api.getSession({ headers: context.request.headers });
+  } catch (error) {
+    console.error('[middleware] no se pudo leer la sesión:', error);
+    sinPoderPreguntar = true;
+  }
+
   if (found) {
     context.locals.user = found.user;
     context.locals.session = found.session;
+  }
+
+  const pideIdentidad =
+    needsSession(context.url.pathname) || context.url.pathname.startsWith(routes.admin());
+
+  /**
+   * Sin saber quién eres, una pantalla con datos personales no puede
+   * responder. Y **mandarte al login sería mentir**: te diría que no has
+   * entrado cuando lo que pasa es que el servidor no puede comprobarlo. Se
+   * lanza para que Astro sirva `500.astro`, que lo cuenta como es.
+   */
+  if (sinPoderPreguntar && pideIdentidad) {
+    throw new Error('No se pudo consultar la base de datos.');
   }
 
   if (!found && needsSession(context.url.pathname)) {
