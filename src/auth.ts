@@ -22,7 +22,8 @@ import { eq } from 'drizzle-orm';
 import { INVITE_HEADER, MIN_PASSWORD_LENGTH } from '@/auth-contract';
 import { db } from '@/db';
 import { user as userTable } from '@/db/auth-schema';
-import { appConfig, INVITE_CODE_KEY } from '@/db/schema';
+import { INVITE_CODE_KEY } from '@/db/keys';
+import { appConfig } from '@/db/schema';
 import * as authSchema from '@/db/auth-schema';
 
 /**

@@ -148,6 +148,9 @@ export const workoutSessions = pgTable(
  * nadie. Quién puede leerlo y escribirlo lo deciden las acciones de
  * `src/actions/admin.ts`, que comprueban que quien llama sea administrador.
  *
+ * Sus claves están en `db/keys.ts`, no aquí: este archivo exporta tablas y
+ * nada más, porque `db/index.ts` le pasa a Drizzle todo lo que exporte.
+ *
  * El código se guarda **en claro**. Es deliberado: el panel tiene que poder
  * enseñártelo para que lo compartas, y un valor que se enseña no puede estar
  * cifrado. No es una contraseña —no da acceso a nada, solo permite crear una
@@ -158,6 +161,3 @@ export const appConfig = pgTable('app_config', {
   value: text('value').notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
 });
-
-/** La clave del código de invitación dentro de `app_config`. */
-export const INVITE_CODE_KEY = 'signup_invite_code';

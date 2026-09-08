@@ -26,7 +26,8 @@ import { auth, currentInviteCode, isAdminUser } from '@/auth';
 import { MIN_PASSWORD_LENGTH } from '@/auth-contract';
 import { db } from '@/db';
 import { user as userTable } from '@/db/auth-schema';
-import { appConfig, INVITE_CODE_KEY } from '@/db/schema';
+import { INVITE_CODE_KEY } from '@/db/keys';
+import { appConfig } from '@/db/schema';
 
 /** El rol es una lista separada por comas; `admin` puede venir acompañado. */
 function hasAdminRole(role: string | null | undefined): boolean {

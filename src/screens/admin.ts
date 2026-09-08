@@ -421,8 +421,12 @@ async function pintar(
 export interface AdminPayload {
   /** Qué vista es: cuentas activas o papelera. */
   readonly trashed: boolean;
-  /** Las cuentas, ya resueltas por el servidor al montar la página. */
-  readonly cuentas: readonly Account[];
+  /**
+   * Las cuentas que resolvió el servidor al montar la página, o `null` si no
+   * pudo. **Una lista vacía y un fallo no son lo mismo**: con `null` se vuelven
+   * a pedir aquí, y si tampoco se puede, se ve el error.
+   */
+  readonly cuentas: readonly Account[] | null;
 }
 
 /**
@@ -494,5 +498,5 @@ export async function mountAdminPage(payload: AdminPayload): Promise<void> {
 
   mountInviteCode();
 
-  await pintar(cuerpo, vacio, trashed, payload.cuentas);
+  await pintar(cuerpo, vacio, trashed, payload.cuentas ?? undefined);
 }

@@ -29,9 +29,19 @@ export const prerender = false;
  * comprobación de permisos es exactamente la misma y no hay una segunda
  * consulta que mantener al día.
  */
-const { data: cuentas } = await Astro.callAction(actions.admin.list, { trashed: false });
+/**
+ * La lista, resuelta ya en el servidor para que la tabla no llegue vacía y se
+ * rellene un segundo después.
+ *
+ * **Si falla, se manda `null`, no una lista vacía.** No es lo mismo «no hay
+ * cuentas» que «no se pudieron leer», y confundirlos hace que un error de la
+ * base se lea como una base vacía. Con `null`, el navegador vuelve a pedirlas
+ * por su cuenta y, si tampoco puede, lo dice en pantalla.
+ */
+const listado = await Astro.callAction(actions.admin.list, { trashed: false });
+if (listado.error) console.error('[admin] no se pudo leer la lista:', listado.error);
+const cuentas = listado.error ? null : (listado.data ?? []);
 
-/** El código de invitación, por el mismo motivo: sin viaje extra al cargar. */
 const { data: invitacion } = await Astro.callAction(actions.admin.getInviteCode, undefined);
 
 /** Campo de formulario, con el `input` de daisyUI vestido de la casa. */
@@ -154,7 +164,7 @@ const CHEVRON = 'desplegable pr-11';
   id="datos-admin"
   type="application/json"
   is:inline
-  set:html={JSON.stringify({ trashed: false, cuentas: cuentas ?? [] })}
+  set:html={JSON.stringify({ trashed: false, cuentas })}
 />
 
 <script>
