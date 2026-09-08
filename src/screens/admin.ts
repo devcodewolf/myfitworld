@@ -425,6 +425,44 @@ export interface AdminPayload {
   readonly cuentas: readonly Account[];
 }
 
+/**
+ * El código de invitación: verlo, cambiarlo, o generar uno nuevo.
+ *
+ * Solo está en `/admin`, no en la papelera, así que si no encuentra el
+ * formulario se va sin ruido.
+ */
+function mountInviteCode(): void {
+  const formulario = el<HTMLFormElement>('form-invitacion');
+  const campo = el<HTMLInputElement>('codigo');
+  if (!formulario || !campo) return;
+
+  el<HTMLButtonElement>('generar-codigo')?.addEventListener('click', () => {
+    // Tres grupos de cinco: largo de sobra y todavía se puede dictar por
+    // teléfono, que es como se comparte de verdad un código así.
+    const alfabeto = 'abcdefghijkmnpqrstuvwxyz23456789';
+    const azar = crypto.getRandomValues(new Uint8Array(15));
+    const letras = [...azar].map((n) => alfabeto[n % alfabeto.length]).join('');
+    campo.value = [letras.slice(0, 5), letras.slice(5, 10), letras.slice(10, 15)].join('-');
+    campo.focus();
+  });
+
+  formulario.addEventListener('submit', (event) => {
+    event.preventDefault();
+    void (async () => {
+      try {
+        await llamar(actions.admin.setInviteCode({ code: campo.value.trim() }));
+        announce(
+          campo.value.trim() === ''
+            ? 'Registro cerrado: sin código, nadie puede crear una cuenta.'
+            : 'Código de invitación cambiado.',
+        );
+      } catch (error) {
+        announce(error instanceof Error ? error.message : String(error), 'error');
+      }
+    })();
+  });
+}
+
 export async function mountAdminPage(payload: AdminPayload): Promise<void> {
   const { trashed } = payload;
   const cuerpo = el<HTMLTableSectionElement>('cuentas');
@@ -453,6 +491,8 @@ export async function mountAdminPage(payload: AdminPayload): Promise<void> {
       }
     })();
   });
+
+  mountInviteCode();
 
   await pintar(cuerpo, vacio, trashed, payload.cuentas);
 }

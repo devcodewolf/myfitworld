@@ -112,6 +112,12 @@ ni una firma fuera de su carpeta. `specs.md` tiene los pasos concretos.
   `src/auth.ts` no mira nada más, y es a propósito: Better Auth hace sus propias
   comprobaciones antes de banear o cambiar un rol, y con dos fuentes distintas
   nuestra pantalla dejaría pasar a quien la librería luego rechaza.
+- **El código de invitación vive en la base, no en el entorno.**
+  `SIGNUP_INVITE_CODE` solo lo siembra la primera vez; a partir de ahí se cambia
+  desde `/admin` y esa variable deja de mirarse. Se guarda en claro en
+  `app_config` porque el panel tiene que poder enseñarlo para compartirlo, y
+  esa tabla no lleva RLS: no es de nadie, y quién la toca lo deciden las
+  acciones de administración. Vacío = registro cerrado.
 - **El primer admin se nombra con `ADMIN_EMAILS`**, que **escribe** esa columna:
   al crear la cuenta si el correo está en la lista, y al entrar si la lista se
   puso después. En local, el atajo es `pnpm db:make-admin tu@correo.com`.

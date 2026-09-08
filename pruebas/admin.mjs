@@ -36,7 +36,7 @@ const ok = (nombre, condicion, detalle = '') => {
 };
 
 async function registrar(email) {
-  await fetch(`${B}/api/auth/sign-up/email`, {
+  return fetch(`${B}/api/auth/sign-up/email`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -164,6 +164,8 @@ try {
     ['admin.trash', { userId: 'x' }],
     ['admin.restore', { userId: 'x' }],
     ['admin.removeForever', { userId: 'x' }],
+    ['admin.getInviteCode', {}],
+    ['admin.setInviteCode', { code: 'colado-por-la-puerta' }],
   ];
   for (const [nombre, input] of prohibidas) {
     const r = await accion(nombre, input, normal.cookie);
@@ -302,7 +304,38 @@ try {
     `${huerfanos.rows[0].perfiles} perfiles, ${huerfanos.rows[0].sesiones} sesiones sueltas`,
   );
 
-  console.log('\n=== 7. De donde sale que alguien sea admin ===');
+  console.log('\n=== 7. El codigo de invitacion se cambia desde el panel ===');
+  const antesDelCambio = await accion('admin.getInviteCode', {}, admin.cookie);
+  ok('el admin puede verlo', typeof antesDelCambio.data?.code === 'string');
+
+  const corto = await accion('admin.setInviteCode', { code: 'abc' }, admin.cookie);
+  ok('rechaza uno demasiado corto', corto.error !== undefined, `status ${corto.error?.status}`);
+
+  const nuevoCodigo = `probado-${sufijo}`;
+  const cambiado = await accion('admin.setInviteCode', { code: nuevoCodigo }, admin.cookie);
+  ok('lo cambia', cambiado.error === undefined, JSON.stringify(cambiado.error));
+
+  const conElViejo = await registrar(`viejo-${sufijo}@ejemplo.com`);
+  ok('el codigo viejo ya no sirve', conElViejo.status === 403, `status ${conElViejo.status}`);
+
+  const registrarCon = (codigo, email) =>
+    fetch(`${B}/api/auth/sign-up/email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', origin: B, 'x-codigo-invitacion': codigo },
+      body: JSON.stringify({ email, password: CLAVE, name: 'Prueba' }),
+    });
+
+  const conElNuevo = await registrarCon(nuevoCodigo, `nuevo-${sufijo}@ejemplo.com`);
+  ok('y el nuevo si', conElNuevo.status === 200, `status ${conElNuevo.status}`);
+
+  await accion('admin.setInviteCode', { code: '' }, admin.cookie);
+  const cerrado = await registrarCon(nuevoCodigo, `cerrado-${sufijo}@ejemplo.com`);
+  ok('vacio cierra el registro del todo', cerrado.status === 403, `status ${cerrado.status}`);
+
+  // Se deja como estaba para no romper el resto de la suite.
+  await accion('admin.setInviteCode', { code: CODIGO }, admin.cookie);
+
+  console.log('\n=== 8. De donde sale que alguien sea admin ===');
   // La variable la lee el servidor al arrancar, asi que aqui se comprueba la
   // mitad que se puede sin reiniciarlo: que `isAdminUser` mire SOLO la columna
   // `role`. Si alguien volviera a meter una segunda fuente, esto lo caza.
@@ -323,7 +356,7 @@ try {
   await cliente.query(`update "user" set role = 'admin' where email = $1`, [ADMIN]);
   admin.cookie = (await entrar(ADMIN)).cookie;
 
-  console.log('\n=== 8. Ni siquiera un admin lee el entreno de otro ===');
+  console.log('\n=== 9. Ni siquiera un admin lee el entreno de otro ===');
   // Las politicas de la base no tienen excepcion para administradores: sus
   // consultas se declaran con SU id. Suplantar es el unico camino, y deja firma.
   const suyas = await accion('sessions.list', {}, admin.cookie);

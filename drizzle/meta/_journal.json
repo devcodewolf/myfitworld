@@ -22,6 +22,13 @@
       "when": 1788783629313,
       "tag": "0002_admin",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1788868572874,
+      "tag": "0003_codigo_invitacion",
+      "breakpoints": true
     }
   ]
 }

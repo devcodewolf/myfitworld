@@ -22,9 +22,11 @@ import { getSettings, saveSettings } from '@/actions/settings';
 import {
   banAccount,
   createAccount,
+  getInviteCode,
   listAccounts,
   removeForever,
   restoreAccount,
+  setInviteCode,
   setPassword,
   setRole,
   trashAccount,
@@ -65,5 +67,7 @@ export const server = {
     trash: trashAccount,
     restore: restoreAccount,
     removeForever,
+    getInviteCode,
+    setInviteCode,
   },
 };

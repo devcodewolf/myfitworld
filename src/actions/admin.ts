@@ -22,10 +22,11 @@ import { ActionError, defineAction, type ActionAPIContext } from 'astro:actions'
 import { and, asc, eq, isNotNull, isNull } from 'drizzle-orm';
 import { z } from 'zod';
 
-import { auth, isAdminUser } from '@/auth';
+import { auth, currentInviteCode, isAdminUser } from '@/auth';
 import { MIN_PASSWORD_LENGTH } from '@/auth-contract';
 import { db } from '@/db';
 import { user as userTable } from '@/db/auth-schema';
+import { appConfig, INVITE_CODE_KEY } from '@/db/schema';
 
 /** El rol es una lista separada por comas; `admin` puede venir acompañado. */
 function hasAdminRole(role: string | null | undefined): boolean {
@@ -207,5 +208,52 @@ export const removeForever = defineAction({
 
     await auth.api.removeUser({ body: { userId }, headers: context.request.headers });
     return null;
+  },
+});
+
+/**
+ * El código de invitación que hay puesto.
+ *
+ * Se devuelve **en claro**, que es justo para lo que existe esta pantalla: para
+ * poder leerlo y compartirlo. Solo lo ve un administrador, como todo lo demás
+ * de este archivo.
+ */
+export const getInviteCode = defineAction({
+  handler: async (_input, context) => {
+    requireAdmin(context);
+    return { code: (await currentInviteCode()) ?? '' };
+  },
+});
+
+/**
+ * Cambia el código de invitación.
+ *
+ * **Vacío cierra el registro**: nadie podrá crear una cuenta hasta que se ponga
+ * uno nuevo. Es una salida legítima —y la más rápida si el código se ha
+ * corrido— así que se admite a propósito en vez de exigir siempre un valor.
+ *
+ * El mínimo de ocho caracteres es para lo demás: un código de tres letras se
+ * adivina probando, y la puerta del registro no tiene freno de intentos.
+ */
+export const setInviteCode = defineAction({
+  input: z.object({
+    code: z
+      .string()
+      .trim()
+      .max(120)
+      .refine((code) => code === '' || code.length >= 8, {
+        message: 'Ocho caracteres o más. Déjalo vacío para cerrar el registro.',
+      }),
+  }),
+  handler: async ({ code }, context) => {
+    requireAdmin(context);
+    await db
+      .insert(appConfig)
+      .values({ key: INVITE_CODE_KEY, value: code, updatedAt: new Date() })
+      .onConflictDoUpdate({
+        target: appConfig.key,
+        set: { value: code, updatedAt: new Date() },
+      });
+    return { code };
   },
 });

@@ -135,3 +135,29 @@ export const workoutSessions = pgTable(
     soloTusFilas('workout_sessions_propias'),
   ],
 ).enableRLS();
+
+/**
+ * Ajustes de la aplicación entera, no de nadie en concreto.
+ *
+ * Hoy guarda una sola cosa —el código de invitación— y por eso es un
+ * clave/valor y no una tabla con una columna por ajuste: así añadir el
+ * siguiente no cuesta una migración.
+ *
+ * **No lleva RLS, y es a propósito.** Las políticas de `drizzle/0001_rls.sql`
+ * filtran por `user_id`, y aquí no hay usuario que filtrar: esto no es de
+ * nadie. Quién puede leerlo y escribirlo lo deciden las acciones de
+ * `src/actions/admin.ts`, que comprueban que quien llama sea administrador.
+ *
+ * El código se guarda **en claro**. Es deliberado: el panel tiene que poder
+ * enseñártelo para que lo compartas, y un valor que se enseña no puede estar
+ * cifrado. No es una contraseña —no da acceso a nada, solo permite crear una
+ * cuenta— y quien pueda leer esta tabla ya tiene la base entera delante.
+ */
+export const appConfig = pgTable('app_config', {
+  key: text('key').primaryKey(),
+  value: text('value').notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
+});
+
+/** La clave del código de invitación dentro de `app_config`. */
+export const INVITE_CODE_KEY = 'signup_invite_code';

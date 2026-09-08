@@ -22,6 +22,7 @@ import { eq } from 'drizzle-orm';
 import { INVITE_HEADER, MIN_PASSWORD_LENGTH } from '@/auth-contract';
 import { db } from '@/db';
 import { user as userTable } from '@/db/auth-schema';
+import { appConfig, INVITE_CODE_KEY } from '@/db/schema';
 import * as authSchema from '@/db/auth-schema';
 
 /**
@@ -41,18 +42,46 @@ function secret(): string {
 }
 
 /**
- * ¿Es válido el código que trae quien intenta registrarse?
+ * El código de invitación que vale ahora mismo, o `null` si no hay ninguno.
  *
- * **Sin `SIGNUP_INVITE_CODE` configurado no se registra nadie.** Es
- * deliberado: un despliegue al que se le olvidó la variable debe quedarse con
- * la puerta cerrada, no abierta a internet.
+ * Vive en la base, no en el entorno, para poder cambiarlo desde el panel
+ * cuando se filtre —que es lo que acaba pasando— sin tener que redesplegar.
+ *
+ * `SIGNUP_INVITE_CODE` sigue existiendo, pero solo como **semilla**: la primera
+ * vez que se pregunta y no hay fila, se crea con lo que diga el entorno. A
+ * partir de ahí manda la base y hay un único sitio donde mirar. Sin eso, un
+ * despliegue nuevo se quedaría sin forma de registrar al primero.
+ *
+ * Vacío significa **registro cerrado**, y eso incluye el caso de un despliegue
+ * al que se le olvidó la variable: la puerta se queda cerrada, no abierta.
+ */
+export async function currentInviteCode(): Promise<string | null> {
+  const rows = await db
+    .select({ value: appConfig.value })
+    .from(appConfig)
+    .where(eq(appConfig.key, INVITE_CODE_KEY))
+    .limit(1);
+
+  const guardado = rows[0]?.value;
+  if (guardado !== undefined) return guardado === '' ? null : guardado;
+
+  const semilla = (process.env.SIGNUP_INVITE_CODE ?? '').trim();
+  await db
+    .insert(appConfig)
+    .values({ key: INVITE_CODE_KEY, value: semilla, updatedAt: new Date() })
+    .onConflictDoNothing();
+  return semilla === '' ? null : semilla;
+}
+
+/**
+ * ¿Es válido el código que trae quien intenta registrarse?
  *
  * La comparación se hace sobre los resúmenes SHA-256, que siempre miden lo
  * mismo: así `timingSafeEqual` no necesita que las dos cadenas tengan igual
  * longitud y de paso no se filtra cuánto mide el código bueno.
  */
-function inviteAccepted(given: string | null): boolean {
-  const expected = process.env.SIGNUP_INVITE_CODE;
+async function inviteAccepted(given: string | null): Promise<boolean> {
+  const expected = await currentInviteCode();
   if (!expected || !given) return false;
   const digest = (value: string): Buffer => createHash('sha256').update(value.trim()).digest();
   return timingSafeEqual(digest(given), digest(expected));
@@ -180,7 +209,7 @@ export const auth = betterAuth({
     before: createAuthMiddleware(async (ctx) => {
       // La puerta del registro.
       if (ctx.path === '/sign-up/email') {
-        if (inviteAccepted(ctx.headers?.get(INVITE_HEADER) ?? null)) return;
+        if (await inviteAccepted(ctx.headers?.get(INVITE_HEADER) ?? null)) return;
         throw new APIError('FORBIDDEN', {
           message: 'Ese código de invitación no vale. Sin uno válido no se puede crear la cuenta.',
         });

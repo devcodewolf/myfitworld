@@ -31,6 +31,9 @@ export const prerender = false;
  */
 const { data: cuentas } = await Astro.callAction(actions.admin.list, { trashed: false });
 
+/** El código de invitación, por el mismo motivo: sin viaje extra al cargar. */
+const { data: invitacion } = await Astro.callAction(actions.admin.getInviteCode, undefined);
+
 /** Campo de formulario, con el `input` de daisyUI vestido de la casa. */
 const FIELD =
   'input w-full rounded-full border-line bg-ground text-ink transition-colors hover:border-line-strong focus:border-line-strong';
@@ -92,6 +95,57 @@ const CHEVRON = 'desplegable pr-11';
           Crear cuenta
         </button>
       </form>
+      {
+        /**
+         * El código de invitación se cambia aquí y no en el entorno porque es
+         * lo que acaba pasando con un código: que alguien lo comparte. Tener
+         * que redesplegar para rotarlo garantiza que no se rote.
+         */
+      }
+      <section class="mt-4 border-t border-line pt-6">
+        <h2 class="text-base font-extrabold text-ink">Código de invitación</h2>
+        <p class="mt-2 text-sm text-ink-dim">
+          Hace falta para crear una cuenta desde la pantalla de entrada. Si se ha corrido más de la
+          cuenta, cámbialo aquí: las cuentas que ya existen no se ven afectadas.
+        </p>
+
+        <form id="form-invitacion" class="mt-5 flex flex-col gap-3">
+          <label class="flex flex-col gap-1.5 text-sm">
+            <span class="font-bold text-ink-dim">El que vale ahora</span>
+            <input
+              id="codigo"
+              name="codigo"
+              type="text"
+              maxlength="120"
+              autocomplete="off"
+              spellcheck="false"
+              value={invitacion?.code ?? ''}
+              class={`${FIELD} figures`}
+            />
+          </label>
+          <p class="text-sm text-ink-faint">
+            Ocho caracteres o más. <span class="text-ink-dim"
+              >Déjalo vacío para cerrar el registro</span
+            >: nadie podrá crear una cuenta hasta que pongas uno nuevo.
+          </p>
+
+          <div class="flex flex-wrap gap-2">
+            <button
+              type="submit"
+              class="btn h-11 min-h-11 rounded-full border-line bg-surface px-5 font-bold text-ink hover:border-line-strong hover:bg-raised"
+            >
+              Guardar
+            </button>
+            <button
+              id="generar-codigo"
+              type="button"
+              class="btn h-11 min-h-11 rounded-full border-line bg-transparent px-5 font-semibold text-ink-dim hover:border-line-strong hover:bg-raised hover:text-ink"
+            >
+              Generar uno
+            </button>
+          </div>
+        </form>
+      </section>
     </div>
   </AccountTable>
 </BaseLayout>
