@@ -33,12 +33,17 @@ const GROUPS: readonly { status: PromptStatus; title: string; text: string }[] =
   {
     status: 'new',
     title: 'Nuevos',
-    text: 'Entran en la rutina si estás de acuerdo con los cambios. Empieza por aquí.',
+    text: 'Ejercicios que entran en la rutina. Empieza por aquí.',
   },
   {
-    status: 'keep',
-    title: 'Se quedan',
-    text: 'Los que ya tenías. Los marcados con vídeo antiguo conviene rehacerlos para que todos casen.',
+    status: 'redo',
+    title: 'Rehacer',
+    text: 'Ya hay vídeo, pero sale mal. En cada tarjeta pone qué falla.',
+  },
+  {
+    status: 'pending',
+    title: 'Faltan',
+    text: 'De los que ya tenías, los que todavía no tienen vídeo nuevo.',
   },
   {
     status: 'optional',
@@ -66,8 +71,9 @@ const COPY_BTN =
   <div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
     <h1 class="text-4xl font-black tracking-[-0.03em] text-ink">Prompts de vídeo</h1>
     <p class="mt-3 max-w-[65ch] text-ink-dim">
-      Página temporal. Cada prompt está completo: cópialo entero y pégalo en la IA de vídeo, en 16:9
-      y de 8 a 10 segundos.
+      Página temporal, y solo con los vídeos que faltan: los que ya salieron bien están enganchados
+      en su ejercicio y su prompt se ha quitado. Cada prompt está completo: cópialo entero y pégalo
+      en la IA de vídeo, en 16:9 y de 8 a 10 segundos.
     </p>
 
     <ol class="mt-6 list-decimal space-y-2 pl-5 text-sm text-ink-dim">
@@ -116,12 +122,7 @@ const COPY_BTN =
                     </button>
                   </div>
                   <p class="mt-3 text-sm text-ink-dim">{card.why}</p>
-                  {card.hasOldVideo && (
-                    <p class="mt-2 text-sm text-ink-faint">
-                      Ya tiene un vídeo antiguo, con otro hombre y otro escenario. Rehazlo para que
-                      case.
-                    </p>
-                  )}
+                  {card.note && <p class="mt-2 text-sm text-ink-faint">{card.note}</p>}
                   <p id={`p-${card.id}`} class={PROMPT_BOX}>
                     {card.prompt}
                   </p>

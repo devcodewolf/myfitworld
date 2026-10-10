@@ -17,6 +17,17 @@
   "defaultRestSeconds": 60,
   "substitutions": ["press-militar-mancuernas"],
   "media": {
+    "video": {
+      "kind": "video",
+      "sources": [
+        {
+          "src": "ejercicios/elevaciones-laterales.mp4",
+          "type": "video/mp4"
+        }
+      ],
+      "alt": "Elevaciones laterales vistas de frente, subiendo las mancuernas hasta la altura del hombro.",
+      "aspectRatio": "16/9"
+    },
     "thumbnail": {
       "kind": "image",
       "src": "https://images.unsplash.com/photo-1606889462784-c033891d5a3e?w=900&q=72&auto=format&fit=crop",

@@ -1,0 +1,32 @@
+{
+  "name": "Remo inclinado con dos mancuernas",
+  "primaryMuscles": ["lats", "upper_back"],
+  "secondaryMuscles": ["biceps", "rear_delts", "lower_back", "forearms"],
+  "equipment": ["dumbbell"],
+  "difficulty": "intermediate",
+  "loadType": "external",
+  "cues": [
+    "Inclínate desde la cadera hasta unos 45 grados, espalda plana y rodillas sueltas",
+    "Lleva las mancuernas a las costillas bajas con los codos pegados al cuerpo",
+    "Junta las escápulas un segundo arriba y baja en 3 segundos"
+  ],
+  "commonMistakes": [
+    "Incorporarse al tirar, que pasa el trabajo a los trapecios",
+    "Redondear la espalda baja al inclinarse"
+  ],
+  "defaultRestSeconds": 90,
+  "substitutions": ["remo-mancuerna-una-mano"],
+  "media": {
+    "video": {
+      "kind": "video",
+      "sources": [
+        {
+          "src": "ejercicios/remo-inclinado-mancuernas.mp4",
+          "type": "video/mp4"
+        }
+      ],
+      "alt": "Remo inclinado de pie con dos mancuernas, tirando hacia las costillas con la espalda plana.",
+      "aspectRatio": "16/9"
+    }
+  }
+}

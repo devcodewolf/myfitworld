@@ -1,0 +1,32 @@
+{
+  "name": "Press francés en el suelo",
+  "primaryMuscles": ["triceps"],
+  "secondaryMuscles": [],
+  "equipment": ["dumbbell", "floor"],
+  "difficulty": "intermediate",
+  "loadType": "external",
+  "cues": [
+    "Brazos algo echados hacia atrás: las mancuernas empiezan encima de la frente, no del pecho",
+    "Solo se mueven los antebrazos; los codos miran al techo y no se abren",
+    "Baja en 3 segundos por detrás de la cabeza hasta casi rozar el suelo"
+  ],
+  "commonMistakes": [
+    "Bajar las mancuernas a la frente o a la cara, que lo convierte en un press",
+    "Abrir los codos hacia los lados para poder con más peso"
+  ],
+  "defaultRestSeconds": 60,
+  "substitutions": ["extension-triceps-tras-nuca"],
+  "media": {
+    "video": {
+      "kind": "video",
+      "sources": [
+        {
+          "src": "ejercicios/press-frances-suelo.mp4",
+          "type": "video/mp4"
+        }
+      ],
+      "alt": "Press francés tumbado en la esterilla, bajando las mancuernas por detrás de la cabeza.",
+      "aspectRatio": "16/9"
+    }
+  }
+}

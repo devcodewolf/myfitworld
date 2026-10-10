@@ -17,6 +17,17 @@
   "defaultRestSeconds": 90,
   "substitutions": ["elevaciones-laterales"],
   "media": {
+    "video": {
+      "kind": "video",
+      "sources": [
+        {
+          "src": "ejercicios/press-militar-mancuernas.mp4",
+          "type": "video/mp4"
+        }
+      ],
+      "alt": "Press militar de pie con dos mancuernas, empujando por encima de la cabeza.",
+      "aspectRatio": "16/9"
+    },
     "thumbnail": {
       "kind": "image",
       "src": "https://images.unsplash.com/photo-1704223523501-aaac6f3a7971?w=900&q=72&auto=format&fit=crop",

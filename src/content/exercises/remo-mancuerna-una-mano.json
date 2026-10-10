@@ -22,11 +22,11 @@
       "kind": "video",
       "sources": [
         {
-          "src": "ejercicios/remo-una-mano.mp4",
+          "src": "ejercicios/remo-mancuerna-una-mano.mp4",
           "type": "video/mp4"
         }
       ],
-      "alt": "Remo a una mano con mancuerna, con la espalda plana y el codo hacia la cadera.",
+      "alt": "Remo a una mano con mancuerna, apoyando la otra mano en una silla.",
       "aspectRatio": "16/9"
     }
   }
