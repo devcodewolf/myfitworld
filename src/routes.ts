@@ -39,6 +39,11 @@ export const routes = {
   /** Administración de cuentas. Solo la ve un admin; al resto le da 404. */
   admin: () => '/admin',
   adminTrash: () => '/admin/papelera',
+  /**
+   * TEMPORAL: los prompts para generar los vídeos de los ejercicios. Se va
+   * con `pages/admin/videos.astro` cuando los vídeos estén dentro.
+   */
+  adminVideoPrompts: () => '/admin/videos',
   /** Entrar como otra persona. `POST`, por lo mismo que salir. */
   impersonate: () => '/admin/suplantar',
   /** El prefijo bajo el que Better Auth atiende todo lo suyo. */
