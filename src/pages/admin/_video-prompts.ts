@@ -18,14 +18,19 @@
 export const CHARACTER =
   'a fit Mediterranean man in his mid-forties with a lean, defined, athletic build ' +
   '(visible muscle definition in arms, shoulders and chest, realistic, not a bodybuilder), ' +
-  'short dark hair greying at the temples and a short trimmed salt-and-pepper beard, ' +
+  'short curly dark hair with a touch of grey and a short trimmed salt-and-pepper beard, ' +
   'wearing a fitted black sleeveless training shirt, dark grey shorts and black training shoes';
 
-/** Una casa, no un gimnasio: es donde se entrena de verdad, y con el material que hay. */
+/**
+ * Un cuarto de entreno en casa, de día. Se ve algo de material al fondo para
+ * que se entienda dónde estamos, pero **desenfocado y poco**: con mucho, la IA
+ * tiende a meterlo en el movimiento o roba la atención al ejercicio. La silla
+ * se queda porque varios ejercicios se apoyan en ella.
+ */
 export const SETTING =
-  'a minimalist home training corner in a living room at night: dark blue-grey painted wall, ' +
-  'warm wooden floor with a black exercise mat, a sturdy plain wooden chair nearby, ' +
-  'soft warm lamp light from one side and a subtle cool rim light; tidy, uncluttered, realistic home, no gym machines';
+  'a bright home gym room in daylight with natural window light: light walls, wooden floor with a black exercise mat, ' +
+  'a sturdy plain wooden chair nearby, and a few pieces of home training equipment in the softly blurred background ' +
+  '(a small dumbbell rack, a kettlebell and a folded weight bench), not used in the exercise; tidy, uncluttered, realistic home';
 
 const PAIR = 'black hexagonal 9 kg dumbbells';
 const ONE = 'black hexagonal 9 kg dumbbell';
@@ -92,11 +97,20 @@ export const VIDEO_PROMPTS: readonly VideoPrompt[] = [
     name: 'Press francés en el suelo',
     status: 'new',
     why: 'Sustituye a los fondos entre bancos: tríceps con carga, sin forzar la parte delantera del hombro.',
-    camera: SIDE_LOW,
+    // Las IAs lo confunden con un press de pecho y bajan las mancuernas a la
+    // frente o al pecho. Por eso se describe la postura de abajo con todo
+    // detalle, se deja sitio libre detrás de la cabeza y se dice qué NO es.
+    camera:
+      'Static camera on a tripod at floor level, exact side view, his head on the left of the frame ' +
+      'with clear empty floor behind his head so the path of the dumbbells is fully visible',
     action:
-      `He lies on his back on the mat, knees bent and feet flat, holding two ${PAIR} with straight arms above his shoulders, palms facing each other. ` +
-      'Keeping his upper arms still and angled slightly back toward his head, he bends only at the elbows and slowly lowers the dumbbells for 3 seconds until they are beside his ears, ' +
-      'then extends his arms back to straight in 1 second. Two repetitions.',
+      `He lies on his back on the mat, knees bent and feet flat, holding two ${PAIR} with a neutral grip, palms facing each other. ` +
+      'Start position: arms straight, angled slightly back from vertical so the dumbbells are above his forehead, not above his chest. ' +
+      'His upper arms stay completely fixed and only his forearms move, hinging at the elbows like a lever. ' +
+      'Over 3 seconds he lowers the dumbbells in an arc BEHIND HIS HEAD, past the top of his head, until his forearms point toward the floor behind him ' +
+      'and the dumbbells are just above the mat behind the crown of his head; his elbows point up toward the ceiling and stay shoulder-width apart, never flaring out. ' +
+      'Then, in 1 second, he straightens his elbows and brings the dumbbells back over his forehead to the start position. ' +
+      'The dumbbells never come down to his face, forehead or chest: this is a triceps extension, not a chest press. Two repetitions.',
   },
   {
     id: 'remo-inclinado-mancuernas',
@@ -125,12 +139,24 @@ export const VIDEO_PROMPTS: readonly VideoPrompt[] = [
     id: 'curl-inverso',
     name: 'Curl inverso',
     status: 'new',
-    why: 'Antebrazo, que solo tocaba el curl martillo. Es el que marca la parte de arriba del antebrazo.',
-    camera: FRONT_34,
+    why: 'Antebrazo (braquial y braquiorradial), que solo tocaba el curl martillo. Es el que marca la parte de arriba del antebrazo.',
+    // La IA lo convertía en un curl normal. Se describe dónde miran las manos
+    // en tres momentos —abajo, a mitad y arriba— y la cámara va de lado: de
+    // frente, la postura de arriba del inverso (palmas a cámara) se confunde
+    // con la de un curl normal visto desde otro ángulo.
+    camera:
+      'Static camera on a tripod at chest height, three-quarter side view from about 45 degrees to his right, ' +
+      'close enough that his hands, wrists and the grip on the dumbbells are clearly visible',
     action:
-      `He stands tall holding two ${PAIR} at his thighs with an overhand grip, palms facing backward, elbows pinned to his sides. ` +
-      'Keeping the palms facing down the whole time and his wrists straight, he curls both dumbbells up to shoulder height, ' +
-      'then lowers them slowly for 3 seconds. No swinging of the torso. Two repetitions.',
+      `Reverse dumbbell curl with a pronated grip. He stands tall, feet shoulder-width apart, holding two ${PAIR} ` +
+      'with an overhand grip, palms facing down, elbows close to his torso and upper arms stationary for the whole clip. ' +
+      'Bottom: arms fully straight, dumbbells in front of his thighs, palms facing his thighs and knuckles facing forward. ' +
+      'He bends his elbows and raises both dumbbells, keeping the same grip and his wrists straight. ' +
+      'Halfway, with his forearms parallel to the floor, the backs of his hands and his knuckles face the ceiling and his palms face the floor. ' +
+      'Top: forearms vertical or slightly beyond, knuckles pointing up and palms facing forward, away from him. ' +
+      'Then he lowers the dumbbells slowly for 3 seconds back to full arm extension. ' +
+      'His hands never rotate at any point: the palms never turn up toward the ceiling and never face each other, ' +
+      'so this is not a regular biceps curl and not a hammer curl. No swinging of the torso. Two repetitions.',
   },
 
   /* ── Se quedan ──────────────────────────────────────────────────────────── */
