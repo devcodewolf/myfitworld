@@ -209,9 +209,6 @@ const toggles = [
               <p class="mt-2 text-sm text-ink-dim">
                 Has entrado como <span class="font-bold text-ink">{Astro.locals.user.email}</span>.
               </p>
-              <p class="mt-2 text-sm text-ink-faint">
-                Tu historial va con la cuenta, no con este navegador.
-              </p>
               <form method="POST" action={routes.signOut()} class="mt-5">
                 <button
                   type="submit"
@@ -225,17 +222,6 @@ const toggles = [
             <p class="mt-2 text-sm text-ink-dim">No has entrado.</p>
           )
         }
-      </section>
-
-      <section class:list={[CELL, 'p-5 sm:p-6']} aria-labelledby="datos">
-        <h2 id="datos" class={CELL_TITLE}>Tus datos</h2>
-        <p class="mt-2 max-w-[70ch] text-sm text-ink-dim">
-          Tu entreno vive en tu cuenta, en el servidor, y se guarda solo en cuanto lo registras. No
-          hay nada que exportar ni que recordar guardar: cambias de móvil, entras, y sigue ahí.
-        </p>
-        <p class="mt-2 max-w-[70ch] text-sm text-ink-faint">
-          Las copias de seguridad las hace el servidor. Este navegador ya no guarda nada tuyo.
-        </p>
       </section>
     </div>
   </div>
