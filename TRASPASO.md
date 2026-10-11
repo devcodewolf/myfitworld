@@ -380,6 +380,10 @@ guardado.
 
 Actualizar `PRODUCT.md`, `CLAUDE.md`, `DESIGN.md`. Borrar `TRASPASO.md`.
 
+**Después de los diez pasos: consejos con IA.** Aplazado a propósito hasta tener el servidor
+desplegado y unas semanas de entreno registrado. Qué hay hecho, qué falta y qué está por decidir,
+en `specs.md` §8. Al borrar este documento, eso no se pierde: vive allí.
+
 ---
 
 ## 4. Estado actual, comprobable

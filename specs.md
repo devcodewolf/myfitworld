@@ -332,3 +332,44 @@ generador de mesociclo a partir del anterior).
 - `historial.astro` es un estado vacío honesto, sin lógica detrás todavía.
 - Subir `--color-ink-faint` para cumplir el suelo de contraste acercó el tercer nivel de texto al
   segundo. Si molesta, se recupera con tamaño o peso, nunca bajando el valor.
+
+## 8. Pendiente: consejos con IA
+
+**Aplazado a propósito hasta después del despliegue** (decidido el 11 de octubre de 2026). Necesita
+servidor —la clave del modelo no puede vivir en el navegador— y necesita datos: sin dos o tres
+semanas de entreno registrado no hay nada que analizar.
+
+### Lo que ya existe
+
+- **`src/core/advice.ts`** (con sus tests): construye el resumen que se le daría al modelo a partir
+  de las sesiones. Sesiones hechas de las previstas, cargas que se pueden montar, peso corporal,
+  series y kilos por semana, series por músculo, ejercicios listos para subir de peso y los que
+  están al tope del material. **Agregados, nunca el registro serie a serie**, y nada que identifique
+  a la persona.
+- **`/consejos`** (`src/pages/consejos.astro` + `src/screens/advice.ts`), privada y enlazada desde
+  Historial. Tiene su forma final —preguntas de ejemplo, cuadro de texto, botón «Analizar mi
+  entreno»— **con todo apagado**, y enseña el resumen real tal como saldría. No simula respuestas.
+
+### Lo que falta
+
+1. **Una acción en el servidor** (`src/actions/`) que reciba la pregunta, calcule el resumen **desde
+   la base, dentro de `withUser`** —nunca desde lo que mande el navegador—, llame al modelo y
+   devuelva la respuesta.
+2. **La clave de API** como variable de entorno del servidor.
+3. **Encender la pantalla**: activar los controles y pintar la respuesta.
+4. **Un límite de uso** por cuenta, para que nadie dispare la factura.
+5. **El objetivo de la persona dentro del resumen.** Hoy no viaja: sin saber qué busca (por ejemplo,
+   fuerza y definición con prioridad en brazo, pecho, hombro y espalda) el modelo aconseja a ciegas.
+   Lo natural es un campo «tu objetivo» en Ajustes que se añada al resumen.
+
+### Decisiones abiertas
+
+- **Qué modelo**: el resumen ocupa menos de 2 KB, así que uno rápido y barato basta.
+- **Cuántas preguntas al día** por cuenta.
+- **Quién puede usarlo**: cualquier cuenta o solo administradores.
+
+### Al retomarlo
+
+Los textos de `/consejos` son de antes de la base de datos: hablan de SQLite y de que el historial
+vive solo en el navegador. Y en «Qué falta», el primer punto (la base de datos con cuenta) ya está
+hecho. Hay que reescribirlos.
