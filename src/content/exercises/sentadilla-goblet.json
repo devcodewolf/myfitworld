@@ -17,6 +17,17 @@
   "defaultRestSeconds": 120,
   "substitutions": ["zancadas-mancuernas"],
   "media": {
+    "video": {
+      "kind": "video",
+      "sources": [
+        {
+          "src": "ejercicios/sentadilla-goblet.mp4",
+          "type": "video/mp4"
+        }
+      ],
+      "alt": "Sentadilla goblet con la mancuerna pegada al pecho, bajando hasta pasar la rodilla.",
+      "aspectRatio": "16/9"
+    },
     "thumbnail": {
       "kind": "image",
       "src": "https://images.unsplash.com/photo-1603503363848-6952525df449?w=900&q=72&auto=format&fit=crop",

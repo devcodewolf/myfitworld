@@ -1,0 +1,32 @@
+{
+  "name": "Curl inverso",
+  "primaryMuscles": ["forearms"],
+  "secondaryMuscles": ["biceps"],
+  "equipment": ["dumbbell"],
+  "difficulty": "beginner",
+  "loadType": "external",
+  "cues": [
+    "Agarre por encima, palmas hacia abajo: las manos no giran en ningún momento",
+    "Codos pegados al costado y muñecas rectas",
+    "Sube hasta que el antebrazo quede vertical y baja en 3 segundos"
+  ],
+  "commonMistakes": [
+    "Girar la muñeca a mitad de subida y acabar haciendo un curl normal",
+    "Doblar la muñeca hacia atrás al subir"
+  ],
+  "defaultRestSeconds": 60,
+  "substitutions": ["curl-martillo"],
+  "media": {
+    "video": {
+      "kind": "video",
+      "sources": [
+        {
+          "src": "ejercicios/curl-inverso.mp4",
+          "type": "video/mp4"
+        }
+      ],
+      "alt": "Curl inverso de pie con agarre por encima: las palmas miran hacia abajo todo el recorrido.",
+      "aspectRatio": "16/9"
+    }
+  }
+}

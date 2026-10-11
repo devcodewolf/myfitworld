@@ -52,6 +52,7 @@ const ONE = 'black hexagonal 9 kg dumbbell';
 export const AVOID =
   'No text, captions, subtitles, numbers, arrows, lines, graphics or overlays of any kind. ' +
   'No logos, no watermark, no mirror, no other people, no music. ' +
+  'No camera, tripod, phone or filming equipment visible anywhere in the scene. ' +
   'No camera movement, no zoom, no cuts, no slow motion. ' +
   'The dumbbells keep the same size the whole time; correct anatomy, five fingers on each hand.';
 
@@ -83,8 +84,13 @@ export interface VideoPrompt {
   readonly action: string;
 }
 
+/**
+ * El encuadre. **No se nombra el trípode**: con «static camera on a tripod»,
+ * en las flexiones declinadas la IA dibujó un trípode con una cámara dentro
+ * del plano. Se pide un plano fijo y se prohíbe que se vea material de rodaje.
+ */
 const camera = (where: string, view: string, extra = '') =>
-  `Static camera on a tripod ${where}, ${view}` + (extra ? `, ${extra}` : '');
+  `Fixed locked-off shot ${where}, ${view}` + (extra ? `, ${extra}` : '');
 
 /**
  * El prompt completo. Empieza y acaba en la misma postura porque la app
@@ -102,96 +108,80 @@ export function buildPrompt(p: VideoPrompt): string {
 }
 
 export const VIDEO_PROMPTS: readonly VideoPrompt[] = [
-  /* ── Nuevos ─────────────────────────────────────────────────────────────── */
+  /* ── Rehacer: salen mal y NO están enganchados ──────────────────────────── */
+  {
+    id: 'pajaros-vuelos-posteriores',
+    status: 'redo',
+    why: 'Hombro posterior y espalda alta: equilibra tanto empuje y ayuda a la postura.',
+    note:
+      'Sin enganchar: el vídeo salió de pie, haciendo elevaciones laterales, que es otro ejercicio. ' +
+      'Ahora la cámara va en diagonal para que se vea el tronco tumbado, y el prompt insiste en que no se incorpora nunca.',
+    // De frente, un tronco horizontal y uno vertical se parecen demasiado: la
+    // IA eligió el de pie. En diagonal se ve la espalda paralela al suelo.
+    camera: camera(
+      'at hip height',
+      'three-quarter side view from about 45 degrees to his right',
+      'so his flat back parallel to the floor is clearly visible',
+    ),
+    action:
+      `Bent-over dumbbell reverse fly for the rear delts. He holds two ${PAIR}. ` +
+      'For the ENTIRE clip he is bent over at the hips with his torso horizontal, parallel to the floor like a tabletop, chest facing the floor, ' +
+      'flat back, knees softly bent and head in line with his spine. He starts already bent over and never stands up. ' +
+      'Bottom: arms hanging straight down toward the floor under his chest, palms facing each other, elbows slightly bent. ' +
+      'Keeping his torso horizontal and still, he opens both arms out to the sides in a wide arc until they are level with his back, ' +
+      'his body and arms forming a T seen from above; he holds 1 second, then lowers them slowly for 3 seconds. ' +
+      'He never straightens up: this is NOT a standing lateral raise, and it is not a row. Two repetitions.',
+  },
+  {
+    id: 'sentadilla-bulgara',
+    status: 'redo',
+    why: 'Pierna entera con poco peso: al ser a una pierna, 9 kg siguen sirviendo.',
+    note:
+      'Sin enganchar: la primera repetición sale bien, pero luego el pie de atrás baja de la silla y se convierte en una zancada en el suelo. ' +
+      'El prompt ahora repite que ese pie no toca el suelo en ningún momento.',
+    camera: camera('at hip height', 'exact side view', 'with the chair fully visible behind him'),
+    action:
+      `Bulgarian split squat with the rear foot elevated on a chair. He holds two ${PAIR} at his sides. ` +
+      'The top of his rear foot (laces down) rests on the SEAT of the wooden chair behind him, and it STAYS ON THE CHAIR FOR THE ENTIRE CLIP, ' +
+      'during every repetition and between them: it never touches the floor. His front foot is planted flat a long step ahead and never moves. ' +
+      'Top: standing tall in that split stance, front leg almost straight, rear foot on the chair. ' +
+      'Over 3 seconds he lowers straight down until his back knee almost touches the floor and his front thigh is parallel to the floor, ' +
+      'front shin roughly vertical, weight on the front heel, torso upright with a slight forward lean. ' +
+      'Then he drives back up in 1 second, still with the rear foot on the chair. ' +
+      'This is not a lunge on the floor and he never steps: the rear foot is on the chair seat from the first frame to the last. ' +
+      'Two repetitions with the same leg.',
+  },
+
+  /* ── Rehacer si quieres: enganchados, con un defecto ────────────────────── */
   {
     id: 'curl-concentrado',
-    name: 'Curl concentrado',
-    status: 'new',
-    why: 'Más bíceps, que era de lo más corto de la rutina. Con el codo apoyado no hay forma de hacer trampa.',
+    status: 'redo',
+    why: 'Más bíceps. Con el codo apoyado no hay forma de hacer trampa.',
+    note:
+      'Enganchado, pero el codo no se apoya en el muslo: sale como un curl sentado normal. Vale, aunque pierde ' +
+      'lo que tiene de especial. El prompt ahora dice exactamente dónde va el codo.',
     camera: camera(
       'at seated height',
       'three-quarter front view from his right side',
-      'so his right arm braced against his thigh is clearly visible',
+      'so his right elbow resting on the inside of his thigh is clearly visible',
     ),
     action:
-      `Seated dumbbell concentration curl, one arm. He sits on the front edge of the wooden chair with his feet planted wide apart, ` +
-      'leaning his torso forward from the hips. The back of his right upper arm rests firmly against the inside of his right thigh, just above the knee, ' +
-      `and his left hand rests on his left thigh. He holds one ${ONE} in his right hand. ` +
-      'Bottom: right arm fully straight, hanging down toward the floor between his legs, palm facing his left leg. ' +
-      'He bends the elbow and curls the dumbbell up: halfway, his forearm is horizontal and his palm faces the ceiling; ' +
-      'at the top, the dumbbell is in front of his right shoulder and his palm faces his shoulder. He squeezes for 1 second, ' +
-      'then lowers it slowly for 3 seconds back to a straight arm. ' +
-      'His upper arm stays glued to his thigh the whole time and his shoulder does not lift. ' +
-      'He stays seated: this is not a standing curl and not a two-arm curl. Two repetitions with the right arm.',
+      'Seated dumbbell concentration curl, one arm. He sits on the front edge of the wooden chair with his feet planted wide apart ' +
+      'and leans his torso well forward over his right leg. ' +
+      'His right ELBOW rests on the inside of his right thigh, just above the knee, with the back of his upper arm pressed against the thigh; ' +
+      'it stays touching the thigh for the entire clip. His left hand rests on his left knee. ' +
+      `Bottom: right arm straight, hanging down toward the floor between his legs, holding one ${ONE}, palm facing his left leg. ` +
+      'He curls the dumbbell up toward his right shoulder, palm turning to face his shoulder at the top, squeezes 1 second, ' +
+      'then lowers it slowly for 3 seconds to a straight arm. ' +
+      'His arm is never free in the air and he does not sit upright: this is not an ordinary seated curl. Two repetitions with the right arm.',
   },
-  {
-    id: 'curl-inverso',
-    name: 'Curl inverso',
-    status: 'new',
-    why: 'Antebrazo (braquial y braquiorradial), que solo tocaba el curl martillo. Es el que marca la parte de arriba del antebrazo.',
-    // De frente, la postura de arriba del inverso (palmas a cámara) se
-    // confunde con la de un curl normal visto desde otro ángulo.
-    camera: camera(
-      'at chest height',
-      'three-quarter side view from about 45 degrees to his right',
-      'close enough that his hands, wrists and the grip on the dumbbells are clearly visible',
-    ),
-    action:
-      `Reverse dumbbell curl with a pronated grip. He stands tall, feet shoulder-width apart, holding two ${PAIR} ` +
-      'with an overhand grip, palms facing down, elbows close to his torso and upper arms stationary for the whole clip. ' +
-      'Bottom: arms fully straight, dumbbells in front of his thighs, palms facing his thighs and knuckles facing forward. ' +
-      'He bends his elbows and raises both dumbbells, keeping the same grip and his wrists straight. ' +
-      'Halfway, with his forearms parallel to the floor, the backs of his hands and his knuckles face the ceiling and his palms face the floor. ' +
-      'Top: forearms vertical or slightly beyond, knuckles pointing up and palms facing forward, away from him. ' +
-      'Then he lowers the dumbbells slowly for 3 seconds back to full arm extension. ' +
-      'His hands never rotate at any point: the palms never turn up toward the ceiling and never face each other, ' +
-      'so this is not a regular biceps curl and not a hammer curl. No swinging of the torso. Two repetitions.',
-  },
-
-  /* ── Rehacer ────────────────────────────────────────────────────────────── */
-  {
-    id: 'remo-mancuerna-una-mano',
-    status: 'redo',
-    why: 'El básico de espalda.',
-    note:
-      'El vídeo nuevo ya está enganchado, pero sale casi de pie, con la mano en el respaldo: así tira más ' +
-      'el trapecio que la espalda. Este prompt insiste en el asiento y en el tronco horizontal.',
-    camera: camera(
-      'at hip height',
-      'exact side view from his right side',
-      'the whole chair visible, so it is obvious his hand is on the seat',
-    ),
-    action:
-      'One-arm dumbbell row with a hand braced on a chair. ' +
-      'His left hand is flat on the SEAT of the wooden chair, not on the backrest; because the seat is low, his torso is bent forward almost parallel to the floor, ' +
-      'with a flat back, his left foot forward and his right leg stepped back. ' +
-      `Bottom: his right arm hangs straight down toward the floor holding one ${ONE}, palm facing his body. ` +
-      'He pulls the dumbbell up toward his right hip, driving the elbow up past his back toward the ceiling, close to his body; ' +
-      'at the top the dumbbell is beside his lower ribs. He squeezes for 1 second, then lowers it slowly for 3 seconds to a full stretch. ' +
-      'His torso stays horizontal and does not rotate or rise. ' +
-      'He is not standing upright, his hand is not on the backrest, and this is not an upright row. Two repetitions with the right arm.',
-  },
-  {
-    id: 'peso-muerto-rumano',
-    status: 'redo',
-    why: 'Isquios y glúteo, y de paso espalda baja y agarre. La pierna que más rinde para tu objetivo.',
-    note: 'El vídeo que hay es de los primeros: otro hombre, otro escenario y rótulos encima. Por eso no está enganchado.',
-    camera: camera('at hip height', 'exact side view'),
-    action:
-      `Romanian deadlift with dumbbells. He stands tall holding two ${PAIR} in front of his thighs, palms facing his thighs. ` +
-      'He pushes his hips straight back as if closing a car door with his backside, keeping his back completely flat and his knees only slightly bent; ' +
-      'his torso tilts forward and the dumbbells slide down close along the front of his legs. ' +
-      'Bottom, after 3 seconds: hips far back, torso tilted well forward with a flat back, head in line with his spine, ' +
-      'dumbbells just below his knees, shins still almost vertical. ' +
-      'Then he drives his hips forward and stands tall again in 1 second, squeezing his glutes at the top. ' +
-      'His hips never drop down and his knees barely bend: this is not a squat. His back never rounds. Two repetitions.',
-  },
-
-  /* ── Faltan ─────────────────────────────────────────────────────────────── */
   {
     id: 'flexiones-declinadas',
-    status: 'pending',
+    status: 'redo',
     why: 'Pectoral superior y hombro. La progresión natural de las flexiones.',
+    note:
+      'Enganchado y con buena técnica, pero se ve un trípode con una cámara a la izquierda: la IA se tomó al pie de la letra ' +
+      '«cámara en un trípode». Ya está quitado de todos los prompts.',
     camera: camera(
       'close to the floor',
       'exact side view',
@@ -199,91 +189,12 @@ export const VIDEO_PROMPTS: readonly VideoPrompt[] = [
     ),
     action:
       'Decline push-up with the feet raised on a chair. The tops of both of his feet rest on the SEAT of the wooden chair behind him; ' +
-      'his hands are flat on the mat in front, slightly wider than his shoulders, directly under his shoulders. ' +
+      'his hands are flat on the mat in front, slightly wider than and directly under his shoulders. ' +
       'His body is one straight, rigid line sloping downward from his heels on the chair to his head, so his head is lower than his feet. ' +
       'Top: arms straight. Over 3 seconds he bends his elbows, about 45 degrees from his torso, and lowers his chest until it is just above the mat between his hands. ' +
       'Then he pushes back up in 1 second to straight arms. ' +
       'His hips neither sag nor pike up, and his feet stay on the chair the whole time: ' +
       'this is not a regular push-up with the feet on the floor and not a pike push-up. Two repetitions.',
-  },
-  {
-    id: 'pajaros-vuelos-posteriores',
-    status: 'pending',
-    why: 'Hombro posterior y espalda alta: equilibra tanto empuje y ayuda a la postura.',
-    camera: camera(
-      'at hip height',
-      'straight front view',
-      'so his arms open toward the sides of the frame like wings',
-    ),
-    action:
-      `Bent-over dumbbell reverse fly for the rear delts. He stands holding two ${PAIR}, hinged forward at the hips until his torso is almost parallel to the floor, ` +
-      'with a flat back and soft knees. ' +
-      'Bottom: arms hanging straight down under his chest, palms facing each other, elbows slightly bent. ' +
-      'Keeping that slight elbow bend fixed, he opens both arms out to the sides in a wide arc until they are level with his shoulders, ' +
-      'forming a T with his torso; he holds 1 second, then lowers them slowly for 3 seconds. ' +
-      'His torso stays parallel to the floor and still the whole time. ' +
-      'He does not stand up as he lifts, and he does not pull the elbows back toward his hips: this is not a row. Two repetitions.',
-  },
-  {
-    id: 'curl-martillo',
-    status: 'pending',
-    why: 'Bíceps y antebrazo a la vez: el que más grosor da al brazo.',
-    camera: camera('at chest height', 'three-quarter front view'),
-    action:
-      `Standing dumbbell hammer curl. He stands tall holding two ${PAIR} at his sides with a neutral grip: palms facing his thighs and thumbs pointing forward, ` +
-      'elbows pinned to his sides. ' +
-      'He curls both dumbbells up together. Halfway, his forearms are horizontal and his thumbs point up at the ceiling. ' +
-      'Top: dumbbells in front of his shoulders, palms still facing each other, thumbs up, like holding two hammers upright. ' +
-      'Then he lowers them slowly for 3 seconds. ' +
-      'His wrists never rotate: the palms never turn up toward the ceiling, so this is not a regular biceps curl. ' +
-      'His elbows stay at his sides and his torso does not swing. Two repetitions.',
-  },
-  {
-    id: 'extension-triceps-tras-nuca',
-    status: 'pending',
-    why: 'La cabeza larga del tríceps, la que más volumen da al brazo, solo se estira con el brazo por encima de la cabeza.',
-    camera: camera(
-      'at shoulder height',
-      'exact side view',
-      'with clear space above and behind his head so the path of the dumbbell is fully visible',
-    ),
-    action:
-      'Seated overhead dumbbell triceps extension with both hands. He sits upright on the wooden chair, feet flat. ' +
-      `He holds one ${ONE} vertically with both hands cupping the top end of it, the dumbbell hanging down from his hands. ` +
-      'Top: arms fully straight overhead, the dumbbell above his head. ' +
-      'His upper arms stay vertical beside his head, elbows pointing at the ceiling and close to his ears; only his forearms move. ' +
-      'Over 3 seconds he bends his elbows and lowers the dumbbell BEHIND HIS HEAD until it is behind his neck and his forearms are past horizontal. ' +
-      'Then he straightens his arms back overhead in 1 second. ' +
-      'His elbows never drop forward and never flare out, and the dumbbell never comes down in front of his face: this is not a shoulder press. ' +
-      'Ribs down, no arching of the lower back. Two repetitions.',
-  },
-  {
-    id: 'sentadilla-bulgara',
-    status: 'pending',
-    why: 'Pierna entera con poco peso: al ser a una pierna, 9 kg siguen sirviendo.',
-    camera: camera('at hip height', 'exact side view', 'with the chair fully visible behind him'),
-    action:
-      `Bulgarian split squat with the rear foot on a chair. He holds two ${PAIR} at his sides. ` +
-      'The top of his rear foot (laces down) rests on the SEAT of the wooden chair behind him; his front foot is planted flat on the floor a long step ahead. ' +
-      'Top: standing tall in that split stance, front leg almost straight. ' +
-      'Over 3 seconds he lowers straight down: his back knee drops toward the floor until it almost touches it, his front thigh becomes parallel to the floor, ' +
-      'his front shin stays roughly vertical and his weight stays on his front heel; his torso stays upright with a slight forward lean. ' +
-      'Then he drives back up in 1 second through the front heel. ' +
-      'His front foot never moves and his rear foot never leaves the chair: this is not a walking lunge and he does not step. ' +
-      'Two repetitions with the same leg.',
-  },
-  {
-    id: 'sentadilla-goblet',
-    status: 'pending',
-    why: 'La sentadilla básica. Se queda, con una serie menos.',
-    camera: camera('at hip height', 'three-quarter front view'),
-    action:
-      `Goblet squat with one dumbbell. He stands with his feet slightly wider than his shoulders, toes turned slightly out, ` +
-      `holding one ${ONE} vertically against his chest with both hands cupping its top end, like holding a goblet, elbows pointing down. ` +
-      'Over 2 seconds he squats down, sitting his hips down between his heels, knees pushing out over his toes, ' +
-      'until his hips are below his knees; his torso stays upright, the dumbbell stays touching his chest and his elbows end up inside his knees. ' +
-      'He pauses 1 second at the bottom with his heels flat on the floor, then stands back up in 1 second. ' +
-      'The dumbbell never moves away from his chest and his heels never lift. Two repetitions.',
   },
 
   /* ── Depende del material ───────────────────────────────────────────────── */

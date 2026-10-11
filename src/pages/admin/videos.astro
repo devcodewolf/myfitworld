@@ -101,7 +101,8 @@ const COPY_BTN =
     </section>
 
     {
-      GROUPS.map((group) => (
+      // Un grupo sin tarjetas se calla: un título encima de nada parece un fallo.
+      GROUPS.filter((group) => cards.some((card) => card.status === group.status)).map((group) => (
         <section class="mt-12">
           <h2 class="text-2xl font-extrabold text-ink">{group.title}</h2>
           <p class="mt-1 text-sm text-ink-faint">{group.text}</p>

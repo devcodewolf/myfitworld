@@ -16,7 +16,7 @@
     "Rotar el tronco para ganar recorrido con impulso"
   ],
   "defaultRestSeconds": 90,
-  "substitutions": ["renegade-row"],
+  "substitutions": ["remo-inclinado-mancuernas"],
   "media": {
     "video": {
       "kind": "video",
@@ -26,7 +26,7 @@
           "type": "video/mp4"
         }
       ],
-      "alt": "Remo a una mano con mancuerna, apoyando la otra mano en una silla.",
+      "alt": "Remo a una mano con mancuerna, con la otra mano apoyada en el asiento de una silla.",
       "aspectRatio": "16/9"
     }
   }

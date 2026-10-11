@@ -1,0 +1,33 @@
+{
+  "name": "Curl concentrado",
+  "primaryMuscles": ["biceps"],
+  "secondaryMuscles": ["forearms"],
+  "equipment": ["dumbbell", "chair"],
+  "difficulty": "beginner",
+  "loadType": "external",
+  "unilateral": true,
+  "cues": [
+    "Sentado, con la parte de atrás del brazo apoyada en la cara interna del muslo",
+    "Sube hasta el hombro y aprieta un segundo arriba",
+    "Baja en 3 segundos hasta estirar el brazo del todo"
+  ],
+  "commonMistakes": [
+    "Despegar el codo del muslo para ayudarte con el hombro",
+    "Bajar solo a medias y perder el estiramiento"
+  ],
+  "defaultRestSeconds": 60,
+  "substitutions": ["curl-biceps-supino"],
+  "media": {
+    "video": {
+      "kind": "video",
+      "sources": [
+        {
+          "src": "ejercicios/curl-concentrado.mp4",
+          "type": "video/mp4"
+        }
+      ],
+      "alt": "Curl concentrado sentado en el borde de la silla, a un brazo.",
+      "aspectRatio": "16/9"
+    }
+  }
+}
