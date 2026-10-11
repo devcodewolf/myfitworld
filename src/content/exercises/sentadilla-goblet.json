@@ -15,7 +15,7 @@
     "Levantar los talones del suelo al bajar"
   ],
   "defaultRestSeconds": 120,
-  "substitutions": ["zancadas-mancuernas"],
+  "substitutions": ["sentadilla-bulgara"],
   "media": {
     "video": {
       "kind": "video",

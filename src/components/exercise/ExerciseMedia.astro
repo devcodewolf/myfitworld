@@ -31,6 +31,8 @@ const {
   class: className,
 } = Astro.props;
 const ratio = ratioProp ?? '4/3';
+/** Se reproduce solo y sin controles: entonces se pausa pulsando sobre él. */
+const tapToggle = eager && !controls;
 ---
 
 <figure
@@ -95,10 +97,13 @@ const ratio = ratioProp ?? '4/3';
         autoplay={eager}
         controls={controls}
         data-hover-play={!eager && !controls ? '' : undefined}
+        data-tap-toggle={tapToggle ? '' : undefined}
+        tabindex={tapToggle ? 0 : undefined}
+        title={tapToggle ? 'Pulsa para pausar o reanudar' : undefined}
         preload={eager ? 'auto' : 'metadata'}
         poster={asset.poster ? routes.asset(asset.poster) : undefined}
         aria-label={asset.alt}
-        class="size-full object-cover"
+        class:list={['size-full object-cover', tapToggle && 'cursor-pointer']}
       >
         {asset.sources.map((source) => (
           <source src={routes.asset(source.src)} type={source.type} />
@@ -139,6 +144,22 @@ const ratio = ratioProp ?? '4/3';
     card.addEventListener('mouseleave', () => {
       video.pause();
       video.currentTime = 0;
+    });
+  });
+
+  // Un vídeo en bucle y sin controles tiene que poder pararse: algo que se
+  // mueve sin fin distrae, y con «reducir movimiento» activado en el sistema ni
+  // siquiera debe arrancar solo. Se pausa y se reanuda pulsando sobre él, con el
+  // ratón, el dedo o el teclado.
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll<HTMLVideoElement>('video[data-tap-toggle]').forEach((video) => {
+    if (reduceMotion) video.pause();
+    const toggle = () => (video.paused ? void video.play().catch(() => {}) : video.pause());
+    video.addEventListener('click', toggle);
+    video.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      toggle();
     });
   });
 

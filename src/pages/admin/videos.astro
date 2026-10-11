@@ -11,7 +11,6 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getExerciseCatalog } from '@/data';
 import {
-  DROPPED,
   IMAGE_REFERENCE_PROMPT,
   VIDEO_PROMPTS,
   buildPrompt,
@@ -124,6 +123,20 @@ const COPY_BTN =
                   </div>
                   <p class="mt-3 text-sm text-ink-dim">{card.why}</p>
                   {card.note && <p class="mt-2 text-sm text-ink-faint">{card.note}</p>}
+                  {card.startFrame && (
+                    <div class="mt-4">
+                      <div class="flex flex-wrap items-center justify-between gap-3">
+                        <h4 class="text-sm font-extrabold text-ink">1 · Foto de partida</h4>
+                        <button type="button" class={COPY_BTN} data-copiar={`f-${card.id}`}>
+                          Copiar
+                        </button>
+                      </div>
+                      <p id={`f-${card.id}`} class={PROMPT_BOX}>
+                        {card.startFrame}
+                      </p>
+                      <h4 class="mt-4 text-sm font-extrabold text-ink">2 · Vídeo desde esa foto</h4>
+                    </div>
+                  )}
                   <p id={`p-${card.id}`} class={PROMPT_BOX}>
                     {card.prompt}
                   </p>
@@ -133,21 +146,6 @@ const COPY_BTN =
         </section>
       ))
     }
-
-    <section class="mt-12">
-      <h2 class="text-2xl font-extrabold text-ink">Se van</h2>
-      <p class="mt-1 text-sm text-ink-faint">No hace falta generar nada para estos.</p>
-      <ul class="mt-5 space-y-3">
-        {
-          DROPPED.map((item) => (
-            <li class="rounded-card border border-line p-4 text-sm">
-              <span class="font-bold text-ink-dim line-through">{nameOf(item.id)}</span>
-              <span class="text-ink-faint"> — {item.why}</span>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
   </div>
 </BaseLayout>
 

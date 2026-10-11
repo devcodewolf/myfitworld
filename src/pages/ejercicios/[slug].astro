@@ -60,7 +60,6 @@ const media = exercise.media?.video ?? exercise.media?.croquis ?? exercise.media
           asset={media}
           ratio={media?.kind === 'video' ? media.aspectRatio : undefined}
           eager
-          controls
         />
 
         <dl class="mt-6 grid grid-cols-2 gap-x-6 gap-y-5 text-sm sm:grid-cols-3">

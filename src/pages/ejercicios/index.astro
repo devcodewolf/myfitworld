@@ -61,7 +61,8 @@ const FILTER =
     {
       /* El vídeo manda en la tarjeta, y sin él la foto: ver el movimiento es lo
         que permite reconocer el ejercicio de un vistazo. Se mueve al pasar el
-        ratón, no solo, para que veinte vídeos no se reproduzcan a la vez. El
+        ratón, no solo, para que veinte vídeos no se reproduzcan a la vez; y sin
+        zoom: ampliarse y arrancar a la vez se veía como un tirón. El
         texto va debajo, sobre material opaco, así que su contraste no depende
         nunca de la imagen. */
     }
@@ -80,7 +81,7 @@ const FILTER =
                   eager={false}
                   controls={false}
                   ratio="3/2"
-                  class="rounded-none border-0 transition-transform duration-500 group-hover:scale-[1.04]"
+                  class="rounded-none border-0"
                 />
               </div>
               <div class="flex flex-1 flex-col p-5">

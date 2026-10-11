@@ -41,19 +41,21 @@ descargarlas a `src/assets/photos/` y cambiar `kind: 'image'` por una referencia
 local; `routes.asset()` ya distingue una URL remota de una ruta propia, así que
 el cambio es de datos, no de componentes.
 
-Las dos que llevan vídeo propio (`flexiones` y `remo-mancuerna-una-mano`) usan su
-vídeo y no tienen foto remota.
+**Hoy casi todos los ejercicios tienen vídeo propio**, en `public/ejercicios/`,
+generado con IA para que salgan siempre el mismo hombre y el mismo cuarto. El
+vídeo manda sobre la lámina y la foto en todas las pantallas, así que las fotos
+de Unsplash de los ejercicios solo se ven en los que aún no lo tienen.
 
 ## Láminas anatómicas (locales)
 
-Los doce GIF de `public/croquis/` salen de **ExerciseDB**, del endpoint libre
+Los diez GIF de `public/croquis/` salen de **ExerciseDB**, del endpoint libre
 `oss.exercisedb.dev`, y se sirven **desde este proyecto**, no enlazados. Se
-descargaron una vez y pesan 0,99 MB entre los doce (180×180 cada uno).
+descargaron una vez (180×180 cada uno). Eran doce: los de fondos entre bancos y
+zancadas se borraron al salir esos ejercicios de la rutina.
 
 | Ejercicio | Nombre en origen |
 | --- | --- |
 | `flexiones-declinadas` | decline push-up |
-| `fondos-entre-bancos` | bench dip on floor |
 | `press-militar-mancuernas` | dumbbell one arm shoulder press |
 | `elevaciones-laterales` | dumbbell lateral raise |
 | `pajaros-vuelos-posteriores` | dumbbell reverse fly |
@@ -62,7 +64,6 @@ descargaron una vez y pesan 0,99 MB entre los doce (180×180 cada uno).
 | `extension-triceps-tras-nuca` | dumbbells seated triceps extension |
 | `sentadilla-goblet` | dumbbell goblet squat |
 | `sentadilla-bulgara` | dumbbell single leg split squat |
-| `zancadas-mancuernas` | dumbbell lunge |
 | `peso-muerto-rumano` | dumbbell romanian deadlift |
 
 **Por qué locales y no enlazados.** Su propio repositorio dice que el endpoint
@@ -75,6 +76,8 @@ El código del API es AGPL-3.0. La licencia de los medios del servidor libre no
 está escrita en ninguna parte, que es un cabo suelto conocido: si algún día esto
 deja de ser una app personal, hay que preguntarles antes de seguir.
 
-**Cuatro ejercicios se quedan sin lámina.** `flexiones` y `remo-mancuerna-una-mano`
-tienen vídeo propio, que manda. `floor-press` y `renegade-row` no tienen ninguna
-coincidencia decente en el catálogo de origen y se quedan con su fotografía.
+**Siete ejercicios no tienen lámina**: `flexiones`, `remo-mancuerna-una-mano` y
+`floor-press`, que no tenían coincidencia decente en el catálogo de origen, y los
+cuatro que entraron después en la rutina (`press-frances-suelo`,
+`remo-inclinado-mancuernas`, `curl-concentrado` y `curl-inverso`). Todos tienen
+vídeo, que es lo que se enseña primero.

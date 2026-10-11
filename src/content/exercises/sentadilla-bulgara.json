@@ -16,7 +16,7 @@
     "Perder el equilibrio y rebotar con la pierna de atrás"
   ],
   "defaultRestSeconds": 90,
-  "substitutions": ["zancadas-mancuernas", "sentadilla-goblet"],
+  "substitutions": ["sentadilla-goblet"],
   "media": {
     "thumbnail": {
       "kind": "image",

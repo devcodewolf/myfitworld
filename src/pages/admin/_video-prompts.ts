@@ -82,6 +82,12 @@ export interface VideoPrompt {
   readonly camera: string;
   /** El movimiento: postura de partida, recorrido y con qué no confundirlo. */
   readonly action: string;
+  /**
+   * Una foto de la postura de partida, para generar el vídeo desde ella
+   * («imagen a vídeo»). Solo en los que han fallado varias veces con texto: si
+   * la postura ya está en la imagen, la IA solo tiene que animarla.
+   */
+  readonly startFrame?: string;
 }
 
 /**
@@ -110,35 +116,20 @@ export function buildPrompt(p: VideoPrompt): string {
 export const VIDEO_PROMPTS: readonly VideoPrompt[] = [
   /* ── Rehacer: salen mal y NO están enganchados ──────────────────────────── */
   {
-    id: 'pajaros-vuelos-posteriores',
-    status: 'redo',
-    why: 'Hombro posterior y espalda alta: equilibra tanto empuje y ayuda a la postura.',
-    note:
-      'Sin enganchar: el vídeo salió de pie, haciendo elevaciones laterales, que es otro ejercicio. ' +
-      'Ahora la cámara va en diagonal para que se vea el tronco tumbado, y el prompt insiste en que no se incorpora nunca.',
-    // De frente, un tronco horizontal y uno vertical se parecen demasiado: la
-    // IA eligió el de pie. En diagonal se ve la espalda paralela al suelo.
-    camera: camera(
-      'at hip height',
-      'three-quarter side view from about 45 degrees to his right',
-      'so his flat back parallel to the floor is clearly visible',
-    ),
-    action:
-      `Bent-over dumbbell reverse fly for the rear delts. He holds two ${PAIR}. ` +
-      'For the ENTIRE clip he is bent over at the hips with his torso horizontal, parallel to the floor like a tabletop, chest facing the floor, ' +
-      'flat back, knees softly bent and head in line with his spine. He starts already bent over and never stands up. ' +
-      'Bottom: arms hanging straight down toward the floor under his chest, palms facing each other, elbows slightly bent. ' +
-      'Keeping his torso horizontal and still, he opens both arms out to the sides in a wide arc until they are level with his back, ' +
-      'his body and arms forming a T seen from above; he holds 1 second, then lowers them slowly for 3 seconds. ' +
-      'He never straightens up: this is NOT a standing lateral raise, and it is not a row. Two repetitions.',
-  },
-  {
     id: 'sentadilla-bulgara',
     status: 'redo',
     why: 'Pierna entera con poco peso: al ser a una pierna, 9 kg siguen sirviendo.',
     note:
-      'Sin enganchar: la primera repetición sale bien, pero luego el pie de atrás baja de la silla y se convierte en una zancada en el suelo. ' +
-      'El prompt ahora repite que ese pie no toca el suelo en ningún momento.',
+      'Sin enganchar, y ha fallado dos veces: la IA la convierte en una zancada en el suelo y el pie de atrás ' +
+      'no llega a subir a la silla. Con texto no hay manera, así que mejor «imagen a vídeo»: genera primero la ' +
+      'foto de abajo, que ya tiene el pie en la silla, y anímala con el prompt de vídeo.',
+    startFrame:
+      `Photorealistic photo, 16:9. ${CHARACTER}, in ${SETTING}. Fixed shot at hip height, exact side view, ` +
+      'the whole wooden chair visible behind him. He is in the starting position of a Bulgarian split squat: ' +
+      'the top of his left foot, laces down, rests on the SEAT of the wooden chair behind him, with his left knee bent; ' +
+      'his right foot is planted flat on the floor a long step in front of the chair, right leg almost straight; ' +
+      `he stands tall holding two ${PAIR} at his sides. ` +
+      'No text, no logos, no camera or tripod visible.',
     camera: camera('at hip height', 'exact side view', 'with the chair fully visible behind him'),
     action:
       `Bulgarian split squat with the rear foot elevated on a chair. He holds two ${PAIR} at his sides. ` +
@@ -214,21 +205,5 @@ export const VIDEO_PROMPTS: readonly VideoPrompt[] = [
       'He pulls himself up, driving his elbows down toward his ribs, until his chin is above the bar, ' +
       'then lowers himself slowly for 3 seconds back to a full hang. ' +
       'No swinging, no kicking: this is not a kipping pull-up. Two repetitions.',
-  },
-];
-
-/** Los que se van de la rutina. Sin prompt: no hace falta generar nada. */
-export const DROPPED: readonly { readonly id: string; readonly why: string }[] = [
-  {
-    id: 'zancadas-mancuernas',
-    why: 'Pierna repetida: la búlgara ya hace ese trabajo. Su hueco pasa a antebrazo.',
-  },
-  {
-    id: 'fondos-entre-bancos',
-    why: 'Cargan mucho la parte delantera del hombro, y pasados los 40 no compensa. Lo sustituye el press francés.',
-  },
-  {
-    id: 'renegade-row',
-    why: 'Con 9 kg es más ejercicio de abdomen que de espalda, y castiga la muñeca. Lo sustituye el remo inclinado.',
   },
 ];
