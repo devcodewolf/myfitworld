@@ -25,6 +25,7 @@
           "type": "video/mp4"
         }
       ],
+      "poster": "ejercicios/posters/floor-press.jpg",
       "alt": "Floor press tumbado en la esterilla, bajando hasta que el brazo apoya en el suelo.",
       "aspectRatio": "16/9"
     },

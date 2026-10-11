@@ -25,6 +25,7 @@
           "type": "video/mp4"
         }
       ],
+      "poster": "ejercicios/posters/remo-inclinado-mancuernas.jpg",
       "alt": "Remo inclinado de pie con dos mancuernas, tirando hacia las costillas con la espalda plana.",
       "aspectRatio": "16/9"
     }

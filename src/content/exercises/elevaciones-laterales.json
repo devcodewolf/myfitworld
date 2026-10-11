@@ -25,6 +25,7 @@
           "type": "video/mp4"
         }
       ],
+      "poster": "ejercicios/posters/elevaciones-laterales.jpg",
       "alt": "Elevaciones laterales vistas de frente, subiendo las mancuernas hasta la altura del hombro.",
       "aspectRatio": "16/9"
     },

@@ -25,6 +25,7 @@
           "type": "video/mp4"
         }
       ],
+      "poster": "ejercicios/posters/curl-inverso.jpg",
       "alt": "Curl inverso de pie con agarre por encima: las palmas miran hacia abajo todo el recorrido.",
       "aspectRatio": "16/9"
     }

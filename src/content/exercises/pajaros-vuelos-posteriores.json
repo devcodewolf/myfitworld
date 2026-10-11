@@ -25,6 +25,7 @@
           "type": "video/mp4"
         }
       ],
+      "poster": "ejercicios/posters/pajaros-vuelos-posteriores.jpg",
       "alt": "Pájaros inclinado desde la cadera, abriendo las mancuernas hacia los lados con la espalda plana.",
       "aspectRatio": "16/9"
     },

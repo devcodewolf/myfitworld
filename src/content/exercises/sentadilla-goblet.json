@@ -25,6 +25,7 @@
           "type": "video/mp4"
         }
       ],
+      "poster": "ejercicios/posters/sentadilla-goblet.jpg",
       "alt": "Sentadilla goblet con la mancuerna pegada al pecho, bajando hasta pasar la rodilla.",
       "aspectRatio": "16/9"
     },

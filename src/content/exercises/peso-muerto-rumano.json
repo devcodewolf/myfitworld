@@ -25,6 +25,7 @@
           "type": "video/mp4"
         }
       ],
+      "poster": "ejercicios/posters/peso-muerto-rumano.jpg",
       "alt": "Peso muerto rumano con mancuernas visto de lado, llevando la cadera atrás con la espalda plana.",
       "aspectRatio": "16/9"
     },

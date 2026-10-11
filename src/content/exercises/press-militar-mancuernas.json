@@ -25,6 +25,7 @@
           "type": "video/mp4"
         }
       ],
+      "poster": "ejercicios/posters/press-militar-mancuernas.jpg",
       "alt": "Press militar de pie con dos mancuernas, empujando por encima de la cabeza.",
       "aspectRatio": "16/9"
     },

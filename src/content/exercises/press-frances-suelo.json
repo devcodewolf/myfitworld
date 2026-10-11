@@ -25,6 +25,7 @@
           "type": "video/mp4"
         }
       ],
+      "poster": "ejercicios/posters/press-frances-suelo.jpg",
       "alt": "Press francés tumbado en la esterilla, bajando las mancuernas por detrás de la cabeza.",
       "aspectRatio": "16/9"
     }

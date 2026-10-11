@@ -25,6 +25,7 @@
           "type": "video/mp4"
         }
       ],
+      "poster": "ejercicios/posters/curl-martillo.jpg",
       "alt": "Curl martillo de pie, con las palmas enfrentadas de principio a fin.",
       "aspectRatio": "16/9"
     },

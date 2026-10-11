@@ -27,7 +27,7 @@ const { mesocycle, activeWeek, activeDay, days = true } = Astro.props;
 const week = mesocycle.weeks.find((item) => item.order === activeWeek) ?? mesocycle.weeks[0]!;
 ---
 
-<div class="flex flex-col gap-3">
+<div class="flex max-w-full min-w-0 flex-col gap-3">
   <ol class="flex gap-2 overflow-x-auto pb-1">
     {
       mesocycle.weeks.map((item) => {

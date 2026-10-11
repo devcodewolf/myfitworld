@@ -94,6 +94,9 @@ const video = computed(() => {
     type: source.type,
     alt: asset.alt,
     aspectRatio: asset.aspectRatio,
+    // La imagen fija mientras llega el vídeo: sin ella, al cambiar de ejercicio
+    // queda un hueco negro hasta el primer fotograma.
+    poster: asset.poster ? routes.asset(asset.poster) : undefined,
   };
 });
 
@@ -453,7 +456,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
       </p>
     </div>
 
-    <div class="grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,26rem)] lg:gap-10">
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,26rem)] lg:gap-10">
       <section class="flex flex-col gap-6" aria-labelledby="ejercicio-actual">
         <!-- El vídeo del ejercicio activo se reproduce solo y en bucle: es lo que estás
              mirando entre serie y serie, sin tocar nada. Solo carga el del ejercicio en
@@ -465,6 +468,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey));
           class="max-h-104 w-full rounded-card border border-line object-cover"
           :style="{ aspectRatio: video.aspectRatio }"
           :aria-label="video.alt"
+          :poster="video.poster"
           autoplay
           muted
           loop

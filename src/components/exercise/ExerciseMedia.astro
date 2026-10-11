@@ -100,7 +100,7 @@ const tapToggle = eager && !controls;
         data-tap-toggle={tapToggle ? '' : undefined}
         tabindex={tapToggle ? 0 : undefined}
         title={tapToggle ? 'Pulsa para pausar o reanudar' : undefined}
-        preload={eager ? 'auto' : 'metadata'}
+        preload={eager ? 'auto' : 'none'}
         poster={asset.poster ? routes.asset(asset.poster) : undefined}
         aria-label={asset.alt}
         class:list={['size-full object-cover', tapToggle && 'cursor-pointer']}
@@ -136,7 +136,9 @@ const tapToggle = eager && !controls;
 <script>
   // En una rejilla, un vídeo que se reproduce solo cuesta megabytes por tarjeta
   // y compite con los de al lado. Se despierta al pasar por encima y se rebobina
-  // al salir, así que la tarjeta en reposo pesa lo que su primer fotograma.
+  // al salir. En reposo la tarjeta enseña el póster y NO descarga el vídeo
+  // (`preload="none"`): con `metadata`, que es solo una sugerencia, el catálogo
+  // se traía 17 MB en el móvil sin tocar nada. Sin ratón no se descarga nunca.
   document.querySelectorAll<HTMLVideoElement>('video[data-hover-play]').forEach((video) => {
     const card = video.closest('a') ?? video.parentElement;
     if (!card) return;

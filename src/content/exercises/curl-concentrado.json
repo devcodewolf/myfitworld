@@ -26,6 +26,7 @@
           "type": "video/mp4"
         }
       ],
+      "poster": "ejercicios/posters/curl-concentrado.jpg",
       "alt": "Curl concentrado sentado en el borde de la silla, a un brazo.",
       "aspectRatio": "16/9"
     }

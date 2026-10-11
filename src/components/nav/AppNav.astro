@@ -14,7 +14,16 @@ const links: ReadonlyArray<{ href: string; label: string; icon: IconName }> = [
 ---
 
 <header class="cabecera sticky top-0 z-40 backdrop-blur-xl">
-  <div class="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-6 lg:px-8">
+  {
+    /* Por debajo de `sm` no caben en una fila el logotipo, los cuatro enlaces y la
+       cuenta: la navegación baja a su propia fila a todo el ancho, repartida a
+       partes iguales. Con la cabecera `sticky`, la alternativa (dejar que la
+       navegación se desplace dentro de un hueco de 60px) esconde tres de los
+       cuatro destinos. */
+  }
+  <div
+    class="mx-auto flex max-w-7xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 sm:flex-nowrap sm:px-6 lg:px-8"
+  >
     <a
       href={routes.home()}
       class="flex shrink-0 items-center gap-2.5 text-sm font-black tracking-[-0.01em] text-ink"
@@ -24,7 +33,7 @@ const links: ReadonlyArray<{ href: string; label: string; icon: IconName }> = [
 
     <nav
       aria-label="Navegación principal"
-      class="ml-auto flex gap-1 overflow-x-auto rounded-full border border-line bg-surface p-1"
+      class="order-last flex basis-full gap-1 overflow-x-auto rounded-full border border-line bg-surface p-1 sm:order-none sm:ml-auto sm:basis-auto"
     >
       {
         links.map((link) => {
@@ -34,13 +43,15 @@ const links: ReadonlyArray<{ href: string; label: string; icon: IconName }> = [
               href={link.href}
               aria-current={active ? 'page' : undefined}
               class:list={[
-                'flex min-h-11 shrink-0 items-center gap-2 rounded-full px-4 text-sm font-semibold whitespace-nowrap transition-colors',
+                'flex min-h-11 flex-1 shrink-0 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold whitespace-nowrap transition-colors sm:flex-none',
                 // El estado activo se lee por superficie y peso, no por color.
                 active ? 'bg-raised font-bold text-ink' : 'text-ink-dim hover:text-ink',
               ]}
             >
               <Icon name={link.icon} size={18} class="shrink-0" />
-              <span class="hidden md:inline">{link.label}</span>
+              {/* Oculto a la vista en pantallas pequeñas, no al lector de pantalla:
+                  con `hidden` el enlace se quedaba sin nombre y solo se oía «enlace». */}
+              <span class="sr-only md:not-sr-only">{link.label}</span>
             </a>
           );
         })
@@ -65,7 +76,7 @@ const links: ReadonlyArray<{ href: string; label: string; icon: IconName }> = [
        * el ancho ni siquiera era fijo: al llegar, empujaba toda la barra.
        */
     }
-    <div class="h-11 w-[4.75rem] shrink-0 md:w-40">
+    <div class="order-2 ml-auto h-11 w-[4.75rem] shrink-0 sm:order-none sm:ml-0 md:w-40">
       {
         Astro.isPrerendered ? (
           <AccountPill server:defer>
