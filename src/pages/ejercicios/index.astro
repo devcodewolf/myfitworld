@@ -59,9 +59,11 @@ const FILTER =
     </div>
 
     {
-      /* La foto manda en la tarjeta y se ve a plena luz: es lo que permite
-        reconocer el ejercicio de un vistazo. El texto va debajo, sobre material
-        opaco, así que su contraste no depende nunca de la imagen. */
+      /* El vídeo manda en la tarjeta, y sin él la foto: ver el movimiento es lo
+        que permite reconocer el ejercicio de un vistazo. Se mueve al pasar el
+        ratón, no solo, para que veinte vídeos no se reproduzcan a la vez. El
+        texto va debajo, sobre material opaco, así que su contraste no depende
+        nunca de la imagen. */
     }
     <ul id="rejilla" class="grid gap-5 pt-7 sm:grid-cols-2 xl:grid-cols-3">
       {
@@ -74,7 +76,7 @@ const FILTER =
               <div class="relative overflow-hidden border-b border-line">
                 <ExerciseMedia
                   label={exercise.name}
-                  asset={exercise.media?.thumbnail ?? exercise.media?.video}
+                  asset={exercise.media?.video ?? exercise.media?.thumbnail}
                   eager={false}
                   controls={false}
                   ratio="3/2"
